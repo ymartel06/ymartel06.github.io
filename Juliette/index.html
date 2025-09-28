@@ -78,20 +78,11 @@
         </style>
 </head>
 <body>
-    <h1>Quiz - Tape la réponse en anglais</h1>
+    <h1>Quiz</h1>
     <div class="quiz-container">
         <label for="quizSelect" style="font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Choisis ton quiz :</label>
         <select id="quizSelect" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;">
-            <option value="days">Jours de la semaine</option>
-            <option value="months">Mois de l'année</option>
-            <option value="numbers">Chiffres</option>
-            <option value="be_present">To be - Présent</option>
-            <option value="be_past">To be - Passé</option>
-            <option value="be_future">To be - Futur</option>
-            <option value="have_present">To have - Présent</option>
-            <option value="have_past">To have - Passé</option>
-            <option value="have_future">To have - Futur</option>
-            <option value="animals">animals</option>
+            <!-- Les options seront ajoutées dynamiquement -->
         </select>
         <button id="startBtn" onclick="startQuiz()" style="margin-bottom:18px;">Commencer</button>
         <button id="backBtn" onclick="backToMenu()" style="display:none;margin-bottom:18px;background:#636e72;">Retour au menu</button>
@@ -133,7 +124,8 @@
         // Récupère le label du quiz sélectionné
         function getQuizLabel() {
             const select = document.getElementById('quizSelect');
-            return select.options[select.selectedIndex].text;
+            const quizName = select.value;
+            return quizzes[quizName]?.title || "";
         }
 
         function backToMenu() {
@@ -152,316 +144,341 @@
         }
     // All answers are now case sensitive
     const quizzes = {
-            days: {
-                caseSensitive: true,
-                type: "text",
-                questions: [
-                    { q: "Lundi", a: "Monday" },
-                    { q: "Mardi", a: "Tuesday" },
-                    { q: "Mercredi", a: "Wednesday" },
-                    { q: "Jeudi", a: "Thursday" },
-                    { q: "Vendredi", a: "Friday" },
-                    { q: "Samedi", a: "Saturday" },
-                    { q: "Dimanche", a: "Sunday" }
-                ]
-            },
-            months: {
-                caseSensitive: true,
-                type: "text",
-                questions: [
-                    { q: "Janvier", a: "January" },
-                    { q: "Février", a: "February" },
-                    { q: "Mars", a: "March" },
-                    { q: "Avril", a: "April" },
-                    { q: "Mai", a: "May" },
-                    { q: "Juin", a: "June" },
-                    { q: "Juillet", a: "July" },
-                    { q: "Août", a: "August" },
-                    { q: "Septembre", a: "September" },
-                    { q: "Octobre", a: "October" },
-                    { q: "Novembre", a: "November" },
-                    { q: "Décembre", a: "December" }
-                ]
-            },
-            numbers: {
-                caseSensitive: false,
-                type: "text",
-                questions: [
-                    { q: "Un", a: "One" },
-                    { q: "Deux", a: "Two" },
-                    { q: "Trois", a: "Three" },
-                    { q: "Quatre", a: "Four" },
-                    { q: "Cinq", a: "Five" },
-                    { q: "Six", a: "Six" },
-                    { q: "Sept", a: "Seven" },
-                    { q: "Huit", a: "Eight" },
-                    { q: "Neuf", a: "Nine" },
-                    { q: "Dix", a: "Ten" },
-                    { q: "Onze", a: "Eleven" },
-                    { q: "Douze", a: "Twelve" },
-                    { q: "Treize", a: "Thirteen" },
-                    { q: "Quatorze", a: "Fourteen" },
-                    { q: "Quinze", a: "Fifteen" },
-                    { q: "Seize", a: "Sixteen" },
-                    { q: "Dix-sept", a: "Seventeen" },
-                    { q: "Dix-huit", a: "Eighteen" },
-                    { q: "Dix-neuf", a: "Nineteen" },
-                    { q: "Vingt", a: "Twenty" },
-                    { q: "Trente", a: "Thirty" },
-                    { q: "Quarante", a: "Forty" },
-                    { q: "Cinquante", a: "Fifty" },
-                    { q: "Soixante", a: "Sixty" },
-                    { q: "Soixante-dix", a: "Seventy" },
-                    { q: "Quatre-vingts", a: "Eighty" },
-                    { q: "Quatre-vingt-dix", a: "Ninety" },
-                    { q: "Cent", a: "One hundred" }
-                ]
-            },
-            be_present: {
-                caseSensitive: true,
-                type: "text",
-                questions: [
-                    { q: "Je suis", a: "I am" },
-                    { q: "Tu es", a: "You are" },
-                    { q: "Il est", a: "He is" },
-                    { q: "Elle est", a: "She is" },
-                    { q: "Nous sommes", a: "We are" },
-                    { q: "Vous êtes", a: "You are" },
-                    { q: "Ils sont", a: "They are" },
-                    { q: "Elles sont", a: "They are" }
-                ]
-            },
-            be_past: {
-                caseSensitive: true,
-                type: "text",
-                questions: [
-                    { q: "J'étais", a: "I was" },
-                    { q: "Tu étais", a: "You were" },
-                    { q: "Il était", a: "He was" },
-                    { q: "Elle était", a: "She was" },
-                    { q: "Nous étions", a: "We were" },
-                    { q: "Vous étiez", a: "You were" },
-                    { q: "Ils étaient", a: "They were" },
-                    { q: "Elles étaient", a: "They were" }
-                ]
-            },
-            be_future: {
-                caseSensitive: true,
-                type: "text",
-                questions: [
-                    { q: "Je serai", a: "I will be" },
-                    { q: "Tu seras", a: "You will be" },
-                    { q: "Il sera", a: "He will be" },
-                    { q: "Elle sera", a: "She will be" },
-                    { q: "Nous serons", a: "We will be" },
-                    { q: "Vous serez", a: "You will be" },
-                    { q: "Ils seront", a: "They will be" },
-                    { q: "Elles seront", a: "They will be" }
-                ]
-            },
-            have_present: {
-                caseSensitive: true,
-                type: "text",
-                questions: [
-                    { q: "J'ai", a: "I have" },
-                    { q: "Tu as", a: "You have" },
-                    { q: "Il a", a: "He has" },
-                    { q: "Elle a", a: "She has" },
-                    { q: "Nous avons", a: "We have" },
-                    { q: "Vous avez", a: "You have" },
-                    { q: "Ils ont", a: "They have" },
-                    { q: "Elles ont", a: "They have" }
-                ]
-            },
-            have_past: {
-                caseSensitive: true,
-                type: "text",
-                questions: [
-                    { q: "J'avais", a: "I had" },
-                    { q: "Tu avais", a: "You had" },
-                    { q: "Il avait", a: "He had" },
-                    { q: "Elle avait", a: "She had" },
-                    { q: "Nous avions", a: "We had" },
-                    { q: "Vous aviez", a: "You had" },
-                    { q: "Ils avaient", a: "They had" },
-                    { q: "Elles avaient", a: "They had" }
-                ]
-            },
-            have_future: {
-                caseSensitive: true,
-                type: "text",
-                questions: [
-                    { q: "J'aurai", a: "I will have" },
-                    { q: "Tu auras", a: "You will have" },
-                    { q: "Il aura", a: "He will have" },
-                    { q: "Elle aura", a: "She will have" },
-                    { q: "Nous aurons", a: "We will have" },
-                    { q: "Vous aurez", a: "You will have" },
-                    { q: "Ils auront", a: "They will have" },
-                    { q: "Elles auront", a: "They will have" }
-                ]
-            },
-            animals: {
-                caseSensitive: false,
-                type: "multiple",
-                questions: [
-                    { q: "Le chat", a: "Cat", choices: ["Dog", "Cat", "Mouse", "Horse"] },
-                    { q: "Le chien", a: "Dog", choices: ["Cat", "Dog", "Rabbit", "Cow"] },
-                    { q: "La vache", a: "Cow", choices: ["Cow", "Pig", "Sheep", "Goat"] }
-                ]
+        days: {
+            title: "Jours de la semaine",
+            caseSensitive: true,
+            type: "text",
+            questions: [
+                { q: "Lundi", a: "Monday" },
+                { q: "Mardi", a: "Tuesday" },
+                { q: "Mercredi", a: "Wednesday" },
+                { q: "Jeudi", a: "Thursday" },
+                { q: "Vendredi", a: "Friday" },
+                { q: "Samedi", a: "Saturday" },
+                { q: "Dimanche", a: "Sunday" }
+            ]
+        },
+        months: {
+            title: "Mois de l'année",
+            caseSensitive: true,
+            type: "text",
+            questions: [
+                { q: "Janvier", a: "January" },
+                { q: "Février", a: "February" },
+                { q: "Mars", a: "March" },
+                { q: "Avril", a: "April" },
+                { q: "Mai", a: "May" },
+                { q: "Juin", a: "June" },
+                { q: "Juillet", a: "July" },
+                { q: "Août", a: "August" },
+                { q: "Septembre", a: "September" },
+                { q: "Octobre", a: "October" },
+                { q: "Novembre", a: "November" },
+                { q: "Décembre", a: "December" }
+            ]
+        },
+        numbers: {
+            title: "Chiffres",
+            caseSensitive: false,
+            type: "text",
+            questions: [
+                { q: "Un", a: "One" },
+                { q: "Deux", a: "Two" },
+                { q: "Trois", a: "Three" },
+                { q: "Quatre", a: "Four" },
+                { q: "Cinq", a: "Five" },
+                { q: "Six", a: "Six" },
+                { q: "Sept", a: "Seven" },
+                { q: "Huit", a: "Eight" },
+                { q: "Neuf", a: "Nine" },
+                { q: "Dix", a: "Ten" },
+                { q: "Onze", a: "Eleven" },
+                { q: "Douze", a: "Twelve" },
+                { q: "Treize", a: "Thirteen" },
+                { q: "Quatorze", a: "Fourteen" },
+                { q: "Quinze", a: "Fifteen" },
+                { q: "Seize", a: "Sixteen" },
+                { q: "Dix-sept", a: "Seventeen" },
+                { q: "Dix-huit", a: "Eighteen" },
+                { q: "Dix-neuf", a: "Nineteen" },
+                { q: "Vingt", a: "Twenty" },
+                { q: "Trente", a: "Thirty" },
+                { q: "Quarante", a: "Forty" },
+                { q: "Cinquante", a: "Fifty" },
+                { q: "Soixante", a: "Sixty" },
+                { q: "Soixante-dix", a: "Seventy" },
+                { q: "Quatre-vingts", a: "Eighty" },
+                { q: "Quatre-vingt-dix", a: "Ninety" },
+                { q: "Cent", a: "One hundred" }
+            ]
+        },
+        be_present: {
+            title: "To be - Présent",
+            caseSensitive: true,
+            type: "text",
+            questions: [
+                { q: "Je suis", a: "I am" },
+                { q: "Tu es", a: "You are" },
+                { q: "Il est", a: "He is" },
+                { q: "Elle est", a: "She is" },
+                { q: "Nous sommes", a: "We are" },
+                { q: "Vous êtes", a: "You are" },
+                { q: "Ils sont", a: "They are" },
+                { q: "Elles sont", a: "They are" }
+            ]
+        },
+        be_past: {
+            title: "To be - Passé",
+            caseSensitive: true,
+            type: "text",
+            questions: [
+                { q: "J'étais", a: "I was" },
+                { q: "Tu étais", a: "You were" },
+                { q: "Il était", a: "He was" },
+                { q: "Elle était", a: "She was" },
+                { q: "Nous étions", a: "We were" },
+                { q: "Vous étiez", a: "You were" },
+                { q: "Ils étaient", a: "They were" },
+                { q: "Elles étaient", a: "They were" }
+            ]
+        },
+        be_future: {
+            title: "To be - Futur",
+            caseSensitive: true,
+            type: "text",
+            questions: [
+                { q: "Je serai", a: "I will be" },
+                { q: "Tu seras", a: "You will be" },
+                { q: "Il sera", a: "He will be" },
+                { q: "Elle sera", a: "She will be" },
+                { q: "Nous serons", a: "We will be" },
+                { q: "Vous serez", a: "You will be" },
+                { q: "Ils seront", a: "They will be" },
+                { q: "Elles seront", a: "They will be" }
+            ]
+        },
+        have_present: {
+            title: "To have - Présent",
+            caseSensitive: true,
+            type: "text",
+            questions: [
+                { q: "J'ai", a: "I have" },
+                { q: "Tu as", a: "You have" },
+                { q: "Il a", a: "He has" },
+                { q: "Elle a", a: "She has" },
+                { q: "Nous avons", a: "We have" },
+                { q: "Vous avez", a: "You have" },
+                { q: "Ils ont", a: "They have" },
+                { q: "Elles ont", a: "They have" }
+            ]
+        },
+        have_past: {
+            title: "To have - Passé",
+            caseSensitive: true,
+            type: "text",
+            questions: [
+                { q: "J'avais", a: "I had" },
+                { q: "Tu avais", a: "You had" },
+                { q: "Il avait", a: "He had" },
+                { q: "Elle avait", a: "She had" },
+                { q: "Nous avions", a: "We had" },
+                { q: "Vous aviez", a: "You had" },
+                { q: "Ils avaient", a: "They had" },
+                { q: "Elles avaient", a: "They had" }
+            ]
+        },
+        have_future: {
+            title: "To have - Futur",
+            caseSensitive: true,
+            type: "text",
+            questions: [
+                { q: "J'aurai", a: "I will have" },
+                { q: "Tu auras", a: "You will have" },
+                { q: "Il aura", a: "He will have" },
+                { q: "Elle aura", a: "She will have" },
+                { q: "Nous aurons", a: "We will have" },
+                { q: "Vous aurez", a: "You will have" },
+                { q: "Ils auront", a: "They will have" },
+                { q: "Elles auront", a: "They will have" }
+            ]
+        },
+        animals: {
+            title: "Animaux",
+            caseSensitive: false,
+            type: "multiple",
+            questions: [
+                { q: "Le chat", a: "Cat", choices: ["Dog", "Cat", "Mouse", "Horse"] },
+                { q: "Le chien", a: "Dog", choices: ["Cat", "Dog", "Rabbit", "Cow"] },
+                { q: "La vache", a: "Cow", choices: ["Cow", "Pig", "Sheep", "Goat"] }
+            ]
+        }
+    };
+
+    // Remplit le select quizSelect dynamiquement
+    function fillQuizSelect() {
+        const select = document.getElementById('quizSelect');
+        select.innerHTML = "";
+        Object.entries(quizzes).forEach(([key, quiz]) => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = quiz.title;
+            select.appendChild(option);
+        });
+    }
+
+    // Appelle la fonction au chargement
+    window.addEventListener('DOMContentLoaded', fillQuizSelect);
+
+    let current = 0;
+    let wrongAnswers = [];
+    let quizQueue = [];
+
+    function startQuiz() {
+        const select = document.getElementById('quizSelect');
+        const quizName = select.value;
+        quizQueue = shuffle([...quizzes[quizName].questions]);
+        current = 0;
+        wrongAnswers = [];
+        // Hide select and start button
+        select.style.display = 'none';
+        document.getElementById('startBtn').style.display = 'none';
+        // Show quiz elements
+        document.getElementById('question').style.display = '';
+        document.getElementById('answer').style.display = '';
+        document.getElementById('validateBtn').style.display = '';
+        document.getElementById('result').style.display = '';
+        document.getElementById('nextBtn').style.display = '';
+        document.getElementById('backBtn').style.display = '';
+        document.getElementById('quizInfo').style.display = '';
+        document.getElementById('choicesContainer').style.display = 'none';
+        showQuestion();
+    }
+
+    // Mélange aléatoire d'un tableau
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function showQuestion() {
+        if (quizQueue.length === 0) {
+            if (wrongAnswers.length > 0) {
+                quizQueue = [...wrongAnswers];
+                wrongAnswers = [];
+                current = 0;
+                document.getElementById('result').textContent = "On recommence les questions mal répondues !";
+                setTimeout(showQuestion, 1500);
+                return;
+            } else {
+                document.getElementById('question').textContent = "Quiz terminé !";
+                document.getElementById('quizInfo').style.display = 'none';
+                document.getElementById('answer').style.display = "none";
+                document.getElementById('validateBtn').style.display = "none";
+                document.getElementById('nextBtn').style.display = "none";
+                document.getElementById('result').textContent = "Bravo, tu as fini !";
+                document.getElementById('backBtn').style.display = '';
+                return;
             }
-        };
+        }
+        document.getElementById('quizInfo').innerHTML = getQuizLabel() + " &nbsp;|&nbsp; " + (current + 1) + "/" + (quizQueue.length);
+        document.getElementById('question').textContent = "Traduis en anglais : " + quizQueue[current].q;
+        document.getElementById('answer').value = "";
+        document.getElementById('result').textContent = "";
+        updateValidateState();
 
-        let current = 0;
-        let wrongAnswers = [];
-        let quizQueue = [];
+        const select = document.getElementById('quizSelect');
+        const quizName = select.value;
+        const quizType = quizzes[quizName].type || "text";
+        document.getElementById('answer').style.display = quizType === "text" ? "" : "none";
+        document.getElementById('choicesContainer').style.display = quizType === "multiple" ? "" : "none";
+        document.getElementById('validateBtn').style.display = quizType === "text" ? '' : 'none';
+        document.getElementById('result').textContent = "";
+        document.getElementById('answer').value = "";
+        document.getElementById('answer').disabled = false;
+        updateValidateState();
 
-        function startQuiz() {
-            const select = document.getElementById('quizSelect');
-            const quizName = select.value;
-            quizQueue = shuffle([...quizzes[quizName].questions]);
+        if (quizType === "multiple") {
+            renderChoices(quizQueue[current]);
+        } else {
+            document.getElementById('choicesContainer').innerHTML = "";
+        }
+    }
+
+    function renderChoices(questionObj) {
+        const container = document.getElementById('choicesContainer');
+        container.innerHTML = "";
+        questionObj.choices.forEach(choice => {
+            const btn = document.createElement('button');
+            btn.textContent = choice;
+            btn.style.margin = "4px";
+            btn.onclick = function() {
+                selectChoice(choice);
+                checkAnswer(); // Valide directement au clic
+            };
+            btn.className = "choice-btn";
+            container.appendChild(btn);
+        });
+        window.selectedChoice = null;
+        updateValidateState();
+    }
+
+    function selectChoice(choice) {
+        window.selectedChoice = choice;
+        document.querySelectorAll('.choice-btn').forEach(btn => {
+            btn.style.background = btn.textContent === choice ? "#27ae60" : "#2d5fa4";
+        });
+        updateValidateState();
+    }
+
+    function checkAnswer() {
+        const select = document.getElementById('quizSelect');
+        const quizName = select.value;
+        const quizType = quizzes[quizName].type || "text";
+        const correct = quizQueue[current].a;
+        let isGood = false;
+        let match = false;
+        if (quizType === "multiple") {
+            match = window.selectedChoice === correct;
+        } else {
+            const userAnswer = document.getElementById('answer').value.trim();
+            const caseSensitive = quizzes[quizName].caseSensitive;
+            if (caseSensitive) {
+                match = userAnswer === correct;
+            } else {
+                match = userAnswer.toLowerCase() === correct.toLowerCase();
+            }
+        }
+        if (match) {
+            document.getElementById('result').innerHTML = "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
+            isGood = true;
+        } else {
+            document.getElementById('result').innerHTML = "Non, la bonne réponse est : <span style='color:#d63031;font-weight:bold;'>" + correct + "</span>";
+            wrongAnswers.push(quizQueue[current]);
+        }
+        document.getElementById('validateBtn').disabled = true;
+        document.getElementById('answer').disabled = true;
+        document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+        setTimeout(() => {
+            document.getElementById('validateBtn').disabled = false;
+            document.getElementById('answer').disabled = false;
+            document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = false);
+            nextQuestion();
+        }, isGood ? 2000 : 3000);
+    }
+
+    function nextQuestion() {
+        current++;
+        if (current >= quizQueue.length) {
+            quizQueue = quizQueue.slice(current); // Remove answered
             current = 0;
-            wrongAnswers = [];
-            // Hide select and start button
-            select.style.display = 'none';
-            document.getElementById('startBtn').style.display = 'none';
-            // Show quiz elements
-            document.getElementById('question').style.display = '';
-            document.getElementById('answer').style.display = '';
-            document.getElementById('validateBtn').style.display = '';
-            document.getElementById('result').style.display = '';
-            document.getElementById('nextBtn').style.display = '';
-            document.getElementById('backBtn').style.display = '';
-            document.getElementById('quizInfo').style.display = '';
-            document.getElementById('choicesContainer').style.display = 'none';
+            showQuestion();
+        } else {
             showQuestion();
         }
-
-        // Mélange aléatoire d'un tableau
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function showQuestion() {
-            if (quizQueue.length === 0) {
-                if (wrongAnswers.length > 0) {
-                    quizQueue = [...wrongAnswers];
-                    wrongAnswers = [];
-                    current = 0;
-                    document.getElementById('result').textContent = "On recommence les questions mal répondues !";
-                    setTimeout(showQuestion, 1500);
-                    return;
-                } else {
-                    document.getElementById('question').textContent = "Quiz terminé !";
-                    document.getElementById('quizInfo').style.display = 'none';
-                    document.getElementById('answer').style.display = "none";
-                    document.getElementById('validateBtn').style.display = "none";
-                    document.getElementById('nextBtn').style.display = "none";
-                    document.getElementById('result').textContent = "Bravo, tu as fini !";
-                    document.getElementById('backBtn').style.display = '';
-                    return;
-                }
-            }
-            document.getElementById('quizInfo').innerHTML = getQuizLabel() + " &nbsp;|&nbsp; " + (current + 1) + "/" + (quizQueue.length);
-            document.getElementById('question').textContent = "Traduis en anglais : " + quizQueue[current].q;
-            document.getElementById('answer').value = "";
-            document.getElementById('result').textContent = "";
-            updateValidateState();
-
-            const select = document.getElementById('quizSelect');
-            const quizName = select.value;
-            const quizType = quizzes[quizName].type || "text";
-            document.getElementById('answer').style.display = quizType === "text" ? "" : "none";
-            document.getElementById('choicesContainer').style.display = quizType === "multiple" ? "" : "none";
-            document.getElementById('validateBtn').style.display = quizType === "text" ? '' : 'none';
-            document.getElementById('result').textContent = "";
-            document.getElementById('answer').value = "";
-            document.getElementById('answer').disabled = false;
-            updateValidateState();
-
-            if (quizType === "multiple") {
-                renderChoices(quizQueue[current]);
-            } else {
-                document.getElementById('choicesContainer').innerHTML = "";
-            }
-        }
-
-        function renderChoices(questionObj) {
-            const container = document.getElementById('choicesContainer');
-            container.innerHTML = "";
-            questionObj.choices.forEach(choice => {
-                const btn = document.createElement('button');
-                btn.textContent = choice;
-                btn.style.margin = "4px";
-                btn.onclick = function() {
-                    selectChoice(choice);
-                    checkAnswer(); // Valide directement au clic
-                };
-                btn.className = "choice-btn";
-                container.appendChild(btn);
-            });
-            window.selectedChoice = null;
-            updateValidateState();
-        }
-
-        function selectChoice(choice) {
-            window.selectedChoice = choice;
-            document.querySelectorAll('.choice-btn').forEach(btn => {
-                btn.style.background = btn.textContent === choice ? "#27ae60" : "#2d5fa4";
-            });
-            updateValidateState();
-        }
-
-        function checkAnswer() {
-            const select = document.getElementById('quizSelect');
-            const quizName = select.value;
-            const quizType = quizzes[quizName].type || "text";
-            const correct = quizQueue[current].a;
-            let isGood = false;
-            let match = false;
-            if (quizType === "multiple") {
-                match = window.selectedChoice === correct;
-            } else {
-                const userAnswer = document.getElementById('answer').value.trim();
-                const caseSensitive = quizzes[quizName].caseSensitive;
-                if (caseSensitive) {
-                    match = userAnswer === correct;
-                } else {
-                    match = userAnswer.toLowerCase() === correct.toLowerCase();
-                }
-            }
-            if (match) {
-                document.getElementById('result').innerHTML = "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
-                isGood = true;
-            } else {
-                document.getElementById('result').innerHTML = "Non, la bonne réponse est : <span style='color:#d63031;font-weight:bold;'>" + correct + "</span>";
-                wrongAnswers.push(quizQueue[current]);
-            }
-            document.getElementById('validateBtn').disabled = true;
-            document.getElementById('answer').disabled = true;
-            document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
-            setTimeout(() => {
-                document.getElementById('validateBtn').disabled = false;
-                document.getElementById('answer').disabled = false;
-                document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = false);
-                nextQuestion();
-            }, isGood ? 2000 : 3000);
-        }
-
-        function nextQuestion() {
-            current++;
-            if (current >= quizQueue.length) {
-                quizQueue = quizQueue.slice(current); // Remove answered
-                current = 0;
-                showQuestion();
-            } else {
-                showQuestion();
-            }
-        }
+    }
     </script>
 </body>
 </html>
