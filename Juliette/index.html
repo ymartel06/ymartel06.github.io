@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Quiz - Chiffres et Jours</title>
+    <title>Quiz</title>
         <style>
             body {
                 font-family: 'Segoe UI', Arial, sans-serif;
@@ -137,8 +137,11 @@
             document.getElementById('quizSelect').style.display = '';
             document.getElementById('startBtn').style.display = '';
         }
-        const quizzes = {
-            days: [
+    // All answers are now case sensitive
+    const quizzes = {
+        days: {
+            caseSensitive: true,
+            questions: [
                 { q: "Lundi", a: "Monday" },
                 { q: "Mardi", a: "Tuesday" },
                 { q: "Mercredi", a: "Wednesday" },
@@ -146,8 +149,11 @@
                 { q: "Vendredi", a: "Friday" },
                 { q: "Samedi", a: "Saturday" },
                 { q: "Dimanche", a: "Sunday" }
-            ],
-            months: [
+            ]
+        },
+        months: {
+            caseSensitive: true,
+            questions: [
                 { q: "Janvier", a: "January" },
                 { q: "Février", a: "February" },
                 { q: "Mars", a: "March" },
@@ -160,8 +166,11 @@
                 { q: "Octobre", a: "October" },
                 { q: "Novembre", a: "November" },
                 { q: "Décembre", a: "December" }
-            ],
-            numbers: [
+            ]
+        },
+        numbers: {
+            caseSensitive: true,
+            questions: [
                 { q: "Un", a: "One" },
                 { q: "Deux", a: "Two" },
                 { q: "Trois", a: "Three" },
@@ -190,8 +199,11 @@
                 { q: "Quatre-vingts", a: "Eighty" },
                 { q: "Quatre-vingt-dix", a: "Ninety" },
                 { q: "Cent", a: "One hundred" }
-            ],
-            be_present: [
+            ]
+        },
+        be_present: {
+            caseSensitive: true,
+            questions: [
                 { q: "Je suis", a: "I am" },
                 { q: "Tu es", a: "You are" },
                 { q: "Il est", a: "He is" },
@@ -200,8 +212,11 @@
                 { q: "Vous êtes", a: "You are" },
                 { q: "Ils sont", a: "They are" },
                 { q: "Elles sont", a: "They are" }
-            ],
-            be_past: [
+            ]
+        },
+        be_past: {
+            caseSensitive: true,
+            questions: [
                 { q: "J'étais", a: "I was" },
                 { q: "Tu étais", a: "You were" },
                 { q: "Il était", a: "He was" },
@@ -210,8 +225,11 @@
                 { q: "Vous étiez", a: "You were" },
                 { q: "Ils étaient", a: "They were" },
                 { q: "Elles étaient", a: "They were" }
-            ],
-            be_future: [
+            ]
+        },
+        be_future: {
+            caseSensitive: true,
+            questions: [
                 { q: "Je serai", a: "I will be" },
                 { q: "Tu seras", a: "You will be" },
                 { q: "Il sera", a: "He will be" },
@@ -220,8 +238,11 @@
                 { q: "Vous serez", a: "You will be" },
                 { q: "Ils seront", a: "They will be" },
                 { q: "Elles seront", a: "They will be" }
-            ],
-            have_present: [
+            ]
+        },
+        have_present: {
+            caseSensitive: true,
+            questions: [
                 { q: "J'ai", a: "I have" },
                 { q: "Tu as", a: "You have" },
                 { q: "Il a", a: "He has" },
@@ -230,8 +251,11 @@
                 { q: "Vous avez", a: "You have" },
                 { q: "Ils ont", a: "They have" },
                 { q: "Elles ont", a: "They have" }
-            ],
-            have_past: [
+            ]
+        },
+        have_past: {
+            caseSensitive: true,
+            questions: [
                 { q: "J'avais", a: "I had" },
                 { q: "Tu avais", a: "You had" },
                 { q: "Il avait", a: "He had" },
@@ -240,8 +264,11 @@
                 { q: "Vous aviez", a: "You had" },
                 { q: "Ils avaient", a: "They had" },
                 { q: "Elles avaient", a: "They had" }
-            ],
-            have_future: [
+            ]
+        },
+        have_future: {
+            caseSensitive: true,
+            questions: [
                 { q: "J'aurai", a: "I will have" },
                 { q: "Tu auras", a: "You will have" },
                 { q: "Il aura", a: "He will have" },
@@ -251,7 +278,8 @@
                 { q: "Ils auront", a: "They will have" },
                 { q: "Elles auront", a: "They will have" }
             ]
-        };
+        }
+    };
 
         let current = 0;
         let wrongAnswers = [];
@@ -260,7 +288,7 @@
         function startQuiz() {
             const select = document.getElementById('quizSelect');
             const quizName = select.value;
-            quizQueue = shuffle([...quizzes[quizName]]);
+            quizQueue = shuffle([...quizzes[quizName].questions]);
             current = 0;
             wrongAnswers = [];
             // Hide select and start button
@@ -315,9 +343,18 @@
 
         function checkAnswer() {
             const userAnswer = document.getElementById('answer').value.trim();
+            const select = document.getElementById('quizSelect');
+            const quizName = select.value;
             const correct = quizQueue[current].a;
             let isGood = false;
-            if (userAnswer.toLowerCase() === correct.toLowerCase()) {
+            const caseSensitive = quizzes[quizName].caseSensitive;
+            let match = false;
+            if (caseSensitive) {
+                match = userAnswer === correct;
+            } else {
+                match = userAnswer.toLowerCase() === correct.toLowerCase();
+            }
+            if (match) {
                 document.getElementById('result').innerHTML = "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
                 isGood = true;
             } else {
