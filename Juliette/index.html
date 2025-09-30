@@ -307,9 +307,9 @@
             caseSensitive: false,
             type: "multiple",
             questions: [
-                { q: "Le chat", a: "Cat", choices: ["Dog", "Cat", "Mouse", "Horse"] },
-                { q: "Le chien", a: "Dog", choices: ["Cat", "Dog", "Rabbit", "Cow"] },
-                { q: "La vache", a: "Cow", choices: ["Cow", "Pig", "Sheep", "Goat"] }
+                { q: "Le chat", a: 1, choices: ["Dog", "Cat", "Mouse", "Horse"] },
+                { q: "Le chien", a: 1, choices: ["Cat", "Dog", "Rabbit", "Cow"] },
+                { q: "La vache", a: 0, choices: ["Cow", "Pig", "Sheep", "Goat"] }
             ]
         }
     };
@@ -410,12 +410,12 @@
     function renderChoices(questionObj) {
         const container = document.getElementById('choicesContainer');
         container.innerHTML = "";
-        questionObj.choices.forEach(choice => {
+        questionObj.choices.forEach((choice, idx) => {
             const btn = document.createElement('button');
             btn.textContent = choice;
             btn.style.margin = "4px";
             btn.onclick = function() {
-                selectChoice(choice);
+                selectChoice(idx);
                 checkAnswer(); // Valide directement au clic
             };
             btn.className = "choice-btn";
@@ -425,10 +425,10 @@
         updateValidateState();
     }
 
-    function selectChoice(choice) {
-        window.selectedChoice = choice;
-        document.querySelectorAll('.choice-btn').forEach(btn => {
-            btn.style.background = btn.textContent === choice ? "#27ae60" : "#2d5fa4";
+    function selectChoice(idx) {
+        window.selectedChoice = idx;
+        document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+            btn.style.background = i === idx ? "#27ae60" : "#2d5fa4";
         });
         updateValidateState();
     }
@@ -455,7 +455,10 @@
             document.getElementById('result').innerHTML = "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
             isGood = true;
         } else {
-            document.getElementById('result').innerHTML = "Non, la bonne réponse est : <span style='color:#d63031;font-weight:bold;'>" + correct + "</span>";
+            let correctText = quizType === "multiple"
+                ? quizQueue[current].choices[correct]
+                : correct;
+            document.getElementById('result').innerHTML = "Non, la bonne réponse est : <span style='color:#d63031;font-weight:bold;'>" + correctText + "</span>";
             wrongAnswers.push(quizQueue[current]);
         }
         document.getElementById('validateBtn').disabled = true;
