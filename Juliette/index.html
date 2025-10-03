@@ -80,9 +80,10 @@
 <body>
     <h1>Quiz</h1>
     <div class="quiz-container">
-        <label for="quizSelect" style="font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Choisis ton quiz :</label>
+        <label id="lbCategorySelect" for="categorySelect" style="font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Choisis une catégorie :</label>
+        <select id="categorySelect" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;"></select>
+        <label id="lbQuizSelect" for="quizSelect" style="font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Choisis ton quiz :</label>
         <select id="quizSelect" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;">
-            <!-- Les options seront ajoutées dynamiquement -->
         </select>
         <button id="startBtn" onclick="startQuiz()" style="margin-bottom:18px;">Commencer</button>
         <button id="backBtn" onclick="backToMenu()" style="display:none;margin-bottom:18px;background:#636e72;">Retour au menu</button>
@@ -138,7 +139,10 @@
             document.getElementById('nextBtn').style.display = 'none';
             document.getElementById('backBtn').style.display = 'none';
             document.getElementById('choicesContainer').style.display = 'none'; // <-- Ajouté
-            // Show menu elements
+            // Show menu elements            
+            document.getElementById('lbCategorySelect').style.display = '';
+            document.getElementById('lbQuizSelect').style.display = '';
+            document.getElementById('categorySelect').style.display = '';
             document.getElementById('quizSelect').style.display = '';
             document.getElementById('startBtn').style.display = '';
         }
@@ -146,6 +150,7 @@
     const quizzes = {
         days: {
             title: "Jours de la semaine",
+            category: "Vocabulaire",
             caseSensitive: true,
             type: "text",
             questions: [
@@ -160,6 +165,7 @@
         },
         months: {
             title: "Mois de l'année",
+            category: "Vocabulaire",
             caseSensitive: true,
             type: "text",
             questions: [
@@ -179,6 +185,7 @@
         },
         numbers: {
             title: "Chiffres",
+            category: "Vocabulaire",
             caseSensitive: false,
             type: "text",
             questions: [
@@ -214,6 +221,7 @@
         },
         be_present: {
             title: "To be - Présent",
+            category: "Verbes",
             caseSensitive: true,
             type: "text",
             questions: [
@@ -229,6 +237,7 @@
         },
         be_past: {
             title: "To be - Passé",
+            category: "Verbes",
             caseSensitive: true,
             type: "text",
             questions: [
@@ -244,6 +253,7 @@
         },
         be_future: {
             title: "To be - Futur",
+            category: "Verbes",
             caseSensitive: true,
             type: "text",
             questions: [
@@ -259,6 +269,7 @@
         },
         have_present: {
             title: "To have - Présent",
+            category: "Verbes",
             caseSensitive: true,
             type: "text",
             questions: [
@@ -274,6 +285,7 @@
         },
         have_past: {
             title: "To have - Passé",
+            category: "Verbes",
             caseSensitive: true,
             type: "text",
             questions: [
@@ -289,6 +301,7 @@
         },
         have_future: {
             title: "To have - Futur",
+            category: "Verbes",
             caseSensitive: true,
             type: "text",
             questions: [
@@ -304,6 +317,7 @@
         },
         animals: {
             title: "Animaux",
+            category: "Vocabulaire",
             caseSensitive: false,
             type: "multiple",
             questions: [
@@ -314,20 +328,40 @@
         }
     };
 
-    // Remplit le select quizSelect dynamiquement
-    function fillQuizSelect() {
-        const select = document.getElementById('quizSelect');
+    // Remplit le select categorySelect dynamiquement
+    function fillCategorySelect() {
+        const select = document.getElementById('categorySelect');
         select.innerHTML = "";
-        Object.entries(quizzes).forEach(([key, quiz]) => {
+        const categories = [...new Set(Object.values(quizzes).map(q => q.category))];
+        categories.forEach(cat => {
             const option = document.createElement('option');
-            option.value = key;
-            option.textContent = quiz.title;
+            option.value = cat;
+            option.textContent = cat;
             select.appendChild(option);
         });
     }
 
-    // Appelle la fonction au chargement
-    window.addEventListener('DOMContentLoaded', fillQuizSelect);
+    // Remplit le select quizSelect dynamiquement selon la catégorie
+    function fillQuizSelect() {
+        const select = document.getElementById('quizSelect');
+        const category = document.getElementById('categorySelect').value;
+        select.innerHTML = "";
+        Object.entries(quizzes).forEach(([key, quiz]) => {
+            if (quiz.category === category) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = quiz.title;
+                select.appendChild(option);
+            }
+        });
+    }
+
+    // Met à jour quizSelect quand la catégorie change
+    document.addEventListener('DOMContentLoaded', () => {
+        fillCategorySelect();
+        fillQuizSelect();
+        document.getElementById('categorySelect').addEventListener('change', fillQuizSelect);
+    });
 
     let current = 0;
     let wrongAnswers = [];
@@ -341,6 +375,9 @@
         wrongAnswers = [];
         // Hide select and start button
         select.style.display = 'none';
+        document.getElementById('lbQuizSelect').style.display = 'none';
+        document.getElementById('lbCategorySelect').style.display = 'none';
+        document.getElementById('categorySelect').style.display = 'none';
         document.getElementById('startBtn').style.display = 'none';
         // Show quiz elements
         document.getElementById('question').style.display = '';
