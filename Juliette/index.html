@@ -94,6 +94,13 @@
     <button onclick="checkAnswer()" id="validateBtn" style="display:none;" disabled>Valider</button>
         <div class="result" id="result" style="display:none;"></div>
         <button onclick="nextQuestion()" id="nextBtn" style="display:none;">Question suivante</button>
+        <div id="timer" style="display:none;margin-bottom:10px;font-size:1.1em;color:#636e72;font-weight:500;"></div>
+        <div id="scoreBoard" style="display:none;margin-bottom:10px;"></div>
+        <div id="namePrompt" style="display:none;margin-bottom:10px;">
+            <label for="playerName" style="font-size:1.1em;color:#2d5fa4;font-weight:500;">Bravo ! Entre ton prénom :</label>
+            <input type="text" id="playerName" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:8px;width:80%;" />
+            <button onclick="saveScore()" id="saveScoreBtn" style="font-size:1.1em;padding:7px 22px;border-radius:8px;background:#27ae60;color:#fff;">Sauvegarder</button>
+        </div>
     </div>
 
     <script>
@@ -366,6 +373,11 @@
     let current = 0;
     let wrongAnswers = [];
     let quizQueue = [];
+    let timerInterval = null;
+    let startTime = null;
+    let elapsed = 0;
+    let quizFinished = false;
+    let lastScore = null;
 
     function startQuiz() {
         const select = document.getElementById('quizSelect');
@@ -388,6 +400,15 @@
         document.getElementById('backBtn').style.display = '';
         document.getElementById('quizInfo').style.display = '';
         document.getElementById('choicesContainer').style.display = 'none';
+        document.getElementById('timer').style.display = '';
+        document.getElementById('scoreBoard').style.display = 'none';
+        document.getElementById('namePrompt').style.display = 'none';
+        elapsed = 0;
+        quizFinished = false;
+        lastScore = null;
+        startTime = Date.now();
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
         showQuestion();
     }
 
@@ -409,7 +430,7 @@
                 document.getElementById('result').textContent = "On recommence les questions mal répondues !";
                 setTimeout(showQuestion, 1500);
                 return;
-            } else {
+            } else {                
                 document.getElementById('question').textContent = "Quiz terminé !";
                 document.getElementById('quizInfo').style.display = 'none';
                 document.getElementById('choicesContainer').style.display = 'none';
@@ -418,6 +439,7 @@
                 document.getElementById('nextBtn').style.display = "none";
                 document.getElementById('result').textContent = "Bravo, tu as fini !";
                 document.getElementById('backBtn').style.display = '';
+                endQuiz();
                 return;
             }
         }
@@ -454,7 +476,7 @@
             btn.style.margin = "4px";
             btn.onclick = function() {
                 selectChoice(idx);
-                checkAnswer(); // Valide directement au clic
+                checkAnswer();
             };
             btn.className = "choice-btn";
             container.appendChild(btn);
@@ -520,6 +542,73 @@
             showQuestion();
         }
     }
+
+    function updateTimer() {
+        if (quizFinished) return;
+        elapsed = Math.floor((Date.now() - startTime) / 1000);
+        document.getElementById('timer').textContent = "Temps écoulé : " + elapsed + "s";
+    }
+	
+    function endQuiz() {
+        quizFinished = true;
+        clearInterval(timerInterval);
+        document.getElementById('timer').style.display = '';
+        document.getElementById('timer').textContent = "Temps total : " + elapsed + "s";
+        document.getElementById('scoreBoard').style.display = '';
+        showScores();
+        lastScore = elapsed;
+        const quizName = document.getElementById('quizSelect').value;
+        if (isTopScore(quizName, elapsed)) {
+            document.getElementById('namePrompt').style.display = '';
+        } else {
+            document.getElementById('namePrompt').style.display = 'none';
+        }
+    }
+
+    function showScores() {
+        const quizName = document.getElementById('quizSelect').value;
+        const scores = getScores(quizName);
+        let html = "<strong>TOP 5 scores :</strong><br>";
+        if (scores.length === 0) {
+            html += "<em>Aucun score enregistré.</em>";
+        } else {
+            html += "<ol style='padding-left:20px;'>";
+            scores.forEach(s => {
+                html += "<li>" + s.name + " : " + s.time + "s</li>";
+            });
+            html += "</ol>";
+        }
+        document.getElementById('scoreBoard').innerHTML = html;
+    }
+
+    function getScores(quizName) {
+        const key = "scores_" + quizName;
+        const scores = JSON.parse(localStorage.getItem(key) || "[]");
+        return scores;
+    }
+
+    function saveScores(quizName, scores) {
+        const key = "scores_" + quizName;
+        localStorage.setItem(key, JSON.stringify(scores));
+    }
+
+    function isTopScore(quizName, time) {
+        const scores = getScores(quizName);
+        if (scores.length < 5) return true;
+        return scores.some(s => time < s.time);
+    }
+
+    function saveScore() {
+        const quizName = document.getElementById('quizSelect').value;
+        const name = document.getElementById('playerName').value.trim() || "Anonyme";
+        let scores = getScores(quizName);
+        scores.push({ name, time: lastScore });
+        scores = scores.sort((a, b) => a.time - b.time).slice(0, 5);
+        saveScores(quizName, scores);
+        document.getElementById('namePrompt').style.display = 'none';
+        showScores();
+    }
+
     </script>
 </body>
 </html>
