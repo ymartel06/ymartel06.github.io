@@ -511,7 +511,7 @@
             }
         }
         document.getElementById('quizInfo').innerHTML = getQuizLabel() + " &nbsp;|&nbsp; " + (current + 1) + "/" + (quizQueue.length);
-        document.getElementById('question').textContent = "Traduis en anglais : " + quizQueue[current].q;
+        document.getElementById('question').textContent = quizQueue[current].q;
         document.getElementById('answer').value = "";
         document.getElementById('result').textContent = "";
         updateValidateState();
