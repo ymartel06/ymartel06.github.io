@@ -83,7 +83,11 @@
         <label id="lbCategorySelect" for="categorySelect" style="font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Choisis une catégorie :</label>
         <select id="categorySelect" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;"></select>
         <label id="lbQuizSelect" for="quizSelect" style="font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Choisis ton quiz :</label>
-        <select id="quizSelect" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;">
+        <select id="quizSelect" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;"></select>
+        <label id="lbTextMode" for="textModeSelect" style="display:none;font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Mode de réponse :</label>
+        <select id="textModeSelect" style="display:none;font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;">
+            <option value="text">Saisie de texte</option>
+            <option value="selection">Choix multiple</option>
         </select>
         <button id="startBtn" onclick="startQuiz()" style="margin-bottom:18px;">Commencer</button>
         <button id="backBtn" onclick="backToMenu()" style="display:none;margin-bottom:18px;background:#636e72;">Retour au menu</button>
@@ -155,6 +159,8 @@
             document.getElementById('categorySelect').style.display = '';
             document.getElementById('quizSelect').style.display = '';
             document.getElementById('startBtn').style.display = '';
+            document.getElementById('lbTextMode').style.display = 'none';
+            document.getElementById('textModeSelect').style.display = 'none';
         }
     // All answers are now case sensitive
     const quizzes = {
@@ -564,15 +570,21 @@
     function startQuiz() {
         const select = document.getElementById('quizSelect');
         const quizName = select.value;
+        const quizType = quizzes[quizName].type || "text";
+        
         quizQueue = shuffle([...quizzes[quizName].questions]);
         current = 0;
         wrongAnswers = [];
-        // Hide select and start button
+        
+        // Hide menu elements
         select.style.display = 'none';
         document.getElementById('lbQuizSelect').style.display = 'none';
         document.getElementById('lbCategorySelect').style.display = 'none';
         document.getElementById('categorySelect').style.display = 'none';
         document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('lbTextMode').style.display = 'none';
+        document.getElementById('textModeSelect').style.display = 'none';
+        
         // Show quiz elements
         document.getElementById('question').style.display = '';
         document.getElementById('answer').style.display = '';
@@ -585,6 +597,13 @@
         document.getElementById('timer').style.display = '';
         document.getElementById('scoreBoard').style.display = 'none';
         document.getElementById('namePrompt').style.display = 'none';
+        
+        // Show text mode selector if it's a text quiz
+        if (quizType === "text") {
+            document.getElementById('lbTextMode').style.display = '';
+            document.getElementById('textModeSelect').style.display = '';
+        }
+        
         elapsed = 0;
         quizFinished = false;
         lastScore = null;
@@ -634,25 +653,39 @@
         const select = document.getElementById('quizSelect');
         const quizName = select.value;
         const quizType = quizzes[quizName].type || "text";
-        document.getElementById('answer').style.display = quizType === "text" ? "" : "none";
-        document.getElementById('choicesContainer').style.display = quizType === "multiple" ? "" : "none";
-        document.getElementById('validateBtn').style.display = quizType === "text" ? '' : 'none';
-        document.getElementById('result').textContent = "";
-        document.getElementById('answer').value = "";
-        document.getElementById('answer').disabled = false;
-        updateValidateState();
-
-        if (quizType === "multiple") {
-            renderChoices(quizQueue[current]);
+        const textMode = document.getElementById('textModeSelect').value;
+        
+        if (quizType === "text" && textMode === "selection") {
+            document.getElementById('answer').style.display = 'none';
+            document.getElementById('validateBtn').style.display = 'none';
+            document.getElementById('choicesContainer').style.display = '';
+            renderTextChoices(quizQueue[current], quizName);
+        } else if (quizType === "text") {
+            document.getElementById('answer').style.display = '';
+            document.getElementById('validateBtn').style.display = '';
+            document.getElementById('choicesContainer').style.display = 'none';
         } else {
-            document.getElementById('choicesContainer').innerHTML = "";
+            document.getElementById('answer').style.display = 'none';
+            document.getElementById('validateBtn').style.display = 'none';
+            document.getElementById('choicesContainer').style.display = 'none';
         }
     }
 
-    function renderChoices(questionObj) {
+    function renderTextChoices(questionObj, quizName) {
         const container = document.getElementById('choicesContainer');
         container.innerHTML = "";
-        questionObj.choices.forEach((choice, idx) => {
+        
+        // Get all possible answers from the current quiz
+        const allAnswers = quizzes[quizName].questions.map(q => q.a);
+        // Filter out the correct answer and shuffle remaining
+        const otherAnswers = allAnswers.filter(a => a !== questionObj.a);
+        const shuffledOthers = shuffle([...otherAnswers]);
+        // Take 3 random wrong answers
+        const wrongAnswers = shuffledOthers.slice(0, 3);
+        // Combine with correct answer and shuffle
+        const choices = shuffle([questionObj.a, ...wrongAnswers]);
+        
+        choices.forEach((choice, idx) => {
             const btn = document.createElement('button');
             btn.textContent = choice;
             btn.style.margin = "4px";
@@ -679,10 +712,16 @@
         const select = document.getElementById('quizSelect');
         const quizName = select.value;
         const quizType = quizzes[quizName].type || "text";
+        const textMode = document.getElementById('textModeSelect').value;
         const correct = quizQueue[current].a;
         let isGood = false;
         let match = false;
-        if (quizType === "multiple") {
+
+        if (quizType === "text" && textMode === "selection") {
+            const buttons = document.querySelectorAll('.choice-btn');
+            const selectedText = buttons[window.selectedChoice]?.textContent;
+            match = selectedText === correct;
+        } else if (quizType === "multiple") {
             match = window.selectedChoice === correct;
         } else {
             const userAnswer = document.getElementById('answer').value.trim();
@@ -791,6 +830,10 @@
         showScores();
     }
 
+    // Add event listener for textMode changes
+    document.getElementById('textModeSelect').addEventListener('change', () => {
+        showQuestion();
+    });
     </script>
 </body>
 </html>
