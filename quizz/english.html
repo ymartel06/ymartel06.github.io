@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>English Exercise - To Be / To Have (Present)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 2;
+        }
+        h1 {
+            text-align: center;
+        }
+        .instructions {
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .sentence {
+            margin-bottom: 12px;
+        }
+        input {
+            width: 80px;
+            padding: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        button {
+            padding: 10px 30px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #score {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            display: none;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        .correct {
+            background-color: #90EE90;
+        }
+        .incorrect {
+            background-color: #FFB6C6;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>English Exercise</h1>
+    <h2>Write the correct form of "to be" or "to have" in the present.</h2>
+
+    <div class="instructions">
+        Fill in the blanks with: am / is / are / have / has
+    </div>
+
+    <form id="exerciseForm">
+        <div class="sentence">1. I <input type="text" id="ans1"> very happy today.</div>
+        <div class="sentence">2. She <input type="text" id="ans2"> two brothers.</div>
+        <div class="sentence">3. We <input type="text" id="ans3"> in the same class.</div>
+        <div class="sentence">4. He <input type="text" id="ans4"> a new backpack.</div>
+        <div class="sentence">5. They <input type="text" id="ans5"> late for school.</div>
+        <div class="sentence">6. My dog <input type="text" id="ans6"> big brown eyes.</div>
+        <div class="sentence">7. It <input type="text" id="ans7"> very cold outside.</div>
+        <div class="sentence">8. You <input type="text" id="ans8"> my best friend.</div>
+        <div class="sentence">9. Emma <input type="text" id="ans9"> a lot of homework tonight.</div>
+        <div class="sentence">10. I <input type="text" id="ans10"> 11 years old.</div>
+        <div class="sentence">11. The teachers <input type="text" id="ans11"> very kind.</div>
+        <div class="sentence">12. My parents <input type="text" id="ans12"> a small car.</div>
+        <div class="sentence">13. Tom <input type="text" id="ans13"> sick today.</div>
+        <div class="sentence">14. We <input type="text" id="ans14"> a math test tomorrow.</div>
+        <div class="sentence">15. She <input type="text" id="ans15"> very good at soccer.</div>
+        <div class="sentence">16. The cat <input type="text" id="ans16"> under the table.</div>
+        <div class="sentence">17. You <input type="text" id="ans17"> a great idea!</div>
+        <div class="sentence">18. I <input type="text" id="ans18"> ready to go.</div>
+        <div class="sentence">19. My friends <input type="text" id="ans19"> at the park.</div>
+        <div class="sentence">20. Lucas <input type="text" id="ans20"> a blue bike.</div>
+        <div class="sentence">21. My sister <input type="text" id="ans21"> 8 years old.</div>
+        <div class="sentence">22. We <input type="text" id="ans22"> a lot of pencils in our classroom.</div>
+        <div class="sentence">23. The weather <input type="text" id="ans23"> sunny today.</div>
+        <div class="sentence">24. I <input type="text" id="ans24"> a new mobile phone.</div>
+        <div class="sentence">25. My grandparents <input type="text" id="ans25"> very nice.</div>
+        <div class="sentence">26. My best friend <input type="text" id="ans26"> glasses.</div>
+        <div class="sentence">27. You <input type="text" id="ans27"> very intelligent.</div>
+        <div class="sentence">28. This book <input type="text" id="ans28"> very interesting.</div>
+        <div class="sentence">29. My cousins <input type="text" id="ans29"> at the beach.</div>
+        <div class="sentence">30. I <input type="text" id="ans30"> 2 cats at home.</div>
+    </form>
+
+    <div class="button-container">
+        <button type="button" onclick="checkAnswers()">Check Answers</button>
+    </div>
+
+    <div id="score"></div>
+
+    <script>
+        const correctAnswers = [
+            'am', 'has', 'are', 'has', 'are', 'has', 'is', 'are', 'has', 'am',
+            'are', 'have', 'is', 'have', 'is', 'is', 'have', 'am', 'are', 'has',
+            'is', 'have', 'is', 'have', 'are', 'has', 'are', 'is', 'are', 'have'
+        ];
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function initializePage() {
+            const form = document.getElementById('exerciseForm');
+            const sentences = form.querySelectorAll('.sentence');
+            
+            // Créer un tableau d'indices [0, 1, 2, ..., 29]
+            const indices = Array.from({length: 30}, (_, i) => i);
+            
+            // Mélanger les indices
+            const shuffledIndices = shuffleArray(indices);
+            
+            // Afficher seulement les 10 premières phrases mélangées
+            sentences.forEach((sentence, index) => {
+                if (shuffledIndices.indexOf(index) < 10) {
+                    sentence.style.display = 'block';
+                } else {
+                    sentence.style.display = 'none';
+                }
+            });
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            const scoreDisplay = document.getElementById('score');
+            const form = document.getElementById('exerciseForm');
+            const visibleInputs = Array.from(form.querySelectorAll('input[type="text"]')).filter(input => {
+                return input.closest('.sentence').style.display !== 'none';
+            });
+
+            visibleInputs.forEach((input) => {
+                // Extraire le numéro de l'ID (ans1, ans2, etc.)
+                const answerNumber = parseInt(input.id.replace('ans', '')) - 1;
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = correctAnswers[answerNumber];
+
+                if (userAnswer === correctAnswer) {
+                    input.classList.remove('incorrect');
+                    input.classList.add('correct');
+                    score++;
+                } else {
+                    input.classList.remove('correct');
+                    input.classList.add('incorrect');
+                }
+            });
+
+            const percentage = Math.round((score / visibleInputs.length) * 100);
+            scoreDisplay.textContent = `Score: ${score}/${visibleInputs.length} (${percentage}%)`;
+            scoreDisplay.style.display = 'block';
+        }
+
+        // Initialiser la page au chargement
+        window.addEventListener('load', initializePage);
+    </script>
+
+</body>
+</html>
