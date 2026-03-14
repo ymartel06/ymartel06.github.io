@@ -2,113 +2,403 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
-        <style>
-            body {
-                font-family: 'Segoe UI', Arial, sans-serif;
-                background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
-                min-height: 100vh;
-                margin: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start;
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 32px 16px;
+            color: #1a1a2e;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 40px 48px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Controls (menu) ── */
+        .menu-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .field-group label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888;
+        }
+
+        select {
+            padding: 10px 36px 10px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            background: #f5f5f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            transition: border-color 0.2s, background-color 0.2s;
+            font-family: inherit;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: #fff;
+        }
+
+        /* ── Buttons ── */
+        button {
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        #startBtn {
+            width: 100%;
+            margin-top: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        #backBtn {
+            background: #f0f0f5;
+            color: #555;
+            font-size: 13px;
+            padding: 8px 18px;
+        }
+
+        #validateBtn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        #nextBtn {
+            background: #f0f0f5;
+            color: #444;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        /* ── Quiz area ── */
+        .quiz-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            gap: 10px;
+        }
+
+        #quizInfo {
+            font-size: 13px;
+            font-weight: 700;
+            color: #667eea;
+            background: #eef0ff;
+            border-radius: 8px;
+            padding: 5px 12px;
+            flex: 1;
+        }
+
+        #question {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            text-align: center;
+            background: #f8f9ff;
+            border: 2px solid #e8eaf6;
+            border-radius: 14px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #333;
+            background: #fff;
+            border: 2px solid #c5cae9;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"]:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+        input[type="text"]:disabled {
+            opacity: 0.6;
+        }
+
+        /* ── Choices ── */
+        #choicesContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .choice-btn {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+            width: auto;
+        }
+
+        .choice-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.35);
+        }
+
+        .choice-btn.selected {
+            background: linear-gradient(135deg, #27ae60, #1e8449);
+        }
+
+        /* ── Result ── */
+        #result {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            min-height: 28px;
+            padding: 8px 0;
+            color: #555;
+        }
+
+        /* ── Timer ── */
+        #timer {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #999;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #f0f0f5;
+        }
+
+        /* ── Scoreboard ── */
+        #scoreBoard {
+            margin-top: 20px;
+            background: #f8f9ff;
+            border: 2px solid #e8eaf6;
+            border-radius: 14px;
+            padding: 20px 24px;
+            font-size: 14px;
+            color: #444;
+        }
+
+        #scoreBoard strong {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #667eea;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #scoreBoard ol {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        /* ── Name prompt ── */
+        #namePrompt {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border: 2px solid #c5cae9;
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #namePrompt label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        #namePrompt input[type="text"] {
+            margin-bottom: 0;
+        }
+
+        #saveScoreBtn {
+            background: linear-gradient(135deg, #27ae60, #1e8449);
+            color: #fff;
+            width: 100%;
+        }
+
+        /* ── Text mode selector (shown during quiz for text quizzes) ── */
+        #lbTextMode {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888;
+        }
+
+        #textModeSelect {
+            margin-bottom: 16px;
+        }
+
+        /* ── Utilities ── */
+        .quiz-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mode-row {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 580px) {
+            .card {
+                padding: 28px 20px;
             }
-            h1 {
-                color: #2d5fa4;
-                margin-top: 40px;
-                margin-bottom: 30px;
-                font-size: 2.2em;
-                letter-spacing: 1px;
+            header h1 {
+                font-size: 22px;
             }
-            .quiz-container {
-                background: #fff;
-                border-radius: 16px;
-                box-shadow: 0 4px 24px rgba(44, 62, 80, 0.12);
-                padding: 32px 40px 28px 40px;
-                margin-bottom: 40px;
-                min-width: 320px;
-                max-width: 400px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            .question {
-                font-size: 1.4em;
-                color: #2d5fa4;
-                margin-bottom: 18px;
-                font-weight: 500;
-            }
-            input[type="text"] {
-                font-size: 1.1em;
-                padding: 8px 12px;
-                border-radius: 8px;
-                border: 1px solid #b2bec3;
-                margin-bottom: 12px;
-                width: 80%;
-                box-sizing: border-box;
-                outline: none;
-                transition: border-color 0.2s;
-            }
-            input[type="text"]:focus {
-                border-color: #2d5fa4;
-            }
-            button {
-                font-size: 1.1em;
-                padding: 7px 22px;
-                border-radius: 8px;
-                border: none;
-                background: #2d5fa4;
-                color: #fff;
-                margin: 6px 0;
-                cursor: pointer;
-                box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-                transition: background 0.2s;
-            }
-            button:hover {
-                background: #1b3c6b;
-            }
-            .result {
-                margin-top: 18px;
-                font-size: 1.1em;
-                color: #636e72;
-                min-height: 24px;
-                text-align: center;
-            }
-        </style>
+        }
+    </style>
 </head>
 <body>
-    <h1>Quiz</h1>
-    <div class="quiz-container">
-        <label id="lbCategorySelect" for="categorySelect" style="font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Choisis une catégorie :</label>
-        <select id="categorySelect" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;"></select>
-        <label id="lbQuizSelect" for="quizSelect" style="font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Choisis ton quiz :</label>
-        <select id="quizSelect" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;"></select>
-        <label id="lbTextMode" for="textModeSelect" style="display:none;font-size:1.1em;margin-bottom:12px;color:#2d5fa4;font-weight:500;">Mode de réponse :</label>
-        <select id="textModeSelect" style="display:none;font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:18px;width:80%;">
-            <option value="text">Saisie de texte</option>
-            <option value="selection">Choix multiple</option>
-        </select>
-        <button id="startBtn" onclick="startQuiz()" style="margin-bottom:18px;">Commencer</button>
-        <button id="backBtn" onclick="backToMenu()" style="display:none;margin-bottom:18px;background:#636e72;">Retour au menu</button>
-        <div id="quizInfo" style="display:none;margin-bottom:10px;font-size:1.1em;color:#2d5fa4;font-weight:500;"></div>
-        <div class="question" id="question" style="display:none;"></div>
-    <input type="text" id="answer" autocomplete="off" style="display:none;" oninput="updateValidateState()" onkeydown="handleEnter(event)" />
-    <div id="choicesContainer" style="display:none;margin-bottom:12px;"></div>
-    <button onclick="checkAnswer()" id="validateBtn" style="display:none;" disabled>Valider</button>
-        <div class="result" id="result" style="display:none;"></div>
-        <button onclick="nextQuestion()" id="nextBtn" style="display:none;">Question suivante</button>
-        <div id="timer" style="display:none;margin-bottom:10px;font-size:1.1em;color:#636e72;font-weight:500;"></div>
-        <div id="scoreBoard" style="display:none;margin-bottom:10px;"></div>
-        <div id="namePrompt" style="display:none;margin-bottom:10px;">
-            <label for="playerName" style="font-size:1.1em;color:#2d5fa4;font-weight:500;">Bravo ! Entre ton prénom :</label>
-            <input type="text" id="playerName" style="font-size:1.1em;padding:6px 12px;border-radius:8px;border:1px solid #b2bec3;margin-bottom:8px;width:80%;" />
-            <button onclick="saveScore()" id="saveScoreBtn" style="font-size:1.1em;padding:7px 22px;border-radius:8px;background:#27ae60;color:#fff;">Sauvegarder</button>
+    <div class="card">
+        <header>
+            <h1>Quiz</h1>
+        </header>
+
+        <!-- Menu -->
+        <div class="menu-section" id="menuSection">
+            <div class="field-group" id="lbCategorySelectWrap">
+                <label id="lbCategorySelect" for="categorySelect">Catégorie</label>
+                <select id="categorySelect"></select>
+            </div>
+            <div class="field-group" id="lbQuizSelectWrap">
+                <label id="lbQuizSelect" for="quizSelect">Quiz</label>
+                <select id="quizSelect"></select>
+            </div>
+            <button id="startBtn" onclick="startQuiz()">Commencer</button>
+        </div>
+
+        <!-- Quiz area (hidden at start) -->
+        <div id="quizArea" style="display:none;">
+            <div class="quiz-topbar">
+                <div id="quizInfo" style="display:none;"></div>
+                <button id="backBtn" onclick="backToMenu()" style="display:none;">← Retour</button>
+            </div>
+
+            <div class="mode-row" id="textModeRow" style="display:none;">
+                <label id="lbTextMode" for="textModeSelect">Mode de réponse</label>
+                <select id="textModeSelect">
+                    <option value="text">Saisie de texte</option>
+                    <option value="selection">Choix multiple</option>
+                </select>
+            </div>
+
+            <div class="question" id="question" style="display:none;"></div>
+
+            <input type="text" id="answer" autocomplete="off" style="display:none;"
+                   oninput="updateValidateState()" onkeydown="handleEnter(event)" />
+
+            <div id="choicesContainer" style="display:none;"></div>
+
+            <div class="quiz-actions">
+                <button onclick="checkAnswer()" id="validateBtn" style="display:none;" disabled>Valider</button>
+                <button onclick="nextQuestion()" id="nextBtn" style="display:none;">Question suivante</button>
+            </div>
+
+            <div class="result" id="result" style="display:none;"></div>
+
+            <div id="timer" style="display:none;"></div>
+            <div id="scoreBoard" style="display:none;"></div>
+            <div id="namePrompt" style="display:none;">
+                <label for="playerName">Bravo ! Entre ton prénom :</label>
+                <input type="text" id="playerName" />
+                <button onclick="saveScore()" id="saveScoreBtn">Sauvegarder</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Active/désactive le bouton Valider selon le champ
         function updateValidateState() {
             const select = document.getElementById('quizSelect');
             const quizName = select.value;
@@ -121,892 +411,878 @@
             }
         }
 
-        // Valide avec Entrée si le champ n'est pas vide
         function handleEnter(e) {
             const select = document.getElementById('quizSelect');
             const quizName = select.value;
             const quizType = quizzes[quizName].type || "text";
             if (quizType === "text" && e.key === "Enter") {
                 const val = document.getElementById('answer').value.trim();
-                if (val !== "") {
-                    checkAnswer();
-                }
+                if (val !== "") checkAnswer();
             }
         }
-        // Récupère le label du quiz sélectionné
+
         function getQuizLabel() {
             const select = document.getElementById('quizSelect');
-            const quizName = select.value;
-            return quizzes[quizName]?.title || "";
+            return quizzes[select.value]?.title || "";
         }
 
         function backToMenu() {
-            // Hide quiz elements
-            document.getElementById('question').style.display = 'none';
-            document.getElementById('quizInfo').style.display = 'none';
-            document.getElementById('answer').style.display = 'none';
-            document.getElementById('validateBtn').style.display = 'none';
-            document.getElementById('result').style.display = 'none';
-            document.getElementById('nextBtn').style.display = 'none';
-            document.getElementById('backBtn').style.display = 'none';
-            document.getElementById('choicesContainer').style.display = 'none';
-            document.getElementById('timer').style.display = 'none';
-            document.getElementById('scoreBoard').style.display = 'none';
-            document.getElementById('namePrompt').style.display = 'none';
-            // Show menu elements            
-            document.getElementById('lbCategorySelect').style.display = '';
-            document.getElementById('lbQuizSelect').style.display = '';
-            document.getElementById('categorySelect').style.display = '';
-            document.getElementById('quizSelect').style.display = '';
-            document.getElementById('startBtn').style.display = '';
-            document.getElementById('lbTextMode').style.display = 'none';
-            document.getElementById('textModeSelect').style.display = 'none';
+            document.getElementById('quizArea').style.display = 'none';
+            document.getElementById('menuSection').style.display = 'flex';
         }
-    // All answers are now case sensitive
-    const quizzes = {
-        lesson51: {
-            title: "Lesson 5 Part 1",
-            category: "Anglais - Primaire - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { a: "if so", q: "si oui" },
-                { a: "there will be", q: "il y aura" },
-                { a: "donation box", q: "boîte à don" },
-                { a: "funds", q: "fonds" },
-                { a: "owner", q: "propriétaire" },
-                { a: "stall", q: "stand de rue" },
-                { a: "open to", q: "ouvert à" },
-                { a: "pet lover", q: "amoureux des animaux" },
-                { a: "children", q: "enfants" },
-                { a: "castle", q: "château" },
-                { a: "what kind", q: "quel genre" },
-                { a: "in case of", q: "en cas de" },
-                { a: "following", q: "suivant" },
-                { a: "business", q: "entreprise" },
-                { a: "product", q: "produit" },
-                { a: "a dog leash", q: "une laisse pour chien" },
-                { a: "to groom, groomed", q: "toiletter" },
-                { a: "to hold, held", q: "tenir" },
-                { a: "to showcase, showcased", q: "présenter" },
-                { a: "to suggest, suggested", q: "suggérer" },
-                { a: "to act out", q: "agir" },
-                { a: "to attend, attended", q: "assister à" }, 
-                { a: "to own, owned", q: "posséder" },
-                { a: "to interest, interested", q: "intéresser" }
-            ]
-        },
-        lesson52: {
-            title: "Lesson 5 Part 2",
-            category: "Anglais - Primaire - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { a: "on the map", q: "sur la carte" },
-                { a: "on page", q: "sur la page" },
-                { a: "newsletter", q: "bulletin" },
-                { a: "vendor", q: "fournisseur" },
-                { a: "highlights", q: "points forts" },
-                { a: "as well", q: "aussi" },
-                { a: "as well as", q: "ainsi que" },
-                { a: "contest", q: "concours" },
-                { a: "block", q: "paté de maisons" },
-                { a: "traffic light", q: "feu de circulation" },
-                { a: "hill", q: "colline" },
-                { a: "warning", q: "avertissement" },
-                { a: "at the lights", q: "aux lumières" },
-                { a: "personal pronoum", q: "pronom personnel" },
-                { a: "at the stop sign", q: "au panneau d'arrêt" },
-                { a: "again", q: "encore" },
-                { a: "race", q: "course" },
-                { a: "make-up", q: "maquillage" },
-                { a: "toy", q: "jouet" },
-                { a: "prize", q: "prix" },
-                { a: "inflatable", q: "gonfable" },
-                { a: "competition", q: "concours" }, 
-                { a: "newspaper", q: "journal" },
-                { a: "among", q: "parmi" }
-            ]
-        },
-        lesson6: {
-            title: "Lesson 6",
-            category: "Anglais - Primaire - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { a: "north", q: "nord" },
-                { a: "south", q: "sud" },
-                { a: "east", q: "est" },
-                { a: "west", q: "ouest" },
-                { a: "artwork", q: "ouvrage d'art" },
-                { a: "including", q: "y compris" },
-                { a: "free for", q: "gratuit pour" },
-                { a: "creamy", q: "crémeux" },
-                { a: "to find out", q: "découvrir" },
-                { a: "to provide", q: "fournir" },
-                { a: "to drive", q: "conduire" },
-                { a: "to turn", q: "tourner" },
-                { a: "double number", q: "nombre double" },
-                { a: "to turn right", q: "tourner à droite" },
-                { a: "separate", q: "séparé" },
-                { a: "oven", q: "four" },
-                { a: "to enter", q: "entrer" },
-                { a: "to cross", q: "traverser" },
-                { a: "to go up", q: "monter" },
-                { a: "to go around", q: "faire le tour" },
-                { a: "to go down", q: "descendre" },
-                { a: "to go straight", q: "aller tout droit" },
-                { a: "to turn left", q: "tourner à gauche" }, 
-                { a: "to establish", q: "établir" }
-            ]
-        },
-        lesson7: {
-            title: "Lesson 7",
-            category: "Anglais - Primaire - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { a: "dry", q: "sec" },
-                { a: "really", q: "vraiment" },
-                { a: "anywhere else", q: "ailleurs" },
-                { a: "on the brochure", q: "sur la brochure" },
-                { a: "a.m. / p.m.", q: "matin / après-midi" },
-                { a: "ripe", q: "mûr" },
-                { a: "chips", q: "frites" },
-                { a: "mom", q: "maman" },
-                { a: "rough draft", q: "brouillon" },
-                { a: "responsible for", q: "responsable de" },
-                { a: "rally", q: "rassemblement" },
-                { a: "permission", q: "autorisation" },
-                { a: "mayor", q: "maire" },
-                { a: "interesting", q: "intéressant" },
-                { a: "is located", q: "est situé" },
-                { a: "water", q: "eau" },
-                { a: "to cost", q: "coûter" },
-                { a: "to roll a die", q: "lancer un dé" },
-                { a: "to divide", q: "diviser" },
-                { a: "to forget", q: "oublier" },
-                { a: "to verify", q: "vérifier" },
-                { a: "to wrap up", q: "conclure" },
-                { a: "to promise", q: "promettre" }, 
-                { a: "to glide", q: "glisser" }
-            ]
-        },
-        lesson8: {
-            title: "Lesson 8",
-            category: "Anglais - Primaire - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { a: "ham", q: "jambon" },
-                { a: "all year long", q: "toute l'année" },
-                { a: "pill", q: "pilule" },
-                { a: "slice", q: "tranche" },
-                { a: "avocado", q: "avocat" },
-                { a: "mixture", q: "mélange" },
-                { a: "salt", q: "sel" },
-                { a: "chicken", q: "poulet" },
-                { a: "inhabitant", q: "habitant" },
-                { a: "item", q: "article" },
-                { a: "grap", q: "raisin" },
-                { a: "juice", q: "jus" },
-                { a: "meat", q: "viande" },
-                { a: "oil", q: "huile" },
-                { a: "drinks", q: "boissons" },
-                { a: "coffee", q: "café" },
-                { a: "to bear", q: "supporter" },
-                { a: "to offer", q: "offrir" },
-                { a: "to pray", q: "prier" },
-                { a: "to jog", q: "faire du jogging" },
-                { a: "to arrest", q: "arrêter" },
-                { a: "to talk about", q: "parler de" },
-                { a: "to go back", q: "retourner" }, 
-                { a: "to travel", q: "voyager" }
-            ]
-        },
-        feelings: {
-            title: "Lesson - Feelings and emotions",
-            category: "Anglais - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { a: "chill", q: "se détendre" },
-                { a: "scream", q: "crier" },
-                { a: "sweat", q: "transpirer" },
-                { a: "cry", q: "pleurer" },
-                { a: "bite", q: "mordre" },
-                { a: "run away", q: "s'enfuir" },
-                { a: "stomach ache", q: "avoir mal au ventre" }
-            ]
-        },
-        days: {
-            title: "Jours de la semaine",
-            category: "Anglais - Vocabulaire",
-            caseSensitive: true,
-            type: "text",
-            questions: [
-                { q: "Lundi", a: "Monday" },
-                { q: "Mardi", a: "Tuesday" },
-                { q: "Mercredi", a: "Wednesday" },
-                { q: "Jeudi", a: "Thursday" },
-                { q: "Vendredi", a: "Friday" },
-                { q: "Samedi", a: "Saturday" },
-                { q: "Dimanche", a: "Sunday" }
-            ]
-        },
-        months: {
-            title: "Mois de l'année",
-            category: "Anglais - Vocabulaire",
-            caseSensitive: true,
-            type: "text",
-            questions: [
-                { q: "Janvier", a: "January" },
-                { q: "Février", a: "February" },
-                { q: "Mars", a: "March" },
-                { q: "Avril", a: "April" },
-                { q: "Mai", a: "May" },
-                { q: "Juin", a: "June" },
-                { q: "Juillet", a: "July" },
-                { q: "Août", a: "August" },
-                { q: "Septembre", a: "September" },
-                { q: "Octobre", a: "October" },
-                { q: "Novembre", a: "November" },
-                { q: "Décembre", a: "December" }
-            ]
-        },
-        numbers: {
-            title: "Chiffres",
-            category: "Anglais - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { q: "Un", a: "One" },
-                { q: "Deux", a: "Two" },
-                { q: "Trois", a: "Three" },
-                { q: "Quatre", a: "Four" },
-                { q: "Cinq", a: "Five" },
-                { q: "Six", a: "Six" },
-                { q: "Sept", a: "Seven" },
-                { q: "Huit", a: "Eight" },
-                { q: "Neuf", a: "Nine" },
-                { q: "Dix", a: "Ten" },
-                { q: "Onze", a: "Eleven" },
-                { q: "Douze", a: "Twelve" },
-                { q: "Treize", a: "Thirteen" },
-                { q: "Quatorze", a: "Fourteen" },
-                { q: "Quinze", a: "Fifteen" },
-                { q: "Seize", a: "Sixteen" },
-                { q: "Dix-sept", a: "Seventeen" },
-                { q: "Dix-huit", a: "Eighteen" },
-                { q: "Dix-neuf", a: "Nineteen" },
-                { q: "Vingt", a: "Twenty" },
-                { q: "Trente", a: "Thirty" },
-                { q: "Quarante", a: "Forty" },
-                { q: "Cinquante", a: "Fifty" },
-                { q: "Soixante", a: "Sixty" },
-                { q: "Soixante-dix", a: "Seventy" },
-                { q: "Quatre-vingts", a: "Eighty" },
-                { q: "Quatre-vingt-dix", a: "Ninety" },
-                { q: "Cent", a: "One hundred" }
-            ]
-        },
-        be_present: {
-            title: "To be - Présent",
-            category: "Anglais - Verbes",
-            caseSensitive: true,
-            type: "text",
-            questions: [
-                { q: "Je suis", a: "I am" },
-                { q: "Tu es", a: "You are" },
-                { q: "Il est", a: "He is" },
-                { q: "Elle est", a: "She is" },
-                { q: "Nous sommes", a: "We are" },
-                { q: "Vous êtes", a: "You are" },
-                { q: "Ils sont", a: "They are" },
-                { q: "Elles sont", a: "They are" }
-            ]
-        },
-        be_past: {
-            title: "To be - Passé",
-            category: "Anglais - Verbes",
-            caseSensitive: true,
-            type: "text",
-            questions: [
-                { q: "J'étais", a: "I was" },
-                { q: "Tu étais", a: "You were" },
-                { q: "Il était", a: "He was" },
-                { q: "Elle était", a: "She was" },
-                { q: "Nous étions", a: "We were" },
-                { q: "Vous étiez", a: "You were" },
-                { q: "Ils étaient", a: "They were" },
-                { q: "Elles étaient", a: "They were" }
-            ]
-        },
-        be_future: {
-            title: "To be - Futur",
-            category: "Anglais - Verbes",
-            caseSensitive: true,
-            type: "text",
-            questions: [
-                { q: "Je serai", a: "I will be" },
-                { q: "Tu seras", a: "You will be" },
-                { q: "Il sera", a: "He will be" },
-                { q: "Elle sera", a: "She will be" },
-                { q: "Nous serons", a: "We will be" },
-                { q: "Vous serez", a: "You will be" },
-                { q: "Ils seront", a: "They will be" },
-                { q: "Elles seront", a: "They will be" }
-            ]
-        },
-        have_present: {
-            title: "To have - Présent",
-            category: "Anglais - Verbes",
-            caseSensitive: true,
-            type: "text",
-            questions: [
-                { q: "J'ai", a: "I have" },
-                { q: "Tu as", a: "You have" },
-                { q: "Il a", a: "He has" },
-                { q: "Elle a", a: "She has" },
-                { q: "Nous avons", a: "We have" },
-                { q: "Vous avez", a: "You have" },
-                { q: "Ils ont", a: "They have" },
-                { q: "Elles ont", a: "They have" }
-            ]
-        },
-        have_past: {
-            title: "To have - Passé",
-            category: "Anglais - Verbes",
-            caseSensitive: true,
-            type: "text",
-            questions: [
-                { q: "J'avais", a: "I had" },
-                { q: "Tu avais", a: "You had" },
-                { q: "Il avait", a: "He had" },
-                { q: "Elle avait", a: "She had" },
-                { q: "Nous avions", a: "We had" },
-                { q: "Vous aviez", a: "You had" },
-                { q: "Ils avaient", a: "They had" },
-                { q: "Elles avaient", a: "They had" }
-            ]
-        },
-        have_future: {
-            title: "To have - Futur",
-            category: "Anglais - Verbes",
-            caseSensitive: true,
-            type: "text",
-            questions: [
-                { q: "J'aurai", a: "I will have" },
-                { q: "Tu auras", a: "You will have" },
-                { q: "Il aura", a: "He will have" },
-                { q: "Elle aura", a: "She will have" },
-                { q: "Nous aurons", a: "We will have" },
-                { q: "Vous aurez", a: "You will have" },
-                { q: "Ils auront", a: "They will have" },
-                { q: "Elles auront", a: "They will have" }
-            ]
-        },
-        dertiminants: {
-            title: "Determinants",
-            category: "Français - Vocabulaire",
-            caseSensitive: false,
-            type: "multiple",
-            questions: [
-                { q: "Un", a: 1, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Plusieurs", a: 1, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Tout", a: 1, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Chaque", a: 1, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Le", a: 0, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "La", a: 0, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Les", a: 0, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Mon", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Ta", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Ses", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Son", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Notre", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Leur", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Ce", a: 3, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Cet", a: 3, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Ces", a: 3, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
-                { q: "Quatre", a: 4, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] }
-            ]
-        },
-        pronoms: {
-            title: "Pronoms",
-            category: "Français - Vocabulaire",
-            caseSensitive: false,
-            type: "multiple",
-            questions: [
-                { q: "Je", a: 0, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Moi", a: 0, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "On", a: 0, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Eux", a: 0, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Ce", a: 1, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Ça", a: 1, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Celui", a: 1, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Cela", a: 1, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Qui", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Que", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Dont", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Où", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Lequel", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Certains", a: 3, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Beaucoup", a: 3, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Personne", a: 3, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Plusieurs", a: 3, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Le mien", a: 4, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Le nôtre", a: 4, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
-                { q: "Les tiens", a: 4, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] }
-            ]
-        },
-        irregular_verbs_1: {
-            title: "Verbes irréguliers 1 anglais",
-            category: "Anglais - Verbes irréguliers",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { q: "Reveiller", a: "awake, awoke" },
-                { q: "Être", a: "be, was/were" },
-                { q: "Supporter", a: "bear, bore" },
-                { q: "Battre", a: "beat, beat" },
-                { q: "Devenir", a: "become, became" },
-                { q: "Commencer", a: "begin, began" },
-                { q: "Plier", a: "Bend, bent" },
-                { q: "Parier", a: "bet, bet" },
-                { q: "Enchérir", a: "bid, bid" },
-                { q: "Lier", a: "bind, bound" },
-                { q: "Attendre", a: "bite, bit" },
-                { q: "Saigner", a: "bleed, bled" },
-                { q: "Souffler", a: "blow, blew" },
-                { q: "Casser", a: "break, broke" },
-                { q: "Apporter", a: "bring, brought" },
-                { q: "Construire", a: "build, built" },
-                { q: "Exploser", a: "burst, burst" }
-            ]
-        },
-        irregular_verbs_2: {
-            title: "Verbes irréguliers 2 anglais",
-            category: "Anglais - Verbes irréguliers",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { q: "Acheter", a: "buy, bought" },
-                { q: "Attraper", a: "catch, caught" },
-                { q: "Choisir", a: "choose, chose" },
-                { q: "Venir", a: "come, came" },
-                { q: "Coûter", a: "cost, cost" },
-                { q: "Couper", a: "cut, cut" },
-                { q: "Traiter", a: "deal, dealt" },
-                { q: "Creuser", a: "dig, dug" },
-                { q: "Faire", a: "do, did" },
-                { q: "Dessiner", a: "draw, drew" },
-                { q: "Conduire", a: "drive, drove" },
-                { q: "Boire", a: "drink, drank" },
-                { q: "Manger", a: "eat, ate" },
-                { q: "Tomber", a: "fall, fell" },
-                { q: "Se nourrir", a: "feed, fed" },
-                { q: "Sentir", a: "feel, felt" },
-                { q: "Combattre", a: "fight, fought" }
-            ]
-        },
-        pronouns_en: {
-            title: "Pronoms anglais",
-            category: "Anglais - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { q: "Moi", a: "me" },
-                { q: "Toi", a: "you" },
-                { q: "Lui (exemple, c'est lui)", a: "him" },
-                { q: "Elle (exemple, c'est elle)", a: "her" },
-                { q: "Ça / Cela", a: "it" },
-                { q: "Nous (exemple, c'est nous)", a: "us" },
-                { q: "Eux (exemple, c'est eux)", a: "them" },
-                { q: "Le mien", a: "mine" },
-                { q: "Le tien", a: "yours" },
-                { q: "Le sien (masculin)", a: "his" },
-                { q: "Le sien (féminin)", a: "hers" },
-                { q: "Le sien (neutre)", a: "its" },
-                { q: "Le nôtre", a: "ours" },
-                { q: "Le leur", a: "theirs" }
-            ]
-        },
-        reflexive_pronouns_en: {
-            title: "Reflexive pronouns",
-            category: "Anglais - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { q: "Moi-même", a: "myself" },
-                { q: "Toi-même", a: "yourself" },
-                { q: "Lui-même", a: "himself" },
-                { q: "Elle-même", a: "herself" },
-                { q: "Nous-mêmes", a: "ourselves" },
-                { q: "Vous-même", a: "yourself" },
-                { q: "Vous-mêmes", a: "yourselves" },
-                { q: "Eux-mêmes", a: "themselves" },
-                { q: "Lui-même (neutre/objet/animal)", a: "itself" }
-            ]
-        },
-        glossary_words_2: {
-            title: "Glossary Words 2 anglais",
-            category: "Anglais - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { q: "roll call", a: "reading a list of names out loud to check everyone is present" },
-                { q: "BCE", a: "before common era" },
-                { q: "CE", a: "common era" },
-                { q: "confuse", a: "mistake one for the other" },
-                { q: "roofs", a: "tops of buildings" },
-                { q: "roots", a: "origins" },
-                { q: "family tree", a: "diagram of a family's history" },
-                { q: "branch", a: "part of something larger" },
-                { q: "endearment", a: "loving word" },
-                { q: "privacy", a: "confidenciality" },
-                { q: "hurt", a: "cause pain" },
-                { q: "nickname", a: "informal name" }
-            ]
-        },
-        glossary_words_3: {
-            title: "Glossary Words 3 anglais",
-            category: "Anglais - Vocabulaire",
-            caseSensitive: false,
-            type: "text",
-            questions: [
-                { q: "purpose", a: "reason something exists" },
-                { q: "addicted", a: "dependent on something" },
-                { q: "banned", a: "illegal activity" },
-                { q: "censored", a: "remove unacceptable part of something" },
-                { q: "nightmare", a: "a frightening, an unpleasant dream" },
-                { q: "atom bomb", a: "bomb using nuclear fission" },
-                { q: "curfew", a: "a regulation requiring people to say indoors during specified hours" },
-                { q: "up for grabs", a: "available to anyone" },
-                { q: "brutal", a: "exhausting" },
-                { q: "strenuous", a: "taking a lot of effort" },
-                { q: "night owl", a: "person who stays up late" },
-                { q: "attending", a: "going to an event" },
-                { q: "unpaid", a: "work for free" },
-                { q: "journey", a: "path to a goal" },
-                { q: "disappointed", a: "unhappy because something didn't meet expectations" },
-                { q: "valiant", a: "showing courage or determination" },
-                { q: "hooked", a: "obsessed with" },
-                { q: "on board", a: "giving full support" },
-            ]
-        }
-    };
 
-    // Remplit le select categorySelect dynamiquement
-    function fillCategorySelect() {
-        const select = document.getElementById('categorySelect');
-        select.innerHTML = "";
-        const categories = [...new Set(Object.values(quizzes).map(q => q.category))];
-        categories.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat;
-            option.textContent = cat;
-            select.appendChild(option);
-        });
-    }
+        const quizzes = {
+            lesson51: {
+                title: "Lesson 5 Part 1",
+                category: "Anglais - Primaire - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { a: "if so", q: "si oui" },
+                    { a: "there will be", q: "il y aura" },
+                    { a: "donation box", q: "boîte à don" },
+                    { a: "funds", q: "fonds" },
+                    { a: "owner", q: "propriétaire" },
+                    { a: "stall", q: "stand de rue" },
+                    { a: "open to", q: "ouvert à" },
+                    { a: "pet lover", q: "amoureux des animaux" },
+                    { a: "children", q: "enfants" },
+                    { a: "castle", q: "château" },
+                    { a: "what kind", q: "quel genre" },
+                    { a: "in case of", q: "en cas de" },
+                    { a: "following", q: "suivant" },
+                    { a: "business", q: "entreprise" },
+                    { a: "product", q: "produit" },
+                    { a: "a dog leash", q: "une laisse pour chien" },
+                    { a: "to groom, groomed", q: "toiletter" },
+                    { a: "to hold, held", q: "tenir" },
+                    { a: "to showcase, showcased", q: "présenter" },
+                    { a: "to suggest, suggested", q: "suggérer" },
+                    { a: "to act out", q: "agir" },
+                    { a: "to attend, attended", q: "assister à" },
+                    { a: "to own, owned", q: "posséder" },
+                    { a: "to interest, interested", q: "intéresser" }
+                ]
+            },
+            lesson52: {
+                title: "Lesson 5 Part 2",
+                category: "Anglais - Primaire - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { a: "on the map", q: "sur la carte" },
+                    { a: "on page", q: "sur la page" },
+                    { a: "newsletter", q: "bulletin" },
+                    { a: "vendor", q: "fournisseur" },
+                    { a: "highlights", q: "points forts" },
+                    { a: "as well", q: "aussi" },
+                    { a: "as well as", q: "ainsi que" },
+                    { a: "contest", q: "concours" },
+                    { a: "block", q: "paté de maisons" },
+                    { a: "traffic light", q: "feu de circulation" },
+                    { a: "hill", q: "colline" },
+                    { a: "warning", q: "avertissement" },
+                    { a: "at the lights", q: "aux lumières" },
+                    { a: "personal pronoum", q: "pronom personnel" },
+                    { a: "at the stop sign", q: "au panneau d'arrêt" },
+                    { a: "again", q: "encore" },
+                    { a: "race", q: "course" },
+                    { a: "make-up", q: "maquillage" },
+                    { a: "toy", q: "jouet" },
+                    { a: "prize", q: "prix" },
+                    { a: "inflatable", q: "gonfable" },
+                    { a: "competition", q: "concours" },
+                    { a: "newspaper", q: "journal" },
+                    { a: "among", q: "parmi" }
+                ]
+            },
+            lesson6: {
+                title: "Lesson 6",
+                category: "Anglais - Primaire - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { a: "north", q: "nord" },
+                    { a: "south", q: "sud" },
+                    { a: "east", q: "est" },
+                    { a: "west", q: "ouest" },
+                    { a: "artwork", q: "ouvrage d'art" },
+                    { a: "including", q: "y compris" },
+                    { a: "free for", q: "gratuit pour" },
+                    { a: "creamy", q: "crémeux" },
+                    { a: "to find out", q: "découvrir" },
+                    { a: "to provide", q: "fournir" },
+                    { a: "to drive", q: "conduire" },
+                    { a: "to turn", q: "tourner" },
+                    { a: "double number", q: "nombre double" },
+                    { a: "to turn right", q: "tourner à droite" },
+                    { a: "separate", q: "séparé" },
+                    { a: "oven", q: "four" },
+                    { a: "to enter", q: "entrer" },
+                    { a: "to cross", q: "traverser" },
+                    { a: "to go up", q: "monter" },
+                    { a: "to go around", q: "faire le tour" },
+                    { a: "to go down", q: "descendre" },
+                    { a: "to go straight", q: "aller tout droit" },
+                    { a: "to turn left", q: "tourner à gauche" },
+                    { a: "to establish", q: "établir" }
+                ]
+            },
+            lesson7: {
+                title: "Lesson 7",
+                category: "Anglais - Primaire - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { a: "dry", q: "sec" },
+                    { a: "really", q: "vraiment" },
+                    { a: "anywhere else", q: "ailleurs" },
+                    { a: "on the brochure", q: "sur la brochure" },
+                    { a: "a.m. / p.m.", q: "matin / après-midi" },
+                    { a: "ripe", q: "mûr" },
+                    { a: "chips", q: "frites" },
+                    { a: "mom", q: "maman" },
+                    { a: "rough draft", q: "brouillon" },
+                    { a: "responsible for", q: "responsable de" },
+                    { a: "rally", q: "rassemblement" },
+                    { a: "permission", q: "autorisation" },
+                    { a: "mayor", q: "maire" },
+                    { a: "interesting", q: "intéressant" },
+                    { a: "is located", q: "est situé" },
+                    { a: "water", q: "eau" },
+                    { a: "to cost", q: "coûter" },
+                    { a: "to roll a die", q: "lancer un dé" },
+                    { a: "to divide", q: "diviser" },
+                    { a: "to forget", q: "oublier" },
+                    { a: "to verify", q: "vérifier" },
+                    { a: "to wrap up", q: "conclure" },
+                    { a: "to promise", q: "promettre" },
+                    { a: "to glide", q: "glisser" }
+                ]
+            },
+            lesson8: {
+                title: "Lesson 8",
+                category: "Anglais - Primaire - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { a: "ham", q: "jambon" },
+                    { a: "all year long", q: "toute l'année" },
+                    { a: "pill", q: "pilule" },
+                    { a: "slice", q: "tranche" },
+                    { a: "avocado", q: "avocat" },
+                    { a: "mixture", q: "mélange" },
+                    { a: "salt", q: "sel" },
+                    { a: "chicken", q: "poulet" },
+                    { a: "inhabitant", q: "habitant" },
+                    { a: "item", q: "article" },
+                    { a: "grap", q: "raisin" },
+                    { a: "juice", q: "jus" },
+                    { a: "meat", q: "viande" },
+                    { a: "oil", q: "huile" },
+                    { a: "drinks", q: "boissons" },
+                    { a: "coffee", q: "café" },
+                    { a: "to bear", q: "supporter" },
+                    { a: "to offer", q: "offrir" },
+                    { a: "to pray", q: "prier" },
+                    { a: "to jog", q: "faire du jogging" },
+                    { a: "to arrest", q: "arrêter" },
+                    { a: "to talk about", q: "parler de" },
+                    { a: "to go back", q: "retourner" },
+                    { a: "to travel", q: "voyager" }
+                ]
+            },
+            feelings: {
+                title: "Lesson - Feelings and emotions",
+                category: "Anglais - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { a: "chill", q: "se détendre" },
+                    { a: "scream", q: "crier" },
+                    { a: "sweat", q: "transpirer" },
+                    { a: "cry", q: "pleurer" },
+                    { a: "bite", q: "mordre" },
+                    { a: "run away", q: "s'enfuir" },
+                    { a: "stomach ache", q: "avoir mal au ventre" }
+                ]
+            },
+            days: {
+                title: "Jours de la semaine",
+                category: "Anglais - Vocabulaire",
+                caseSensitive: true,
+                type: "text",
+                questions: [
+                    { q: "Lundi", a: "Monday" },
+                    { q: "Mardi", a: "Tuesday" },
+                    { q: "Mercredi", a: "Wednesday" },
+                    { q: "Jeudi", a: "Thursday" },
+                    { q: "Vendredi", a: "Friday" },
+                    { q: "Samedi", a: "Saturday" },
+                    { q: "Dimanche", a: "Sunday" }
+                ]
+            },
+            months: {
+                title: "Mois de l'année",
+                category: "Anglais - Vocabulaire",
+                caseSensitive: true,
+                type: "text",
+                questions: [
+                    { q: "Janvier", a: "January" },
+                    { q: "Février", a: "February" },
+                    { q: "Mars", a: "March" },
+                    { q: "Avril", a: "April" },
+                    { q: "Mai", a: "May" },
+                    { q: "Juin", a: "June" },
+                    { q: "Juillet", a: "July" },
+                    { q: "Août", a: "August" },
+                    { q: "Septembre", a: "September" },
+                    { q: "Octobre", a: "October" },
+                    { q: "Novembre", a: "November" },
+                    { q: "Décembre", a: "December" }
+                ]
+            },
+            numbers: {
+                title: "Chiffres",
+                category: "Anglais - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { q: "Un", a: "One" },
+                    { q: "Deux", a: "Two" },
+                    { q: "Trois", a: "Three" },
+                    { q: "Quatre", a: "Four" },
+                    { q: "Cinq", a: "Five" },
+                    { q: "Six", a: "Six" },
+                    { q: "Sept", a: "Seven" },
+                    { q: "Huit", a: "Eight" },
+                    { q: "Neuf", a: "Nine" },
+                    { q: "Dix", a: "Ten" },
+                    { q: "Onze", a: "Eleven" },
+                    { q: "Douze", a: "Twelve" },
+                    { q: "Treize", a: "Thirteen" },
+                    { q: "Quatorze", a: "Fourteen" },
+                    { q: "Quinze", a: "Fifteen" },
+                    { q: "Seize", a: "Sixteen" },
+                    { q: "Dix-sept", a: "Seventeen" },
+                    { q: "Dix-huit", a: "Eighteen" },
+                    { q: "Dix-neuf", a: "Nineteen" },
+                    { q: "Vingt", a: "Twenty" },
+                    { q: "Trente", a: "Thirty" },
+                    { q: "Quarante", a: "Forty" },
+                    { q: "Cinquante", a: "Fifty" },
+                    { q: "Soixante", a: "Sixty" },
+                    { q: "Soixante-dix", a: "Seventy" },
+                    { q: "Quatre-vingts", a: "Eighty" },
+                    { q: "Quatre-vingt-dix", a: "Ninety" },
+                    { q: "Cent", a: "One hundred" }
+                ]
+            },
+            be_present: {
+                title: "To be - Présent",
+                category: "Anglais - Verbes",
+                caseSensitive: true,
+                type: "text",
+                questions: [
+                    { q: "Je suis", a: "I am" },
+                    { q: "Tu es", a: "You are" },
+                    { q: "Il est", a: "He is" },
+                    { q: "Elle est", a: "She is" },
+                    { q: "Nous sommes", a: "We are" },
+                    { q: "Vous êtes", a: "You are" },
+                    { q: "Ils sont", a: "They are" },
+                    { q: "Elles sont", a: "They are" }
+                ]
+            },
+            be_past: {
+                title: "To be - Passé",
+                category: "Anglais - Verbes",
+                caseSensitive: true,
+                type: "text",
+                questions: [
+                    { q: "J'étais", a: "I was" },
+                    { q: "Tu étais", a: "You were" },
+                    { q: "Il était", a: "He was" },
+                    { q: "Elle était", a: "She was" },
+                    { q: "Nous étions", a: "We were" },
+                    { q: "Vous étiez", a: "You were" },
+                    { q: "Ils étaient", a: "They were" },
+                    { q: "Elles étaient", a: "They were" }
+                ]
+            },
+            be_future: {
+                title: "To be - Futur",
+                category: "Anglais - Verbes",
+                caseSensitive: true,
+                type: "text",
+                questions: [
+                    { q: "Je serai", a: "I will be" },
+                    { q: "Tu seras", a: "You will be" },
+                    { q: "Il sera", a: "He will be" },
+                    { q: "Elle sera", a: "She will be" },
+                    { q: "Nous serons", a: "We will be" },
+                    { q: "Vous serez", a: "You will be" },
+                    { q: "Ils seront", a: "They will be" },
+                    { q: "Elles seront", a: "They will be" }
+                ]
+            },
+            have_present: {
+                title: "To have - Présent",
+                category: "Anglais - Verbes",
+                caseSensitive: true,
+                type: "text",
+                questions: [
+                    { q: "J'ai", a: "I have" },
+                    { q: "Tu as", a: "You have" },
+                    { q: "Il a", a: "He has" },
+                    { q: "Elle a", a: "She has" },
+                    { q: "Nous avons", a: "We have" },
+                    { q: "Vous avez", a: "You have" },
+                    { q: "Ils ont", a: "They have" },
+                    { q: "Elles ont", a: "They have" }
+                ]
+            },
+            have_past: {
+                title: "To have - Passé",
+                category: "Anglais - Verbes",
+                caseSensitive: true,
+                type: "text",
+                questions: [
+                    { q: "J'avais", a: "I had" },
+                    { q: "Tu avais", a: "You had" },
+                    { q: "Il avait", a: "He had" },
+                    { q: "Elle avait", a: "She had" },
+                    { q: "Nous avions", a: "We had" },
+                    { q: "Vous aviez", a: "You had" },
+                    { q: "Ils avaient", a: "They had" },
+                    { q: "Elles avaient", a: "They had" }
+                ]
+            },
+            have_future: {
+                title: "To have - Futur",
+                category: "Anglais - Verbes",
+                caseSensitive: true,
+                type: "text",
+                questions: [
+                    { q: "J'aurai", a: "I will have" },
+                    { q: "Tu auras", a: "You will have" },
+                    { q: "Il aura", a: "He will have" },
+                    { q: "Elle aura", a: "She will have" },
+                    { q: "Nous aurons", a: "We will have" },
+                    { q: "Vous aurez", a: "You will have" },
+                    { q: "Ils auront", a: "They will have" },
+                    { q: "Elles auront", a: "They will have" }
+                ]
+            },
+            dertiminants: {
+                title: "Determinants",
+                category: "Français - Vocabulaire",
+                caseSensitive: false,
+                type: "multiple",
+                questions: [
+                    { q: "Un", a: 1, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Plusieurs", a: 1, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Tout", a: 1, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Chaque", a: 1, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Le", a: 0, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "La", a: 0, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Les", a: 0, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Mon", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Ta", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Ses", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Son", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Notre", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Leur", a: 2, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Ce", a: 3, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Cet", a: 3, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Ces", a: 3, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] },
+                    { q: "Quatre", a: 4, choices: ["Défini", "Indéfini", "Possessif", "Démonstratif", "Numéral"] }
+                ]
+            },
+            pronoms: {
+                title: "Pronoms",
+                category: "Français - Vocabulaire",
+                caseSensitive: false,
+                type: "multiple",
+                questions: [
+                    { q: "Je", a: 0, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Moi", a: 0, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "On", a: 0, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Eux", a: 0, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Ce", a: 1, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Ça", a: 1, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Celui", a: 1, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Cela", a: 1, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Qui", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Que", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Dont", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Où", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Lequel", a: 2, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Certains", a: 3, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Beaucoup", a: 3, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Personne", a: 3, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Plusieurs", a: 3, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Le mien", a: 4, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Le nôtre", a: 4, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] },
+                    { q: "Les tiens", a: 4, choices: ["Personel", "Démonstratif", "Relatif", "Indéfini", "Possessif"] }
+                ]
+            },
+            irregular_verbs_1: {
+                title: "Verbes irréguliers 1 anglais",
+                category: "Anglais - Verbes irréguliers",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { q: "Reveiller", a: "awake, awoke" },
+                    { q: "Être", a: "be, was/were" },
+                    { q: "Supporter", a: "bear, bore" },
+                    { q: "Battre", a: "beat, beat" },
+                    { q: "Devenir", a: "become, became" },
+                    { q: "Commencer", a: "begin, began" },
+                    { q: "Plier", a: "Bend, bent" },
+                    { q: "Parier", a: "bet, bet" },
+                    { q: "Enchérir", a: "bid, bid" },
+                    { q: "Lier", a: "bind, bound" },
+                    { q: "Attendre", a: "bite, bit" },
+                    { q: "Saigner", a: "bleed, bled" },
+                    { q: "Souffler", a: "blow, blew" },
+                    { q: "Casser", a: "break, broke" },
+                    { q: "Apporter", a: "bring, brought" },
+                    { q: "Construire", a: "build, built" },
+                    { q: "Exploser", a: "burst, burst" }
+                ]
+            },
+            irregular_verbs_2: {
+                title: "Verbes irréguliers 2 anglais",
+                category: "Anglais - Verbes irréguliers",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { q: "Acheter", a: "buy, bought" },
+                    { q: "Attraper", a: "catch, caught" },
+                    { q: "Choisir", a: "choose, chose" },
+                    { q: "Venir", a: "come, came" },
+                    { q: "Coûter", a: "cost, cost" },
+                    { q: "Couper", a: "cut, cut" },
+                    { q: "Traiter", a: "deal, dealt" },
+                    { q: "Creuser", a: "dig, dug" },
+                    { q: "Faire", a: "do, did" },
+                    { q: "Dessiner", a: "draw, drew" },
+                    { q: "Conduire", a: "drive, drove" },
+                    { q: "Boire", a: "drink, drank" },
+                    { q: "Manger", a: "eat, ate" },
+                    { q: "Tomber", a: "fall, fell" },
+                    { q: "Se nourrir", a: "feed, fed" },
+                    { q: "Sentir", a: "feel, felt" },
+                    { q: "Combattre", a: "fight, fought" }
+                ]
+            },
+            pronouns_en: {
+                title: "Pronoms anglais",
+                category: "Anglais - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { q: "Moi", a: "me" },
+                    { q: "Toi", a: "you" },
+                    { q: "Lui (exemple, c'est lui)", a: "him" },
+                    { q: "Elle (exemple, c'est elle)", a: "her" },
+                    { q: "Ça / Cela", a: "it" },
+                    { q: "Nous (exemple, c'est nous)", a: "us" },
+                    { q: "Eux (exemple, c'est eux)", a: "them" },
+                    { q: "Le mien", a: "mine" },
+                    { q: "Le tien", a: "yours" },
+                    { q: "Le sien (masculin)", a: "his" },
+                    { q: "Le sien (féminin)", a: "hers" },
+                    { q: "Le sien (neutre)", a: "its" },
+                    { q: "Le nôtre", a: "ours" },
+                    { q: "Le leur", a: "theirs" }
+                ]
+            },
+            reflexive_pronouns_en: {
+                title: "Reflexive pronouns",
+                category: "Anglais - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { q: "Moi-même", a: "myself" },
+                    { q: "Toi-même", a: "yourself" },
+                    { q: "Lui-même", a: "himself" },
+                    { q: "Elle-même", a: "herself" },
+                    { q: "Nous-mêmes", a: "ourselves" },
+                    { q: "Vous-même", a: "yourself" },
+                    { q: "Vous-mêmes", a: "yourselves" },
+                    { q: "Eux-mêmes", a: "themselves" },
+                    { q: "Lui-même (neutre/objet/animal)", a: "itself" }
+                ]
+            },
+            glossary_words_2: {
+                title: "Glossary Words 2 anglais",
+                category: "Anglais - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { q: "roll call", a: "reading a list of names out loud to check everyone is present" },
+                    { q: "BCE", a: "before common era" },
+                    { q: "CE", a: "common era" },
+                    { q: "confuse", a: "mistake one for the other" },
+                    { q: "roofs", a: "tops of buildings" },
+                    { q: "roots", a: "origins" },
+                    { q: "family tree", a: "diagram of a family's history" },
+                    { q: "branch", a: "part of something larger" },
+                    { q: "endearment", a: "loving word" },
+                    { q: "privacy", a: "confidenciality" },
+                    { q: "hurt", a: "cause pain" },
+                    { q: "nickname", a: "informal name" }
+                ]
+            },
+            glossary_words_3: {
+                title: "Glossary Words 3 anglais",
+                category: "Anglais - Vocabulaire",
+                caseSensitive: false,
+                type: "text",
+                questions: [
+                    { q: "purpose", a: "reason something exists" },
+                    { q: "addicted", a: "dependent on something" },
+                    { q: "banned", a: "illegal activity" },
+                    { q: "censored", a: "remove unacceptable part of something" },
+                    { q: "nightmare", a: "a frightening, an unpleasant dream" },
+                    { q: "atom bomb", a: "bomb using nuclear fission" },
+                    { q: "curfew", a: "a regulation requiring people to say indoors during specified hours" },
+                    { q: "up for grabs", a: "available to anyone" },
+                    { q: "brutal", a: "exhausting" },
+                    { q: "strenuous", a: "taking a lot of effort" },
+                    { q: "night owl", a: "person who stays up late" },
+                    { q: "attending", a: "going to an event" },
+                    { q: "unpaid", a: "work for free" },
+                    { q: "journey", a: "path to a goal" },
+                    { q: "disappointed", a: "unhappy because something didn't meet expectations" },
+                    { q: "valiant", a: "showing courage or determination" },
+                    { q: "hooked", a: "obsessed with" },
+                    { q: "on board", a: "giving full support" },
+                ]
+            }
+        };
 
-    // Remplit le select quizSelect dynamiquement selon la catégorie
-    function fillQuizSelect() {
-        const select = document.getElementById('quizSelect');
-        const category = document.getElementById('categorySelect').value;
-        select.innerHTML = "";
-        Object.entries(quizzes).forEach(([key, quiz]) => {
-            if (quiz.category === category) {
+        function fillCategorySelect() {
+            const select = document.getElementById('categorySelect');
+            select.innerHTML = "";
+            const categories = [...new Set(Object.values(quizzes).map(q => q.category))];
+            categories.forEach(cat => {
                 const option = document.createElement('option');
-                option.value = key;
-                option.textContent = quiz.title;
+                option.value = cat;
+                option.textContent = cat;
                 select.appendChild(option);
-            }
+            });
+        }
+
+        function fillQuizSelect() {
+            const select = document.getElementById('quizSelect');
+            const category = document.getElementById('categorySelect').value;
+            select.innerHTML = "";
+            Object.entries(quizzes).forEach(([key, quiz]) => {
+                if (quiz.category === category) {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.textContent = quiz.title;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fillCategorySelect();
+            fillQuizSelect();
+            document.getElementById('categorySelect').addEventListener('change', fillQuizSelect);
         });
-    }
 
-    // Met à jour quizSelect quand la catégorie change
-    document.addEventListener('DOMContentLoaded', () => {
-        fillCategorySelect();
-        fillQuizSelect();
-        document.getElementById('categorySelect').addEventListener('change', fillQuizSelect);
-    });
+        let current = 0;
+        let wrongAnswers = [];
+        let quizQueue = [];
+        let timerInterval = null;
+        let startTime = null;
+        let elapsed = 0;
+        let quizFinished = false;
+        let lastScore = null;
 
-    let current = 0;
-    let wrongAnswers = [];
-    let quizQueue = [];
-    let timerInterval = null;
-    let startTime = null;
-    let elapsed = 0;
-    let quizFinished = false;
-    let lastScore = null;
+        function startQuiz() {
+            const select = document.getElementById('quizSelect');
+            const quizName = select.value;
+            const quizType = quizzes[quizName].type || "text";
 
-    function startQuiz() {
-        const select = document.getElementById('quizSelect');
-        const quizName = select.value;
-        const quizType = quizzes[quizName].type || "text";
-        
-        quizQueue = shuffle([...quizzes[quizName].questions]);
-        current = 0;
-        wrongAnswers = [];
-        
-        // Hide menu elements
-        select.style.display = 'none';
-        document.getElementById('lbQuizSelect').style.display = 'none';
-        document.getElementById('lbCategorySelect').style.display = 'none';
-        document.getElementById('categorySelect').style.display = 'none';
-        document.getElementById('startBtn').style.display = 'none';
-        document.getElementById('lbTextMode').style.display = 'none';
-        document.getElementById('textModeSelect').style.display = 'none';
-        
-        // Show quiz elements
-        document.getElementById('question').style.display = '';
-        document.getElementById('answer').style.display = '';
-        document.getElementById('validateBtn').style.display = '';
-        document.getElementById('result').style.display = '';
-        document.getElementById('nextBtn').style.display = '';
-        document.getElementById('backBtn').style.display = '';
-        document.getElementById('quizInfo').style.display = '';
-        document.getElementById('choicesContainer').style.display = 'none';
-        document.getElementById('timer').style.display = '';
-        document.getElementById('scoreBoard').style.display = 'none';
-        document.getElementById('namePrompt').style.display = 'none';
-        
-        // Show text mode selector if it's a text quiz
-        if (quizType === "text") {
-            document.getElementById('lbTextMode').style.display = '';
-            document.getElementById('textModeSelect').style.display = '';
-        }
-        
-        elapsed = 0;
-        quizFinished = false;
-        lastScore = null;
-        startTime = Date.now();
-        updateTimer();
-        timerInterval = setInterval(updateTimer, 1000);
-        showQuestion();
-    }
+            quizQueue = shuffle([...quizzes[quizName].questions]);
+            current = 0;
+            wrongAnswers = [];
 
-    // Mélange aléatoire d'un tableau
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
+            // Switch views
+            document.getElementById('menuSection').style.display = 'none';
+            document.getElementById('quizArea').style.display = 'block';
 
-    function showQuestion() {
-        if (quizQueue.length === 0) {
-            if (wrongAnswers.length > 0) {
-                quizQueue = [...wrongAnswers];
-                wrongAnswers = [];
-                current = 0;
-                document.getElementById('result').textContent = "On recommence les questions mal répondues !";
-                setTimeout(showQuestion, 1500);
-                return;
-            } else {                
-                document.getElementById('question').textContent = "Quiz terminé !";
-                document.getElementById('quizInfo').style.display = 'none';
-                document.getElementById('choicesContainer').style.display = 'none';
-                document.getElementById('answer').style.display = "none";
-                document.getElementById('validateBtn').style.display = "none";
-                document.getElementById('nextBtn').style.display = "none";
-                document.getElementById('result').textContent = "Bravo, tu as fini !";
-                document.getElementById('backBtn').style.display = '';
-                endQuiz();
-                return;
-            }
-        }
-        document.getElementById('quizInfo').innerHTML = getQuizLabel() + " &nbsp;|&nbsp; " + (current + 1) + "/" + (quizQueue.length);
-        document.getElementById('question').textContent = quizQueue[current].q;
-        document.getElementById('answer').value = "";
-        document.getElementById('result').textContent = "";
-        updateValidateState();
-
-        const select = document.getElementById('quizSelect');
-        const quizName = select.value;
-        const quizType = quizzes[quizName].type || "text";
-        const textMode = document.getElementById('textModeSelect').value;
-        
-        if (quizType === "text" && textMode === "selection") {
-            document.getElementById('answer').style.display = 'none';
-            document.getElementById('validateBtn').style.display = 'none';
-            document.getElementById('choicesContainer').style.display = '';
-            renderTextChoices(quizQueue[current], quizName);
-        } else if (quizType === "text") {
+            // Show/hide elements
+            document.getElementById('quizInfo').style.display = '';
+            document.getElementById('backBtn').style.display = '';
+            document.getElementById('question').style.display = 'flex';
             document.getElementById('answer').style.display = '';
             document.getElementById('validateBtn').style.display = '';
+            document.getElementById('result').style.display = '';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('timer').style.display = '';
+            document.getElementById('scoreBoard').style.display = 'none';
+            document.getElementById('namePrompt').style.display = 'none';
             document.getElementById('choicesContainer').style.display = 'none';
-        } else {
-            document.getElementById('answer').style.display = 'none';
-            document.getElementById('validateBtn').style.display = 'none';
-            document.getElementById('choicesContainer').style.display = 'none';
-        }
-    }
 
-    function renderTextChoices(questionObj, quizName) {
-        const container = document.getElementById('choicesContainer');
-        container.innerHTML = "";
-        
-        // Get all possible answers from the current quiz
-        const allAnswers = quizzes[quizName].questions.map(q => q.a);
-        // Filter out the correct answer and shuffle remaining
-        const otherAnswers = allAnswers.filter(a => a !== questionObj.a);
-        const shuffledOthers = shuffle([...otherAnswers]);
-        // Take 3 random wrong answers
-        const wrongAnswers = shuffledOthers.slice(0, 3);
-        // Combine with correct answer and shuffle
-        const choices = shuffle([questionObj.a, ...wrongAnswers]);
-        
-        choices.forEach((choice, idx) => {
-            const btn = document.createElement('button');
-            btn.textContent = choice;
-            btn.style.margin = "4px";
-            btn.onclick = function() {
-                selectChoice(idx);
-                checkAnswer();
-            };
-            btn.className = "choice-btn";
-            container.appendChild(btn);
-        });
-        window.selectedChoice = null;
-        updateValidateState();
-    }
-
-    function selectChoice(idx) {
-        window.selectedChoice = idx;
-        document.querySelectorAll('.choice-btn').forEach((btn, i) => {
-            btn.style.background = i === idx ? "#27ae60" : "#2d5fa4";
-        });
-        updateValidateState();
-    }
-
-    function checkAnswer() {
-        const select = document.getElementById('quizSelect');
-        const quizName = select.value;
-        const quizType = quizzes[quizName].type || "text";
-        const textMode = document.getElementById('textModeSelect').value;
-        const correct = quizQueue[current].a;
-        let isGood = false;
-        let match = false;
-
-        if (quizType === "text" && textMode === "selection") {
-            const buttons = document.querySelectorAll('.choice-btn');
-            const selectedText = buttons[window.selectedChoice]?.textContent;
-            match = selectedText === correct;
-        } else if (quizType === "multiple") {
-            match = window.selectedChoice === correct;
-        } else {
-            const userAnswer = document.getElementById('answer').value.trim();
-            const caseSensitive = quizzes[quizName].caseSensitive;
-            if (caseSensitive) {
-                match = userAnswer === correct;
+            if (quizType === "text") {
+                document.getElementById('textModeRow').style.display = 'flex';
             } else {
-                match = userAnswer.toLowerCase() === correct.toLowerCase();
+                document.getElementById('textModeRow').style.display = 'none';
+            }
+
+            elapsed = 0;
+            quizFinished = false;
+            lastScore = null;
+            startTime = Date.now();
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+            showQuestion();
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function showQuestion() {
+            if (quizQueue.length === 0) {
+                if (wrongAnswers.length > 0) {
+                    quizQueue = [...wrongAnswers];
+                    wrongAnswers = [];
+                    current = 0;
+                    document.getElementById('result').textContent = "On recommence les questions mal répondues !";
+                    setTimeout(showQuestion, 1500);
+                    return;
+                } else {
+                    document.getElementById('question').textContent = "Quiz terminé !";
+                    document.getElementById('quizInfo').style.display = 'none';
+                    document.getElementById('choicesContainer').style.display = 'none';
+                    document.getElementById('answer').style.display = "none";
+                    document.getElementById('validateBtn').style.display = "none";
+                    document.getElementById('nextBtn').style.display = "none";
+                    document.getElementById('result').textContent = "Bravo, tu as fini !";
+                    endQuiz();
+                    return;
+                }
+            }
+
+            document.getElementById('quizInfo').innerHTML =
+                getQuizLabel() + " &nbsp;|&nbsp; " + (current + 1) + "/" + quizQueue.length;
+            document.getElementById('question').textContent = quizQueue[current].q;
+            document.getElementById('answer').value = "";
+            document.getElementById('result').textContent = "";
+            updateValidateState();
+
+            const quizName = document.getElementById('quizSelect').value;
+            const quizType = quizzes[quizName].type || "text";
+            const textMode = document.getElementById('textModeSelect').value;
+
+            if (quizType === "text" && textMode === "selection") {
+                document.getElementById('answer').style.display = 'none';
+                document.getElementById('validateBtn').style.display = 'none';
+                document.getElementById('choicesContainer').style.display = 'flex';
+                renderTextChoices(quizQueue[current], quizName);
+            } else if (quizType === "text") {
+                document.getElementById('answer').style.display = '';
+                document.getElementById('validateBtn').style.display = '';
+                document.getElementById('choicesContainer').style.display = 'none';
+                setTimeout(() => document.getElementById('answer').focus(), 50);
+            } else {
+                document.getElementById('answer').style.display = 'none';
+                document.getElementById('validateBtn').style.display = 'none';
+                document.getElementById('choicesContainer').style.display = 'flex';
+                renderMultipleChoices(quizQueue[current]);
             }
         }
-        if (match) {
-            document.getElementById('result').innerHTML = "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
-            isGood = true;
-        } else {
-            let correctText = quizType === "multiple"
-                ? quizQueue[current].choices[correct]
-                : correct;
-            document.getElementById('result').innerHTML = "Non, la bonne réponse est : <span style='color:#d63031;font-weight:bold;'>" + correctText + "</span>";
-            wrongAnswers.push(quizQueue[current]);
-        }
-        document.getElementById('validateBtn').disabled = true;
-        document.getElementById('answer').disabled = true;
-        document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
-        setTimeout(() => {
-            document.getElementById('validateBtn').disabled = false;
-            document.getElementById('answer').disabled = false;
-            document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = false);
-            nextQuestion();
-        }, isGood ? 2000 : 3000);
-    }
 
-    function nextQuestion() {
-        current++;
-        if (current >= quizQueue.length) {
-            quizQueue = quizQueue.slice(current); // Remove answered
-            current = 0;
-            showQuestion();
-        } else {
-            showQuestion();
-        }
-    }
-
-    function updateTimer() {
-        if (quizFinished) return;
-        elapsed = Math.floor((Date.now() - startTime) / 1000);
-        document.getElementById('timer').textContent = "Temps écoulé : " + elapsed + "s";
-    }
-	
-    function endQuiz() {
-        quizFinished = true;
-        clearInterval(timerInterval);
-        document.getElementById('timer').style.display = '';
-        document.getElementById('timer').textContent = "Temps total : " + elapsed + "s";
-        document.getElementById('scoreBoard').style.display = '';
-        showScores();
-        lastScore = elapsed;
-        const quizName = document.getElementById('quizSelect').value;
-        if (isTopScore(quizName, elapsed)) {
-            document.getElementById('namePrompt').style.display = '';
-        } else {
-            document.getElementById('namePrompt').style.display = 'none';
-        }
-    }
-
-    function showScores() {
-        const quizName = document.getElementById('quizSelect').value;
-        const scores = getScores(quizName);
-        let html = "<strong>TOP 5 scores :</strong><br>";
-        if (scores.length === 0) {
-            html += "<em>Aucun score enregistré.</em>";
-        } else {
-            html += "<ol style='padding-left:20px;'>";
-            scores.forEach(s => {
-                html += "<li>" + s.name + " : " + s.time + "s</li>";
+        function renderMultipleChoices(questionObj) {
+            const container = document.getElementById('choicesContainer');
+            container.innerHTML = "";
+            questionObj.choices.forEach((choice, idx) => {
+                const btn = document.createElement('button');
+                btn.textContent = choice;
+                btn.className = "choice-btn";
+                btn.onclick = function () {
+                    selectMultipleChoice(idx);
+                };
+                container.appendChild(btn);
             });
-            html += "</ol>";
+            window.selectedChoice = null;
+            updateValidateState();
         }
-        document.getElementById('scoreBoard').innerHTML = html;
-    }
 
-    function getScores(quizName) {
-        const key = "scores_" + quizName;
-        const scores = JSON.parse(localStorage.getItem(key) || "[]");
-        return scores;
-    }
+        function selectMultipleChoice(idx) {
+            window.selectedChoice = idx;
+            document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+                btn.classList.toggle('selected', i === idx);
+            });
+            document.getElementById('validateBtn').style.display = '';
+            document.getElementById('validateBtn').disabled = false;
+            checkAnswer();
+        }
 
-    function saveScores(quizName, scores) {
-        const key = "scores_" + quizName;
-        localStorage.setItem(key, JSON.stringify(scores));
-    }
+        function renderTextChoices(questionObj, quizName) {
+            const container = document.getElementById('choicesContainer');
+            container.innerHTML = "";
+            const allAnswers = quizzes[quizName].questions.map(q => q.a);
+            const otherAnswers = allAnswers.filter(a => a !== questionObj.a);
+            const shuffledOthers = shuffle([...otherAnswers]);
+            const wrongOnes = shuffledOthers.slice(0, 3);
+            const choices = shuffle([questionObj.a, ...wrongOnes]);
 
-    function isTopScore(quizName, time) {
-        const scores = getScores(quizName);
-        if (scores.length < 5) return true;
-        return scores.some(s => time < s.time);
-    }
+            choices.forEach((choice, idx) => {
+                const btn = document.createElement('button');
+                btn.textContent = choice;
+                btn.className = "choice-btn";
+                btn.onclick = function () {
+                    selectTextChoice(idx, choices, questionObj.a);
+                };
+                container.appendChild(btn);
+            });
+            window.selectedChoice = null;
+        }
 
-    function saveScore() {
-        const quizName = document.getElementById('quizSelect').value;
-        const name = document.getElementById('playerName').value.trim() || "Anonyme";
-        let scores = getScores(quizName);
-        scores.push({ name, time: lastScore });
-        scores = scores.sort((a, b) => a.time - b.time).slice(0, 5);
-        saveScores(quizName, scores);
-        document.getElementById('namePrompt').style.display = 'none';
-        showScores();
-    }
+        function selectTextChoice(idx, choices, correctAnswer) {
+            const selectedText = choices[idx];
+            document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+                btn.classList.toggle('selected', i === idx);
+            });
+            // Immediately check
+            const match = selectedText === correctAnswer;
+            if (match) {
+                document.getElementById('result').innerHTML = "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
+            } else {
+                document.getElementById('result').innerHTML =
+                    "Non, la bonne réponse est : <span style='color:#e53935;font-weight:bold;'>" + correctAnswer + "</span>";
+                wrongAnswers.push(quizQueue[current]);
+            }
+            document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+            setTimeout(() => {
+                document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = false);
+                nextQuestion();
+            }, match ? 1500 : 2500);
+        }
 
-    // Add event listener for textMode changes
-    document.getElementById('textModeSelect').addEventListener('change', () => {
-        showQuestion();
-    });
+        function checkAnswer() {
+            const quizName = document.getElementById('quizSelect').value;
+            const quizType = quizzes[quizName].type || "text";
+            const correct = quizQueue[current].a;
+            let match = false;
+
+            if (quizType === "multiple") {
+                match = window.selectedChoice === correct;
+            } else {
+                const userAnswer = document.getElementById('answer').value.trim();
+                const caseSensitive = quizzes[quizName].caseSensitive;
+                match = caseSensitive
+                    ? userAnswer === correct
+                    : userAnswer.toLowerCase() === correct.toLowerCase();
+            }
+
+            if (match) {
+                document.getElementById('result').innerHTML = "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
+            } else {
+                let correctText = quizType === "multiple"
+                    ? quizQueue[current].choices[correct]
+                    : correct;
+                document.getElementById('result').innerHTML =
+                    "Non, la bonne réponse est : <span style='color:#e53935;font-weight:bold;'>" + correctText + "</span>";
+                wrongAnswers.push(quizQueue[current]);
+            }
+
+            document.getElementById('validateBtn').disabled = true;
+            document.getElementById('answer').disabled = true;
+            document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+
+            setTimeout(() => {
+                document.getElementById('validateBtn').disabled = false;
+                document.getElementById('answer').disabled = false;
+                document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = false);
+                nextQuestion();
+            }, match ? 1500 : 2500);
+        }
+
+        function nextQuestion() {
+            current++;
+            if (current >= quizQueue.length) {
+                quizQueue = quizQueue.slice(current);
+                current = 0;
+                showQuestion();
+            } else {
+                showQuestion();
+            }
+        }
+
+        function updateTimer() {
+            if (quizFinished) return;
+            elapsed = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('timer').textContent = "Temps écoulé : " + elapsed + "s";
+        }
+
+        function endQuiz() {
+            quizFinished = true;
+            clearInterval(timerInterval);
+            document.getElementById('timer').textContent = "Temps total : " + elapsed + "s";
+            document.getElementById('scoreBoard').style.display = '';
+            showScores();
+            lastScore = elapsed;
+            const quizName = document.getElementById('quizSelect').value;
+            document.getElementById('namePrompt').style.display =
+                isTopScore(quizName, elapsed) ? '' : 'none';
+        }
+
+        function showScores() {
+            const quizName = document.getElementById('quizSelect').value;
+            const scores = getScores(quizName);
+            let html = "<strong>TOP 5 scores</strong>";
+            if (scores.length === 0) {
+                html += "<p style='color:#aaa;font-style:italic;margin-top:6px;'>Aucun score enregistré.</p>";
+            } else {
+                html += "<ol>";
+                scores.forEach(s => { html += "<li>" + s.name + " : " + s.time + "s</li>"; });
+                html += "</ol>";
+            }
+            document.getElementById('scoreBoard').innerHTML = html;
+        }
+
+        function getScores(quizName) {
+            return JSON.parse(localStorage.getItem("scores_" + quizName) || "[]");
+        }
+
+        function saveScores(quizName, scores) {
+            localStorage.setItem("scores_" + quizName, JSON.stringify(scores));
+        }
+
+        function isTopScore(quizName, time) {
+            const scores = getScores(quizName);
+            if (scores.length < 5) return true;
+            return scores.some(s => time < s.time);
+        }
+
+        function saveScore() {
+            const quizName = document.getElementById('quizSelect').value;
+            const name = document.getElementById('playerName').value.trim() || "Anonyme";
+            let scores = getScores(quizName);
+            scores.push({ name, time: lastScore });
+            scores = scores.sort((a, b) => a.time - b.time).slice(0, 5);
+            saveScores(quizName, scores);
+            document.getElementById('namePrompt').style.display = 'none';
+            showScores();
+        }
+
+        document.getElementById('textModeSelect').addEventListener('change', () => {
+            showQuestion();
+        });
     </script>
 </body>
 </html>
