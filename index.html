@@ -476,6 +476,12 @@
 						</div>
 					</div>
 					
+					<div class="text-center" style="margin: 16px 0 8px;">
+						<a class="btn btn-default btn-sm" data-toggle="collapse" href="#previous-experiences" aria-expanded="false" id="prev-exp-toggle">
+							<span class="glyphicon glyphicon-chevron-down"></span> Show previous experiences
+						</a>
+					</div>
+					<div class="collapse" id="previous-experiences">
 					<div class="row">
 						<div class="col-md-3">
 							<div class="work-summary-box">
@@ -565,7 +571,8 @@
 							</div>
 						</div>
 					</div>
-					
+					</div><!-- /#previous-experiences -->
+				
 				</div>
 			</div>
 		</section>
@@ -710,6 +717,13 @@
 	  ga('create', 'UA-25011539-1', 'auto');
 	  ga('send', 'pageview');
 
+	</script>
+	<script>
+		$('#previous-experiences').on('show.bs.collapse', function () {
+			$('#prev-exp-toggle').html('<span class="glyphicon glyphicon-chevron-up"></span> Hide previous experiences');
+		}).on('hide.bs.collapse', function () {
+			$('#prev-exp-toggle').html('<span class="glyphicon glyphicon-chevron-down"></span> Show previous experiences');
+		});
 	</script>
 </body>
 </html>
