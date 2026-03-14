@@ -2,130 +2,349 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English Exercise - To Be / To Have</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            line-height: 2;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 32px 16px;
+            color: #1a1a2e;
         }
-        h1 {
+
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 48px;
+        }
+
+        header {
             text-align: center;
+            margin-bottom: 32px;
         }
-        h2 {
-            text-align: center;
-            font-size: 18px;
-            font-weight: normal;
-            color: #555;
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
         }
+
+        header p {
+            color: #666;
+            font-size: 15px;
+        }
+
         .controls {
-            text-align: center;
-            margin-bottom: 20px;
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
         }
-        .controls label {
-            font-weight: bold;
-            font-size: 16px;
-            margin-right: 8px;
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
+
+        .control-group label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888;
+        }
+
         select {
-            padding: 6px 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .instructions {
-            margin-bottom: 20px;
-            font-weight: bold;
-            background-color: #fff8dc;
-            padding: 10px 16px;
-            border-left: 4px solid #f0c040;
-            border-radius: 4px;
-        }
-        .sentence {
-            margin-bottom: 12px;
-        }
-        input {
-            width: 120px;
-            padding: 4px;
+            padding: 8px 36px 8px 14px;
             font-size: 14px;
-            text-align: center;
+            font-weight: 600;
+            color: #333;
+            background: #f5f5f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: border-color 0.2s, background-color 0.2s;
+            min-width: 150px;
         }
-        .button-container {
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: #fff;
+        }
+
+        .hint-box {
+            background: linear-gradient(135deg, #fff8e1, #fffde7);
+            border-left: 4px solid #ffc107;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin-bottom: 28px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6d4c00;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hint-box::before {
+            content: '💡';
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .sentences-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .sentence {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9ff;
+            border: 2px solid #e8eaf6;
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 15px;
+            color: #333;
+            transition: border-color 0.2s, background-color 0.2s;
+            flex-wrap: wrap;
+        }
+
+        .sentence-num {
+            font-size: 12px;
+            font-weight: 700;
+            color: #667eea;
+            background: #eef0ff;
+            border-radius: 6px;
+            padding: 2px 8px;
+            flex-shrink: 0;
+        }
+
+        .sentence-text {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #333;
+            background: #ffffff;
+            border: 2px solid #c5cae9;
+            border-radius: 8px;
+            width: 140px;
             text-align: center;
-            margin: 30px 0;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+        input.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+            color: #1b5e20;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+        }
+
+        input.incorrect {
+            border-color: #f44336;
+            background: #fce4ec;
+            color: #b71c1c;
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.15);
+        }
+
+        .sentence.answered-correct {
+            border-color: #a5d6a7;
+            background: #f1f8e9;
+        }
+
+        .sentence.answered-incorrect {
+            border-color: #ef9a9a;
+            background: #fff5f5;
+        }
+
+        .correct-answer {
+            font-size: 12px;
+            color: #e53935;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        .button-row {
             display: flex;
             gap: 12px;
             justify-content: center;
         }
+
         button {
-            padding: 10px 30px;
-            font-size: 16px;
-            color: white;
+            padding: 12px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
         }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
         #checkBtn {
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
         }
-        #checkBtn:hover {
-            background-color: #45a049;
-        }
+
         #newBtn {
-            background-color: #2196F3;
+            background: #f0f0f5;
+            color: #444;
         }
+
         #newBtn:hover {
-            background-color: #1976D2;
+            background: #e4e4ef;
         }
+
         #score {
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 20px;
-            padding: 15px;
             display: none;
-            background-color: #f0f0f0;
-            border-radius: 4px;
+            text-align: center;
+            margin-top: 28px;
+            padding: 20px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border: 2px solid #c5cae9;
         }
-        .correct {
-            background-color: #90EE90;
+
+        #score .score-big {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .incorrect {
-            background-color: #FFB6C6;
+
+        #score .score-label {
+            font-size: 14px;
+            color: #777;
+            margin-top: 4px;
+        }
+
+        .progress-bar-wrap {
+            background: #e8eaf6;
+            border-radius: 99px;
+            height: 8px;
+            margin: 12px auto 0;
+            max-width: 240px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.6s ease;
+        }
+
+        .score-message {
+            margin-top: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 28px 20px;
+            }
+            header h1 {
+                font-size: 22px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1>English Exercise</h1>
-    <h2>Write the correct form of "to be" or "to have".</h2>
+    <div class="card">
+        <header>
+            <h1>English Exercise</h1>
+            <p>Fill in the blanks with the correct form of <em>to be</em> or <em>to have</em></p>
+        </header>
 
-    <div class="controls">
-        <label for="tenseSelect">Tense:</label>
-        <select id="tenseSelect" onchange="initializePage()">
-            <option value="present">Present</option>
-            <option value="past">Past</option>
-            <option value="future">Future</option>
-        </select>
-        &nbsp;&nbsp;
-        <label for="formSelect">Form:</label>
-        <select id="formSelect" onchange="initializePage()">
-            <option value="positive">Positive</option>
-            <option value="negative">Negative</option>
-        </select>
+        <div class="controls">
+            <div class="control-group">
+                <label for="tenseSelect">Tense</label>
+                <select id="tenseSelect" onchange="initializePage()">
+                    <option value="present">Present</option>
+                    <option value="past">Past</option>
+                    <option value="future">Future</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="formSelect">Form</label>
+                <select id="formSelect" onchange="initializePage()">
+                    <option value="positive">Positive</option>
+                    <option value="negative">Negative</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="hint-box" id="instructions"></div>
+
+        <form id="exerciseForm" class="sentences-list"></form>
+
+        <div class="button-row">
+            <button type="button" id="checkBtn" onclick="checkAnswers()">Check Answers</button>
+            <button type="button" id="newBtn" onclick="initializePage()">New Exercise</button>
+        </div>
+
+        <div id="score">
+            <div class="score-big" id="scoreBig"></div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+            <div class="score-message" id="scoreMessage"></div>
+        </div>
     </div>
-
-    <div class="instructions" id="instructions"></div>
-
-    <form id="exerciseForm"></form>
-
-    <div class="button-container">
-        <button type="button" id="checkBtn" onclick="checkAnswers()">Check Answers</button>
-        <button type="button" id="newBtn" onclick="initializePage()">New Exercise</button>
-    </div>
-
-    <div id="score"></div>
 
     <script>
         const allSentences = {
@@ -218,6 +437,13 @@
             future:  { positive: "will be / will have",        negative: "won't be / won't have" },
         };
 
+        const messages = [
+            { min: 90, text: "Excellent work! 🎉" },
+            { min: 70, text: "Well done! Keep it up." },
+            { min: 50, text: "Good effort! Review and try again." },
+            { min: 0,  text: "Keep practising — you'll get there!" },
+        ];
+
         function shuffleArray(array) {
             const shuffled = [...array];
             for (let i = shuffled.length - 1; i > 0; i--) {
@@ -228,68 +454,89 @@
         }
 
         function initializePage() {
-            const tense     = document.getElementById('tenseSelect').value;
-            const formType  = document.getElementById('formSelect').value;
+            const tense    = document.getElementById('tenseSelect').value;
+            const formType = document.getElementById('formSelect').value;
 
-            // Update instructions
             document.getElementById('instructions').textContent =
-                'Fill in the blanks with: ' + hints[tense][formType];
+                'Use: ' + hints[tense][formType];
 
-            // Pick 10 random sentences for this tense + form
-            const pool = allSentences[tense].filter(s => s.form === formType);
+            const pool     = allSentences[tense].filter(s => s.form === formType);
             const selected = shuffleArray(pool).slice(0, 10);
 
-            // Render sentences
             const form = document.getElementById('exerciseForm');
             form.innerHTML = '';
             selected.forEach((s, i) => {
                 const parts = s.text.split('___');
-                const div = document.createElement('div');
+                const div   = document.createElement('div');
                 div.className = 'sentence';
                 div.dataset.answer = s.answer;
+
+                const num = document.createElement('span');
+                num.className = 'sentence-num';
+                num.textContent = i + 1;
+
+                const textWrap = document.createElement('span');
+                textWrap.className = 'sentence-text';
 
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.id = 'ans' + (i + 1);
                 input.autocomplete = 'off';
+                input.placeholder = '…';
 
-                div.appendChild(document.createTextNode((i + 1) + '. ' + parts[0]));
-                div.appendChild(input);
-                div.appendChild(document.createTextNode(parts[1] || ''));
+                textWrap.appendChild(document.createTextNode(parts[0]));
+                textWrap.appendChild(input);
+                textWrap.appendChild(document.createTextNode(parts[1] || ''));
+
+                div.appendChild(num);
+                div.appendChild(textWrap);
                 form.appendChild(div);
             });
 
-            // Reset score
-            const scoreDisplay = document.getElementById('score');
-            scoreDisplay.style.display = 'none';
-            scoreDisplay.textContent = '';
+            const scoreEl = document.getElementById('score');
+            scoreEl.style.display = 'none';
         }
 
         function checkAnswers() {
-            const form = document.getElementById('exerciseForm');
-            const sentences = form.querySelectorAll('.sentence');
+            const sentences = document.querySelectorAll('#exerciseForm .sentence');
             let score = 0;
 
-            sentences.forEach((sentence) => {
-                const input = sentence.querySelector('input');
-                const userAnswer = input.value.trim().toLowerCase();
-                const correctAnswer = sentence.dataset.answer;
+            sentences.forEach(sentence => {
+                const input    = sentence.querySelector('input');
+                const userAns  = input.value.trim().toLowerCase();
+                const correct  = sentence.dataset.answer;
 
-                if (userAnswer === correctAnswer) {
-                    input.classList.remove('incorrect');
+                // Remove old correct-answer hint if any
+                const old = sentence.querySelector('.correct-answer');
+                if (old) old.remove();
+
+                sentence.classList.remove('answered-correct', 'answered-incorrect');
+                input.classList.remove('correct', 'incorrect');
+
+                if (userAns === correct) {
                     input.classList.add('correct');
+                    sentence.classList.add('answered-correct');
                     score++;
                 } else {
-                    input.classList.remove('correct');
                     input.classList.add('incorrect');
+                    sentence.classList.add('answered-incorrect');
+                    const hint = document.createElement('span');
+                    hint.className = 'correct-answer';
+                    hint.textContent = '→ ' + correct;
+                    sentence.querySelector('.sentence-text').appendChild(hint);
                 }
             });
 
-            const total = sentences.length;
-            const percentage = Math.round((score / total) * 100);
-            const scoreDisplay = document.getElementById('score');
-            scoreDisplay.textContent = `Score: ${score}/${total} (${percentage}%)`;
-            scoreDisplay.style.display = 'block';
+            const total      = sentences.length;
+            const pct        = Math.round((score / total) * 100);
+            const msg        = messages.find(m => pct >= m.min).text;
+
+            document.getElementById('scoreBig').textContent   = `${score} / ${total}`;
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('scoreMessage').textContent = msg;
+
+            const scoreEl = document.getElementById('score');
+            scoreEl.style.display = 'block';
         }
 
         window.addEventListener('load', initializePage);
