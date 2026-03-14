@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
+    <title>Quiz & Exercices</title>
     <style>
         * {
             box-sizing: border-box;
@@ -23,14 +23,14 @@
             background: #ffffff;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            max-width: 560px;
+            max-width: 720px;
             margin: 0 auto;
             padding: 40px 48px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
         }
 
         header h1 {
@@ -42,7 +42,92 @@
             background-clip: text;
         }
 
-        /* ── Controls (menu) ── */
+        /* ── Tabs ── */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 28px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            background: transparent;
+            color: #999;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+
+        .tab:hover:not(.tab-active) {
+            background: #ebebf0;
+            color: #555;
+        }
+
+        .tab.tab-active {
+            background: #fff;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        /* ── Shared: select ── */
+        select {
+            padding: 10px 36px 10px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            background: #f5f5f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            font-family: inherit;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: #fff;
+        }
+
+        /* ── Shared: buttons ── */
+        button {
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        button:hover:not(:disabled):not(.tab) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        button:active:not(.tab) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        /* ════════════════════════════════════
+           QUIZ TAB
+        ════════════════════════════════════ */
+
         .menu-section {
             display: flex;
             flex-direction: column;
@@ -63,83 +148,18 @@
             color: #888;
         }
 
-        select {
-            padding: 10px 36px 10px 14px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            background: #f5f5f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
-            border: 2px solid transparent;
-            border-radius: 10px;
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
+        .field-group select {
             width: 100%;
-            transition: border-color 0.2s, background-color 0.2s;
-            font-family: inherit;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: #667eea;
-            background-color: #fff;
-        }
-
-        /* ── Buttons ── */
-        button {
-            padding: 12px 28px;
-            font-size: 15px;
-            font-weight: 700;
-            font-family: inherit;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-        }
-
-        button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-
-        button:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
         }
 
         #startBtn {
             width: 100%;
             margin-top: 8px;
+            padding: 12px 28px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: #fff;
         }
 
-        #backBtn {
-            background: #f0f0f5;
-            color: #555;
-            font-size: 13px;
-            padding: 8px 18px;
-        }
-
-        #validateBtn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
-            width: 100%;
-            margin-top: 4px;
-        }
-
-        #nextBtn {
-            background: #f0f0f5;
-            color: #444;
-            width: 100%;
-            margin-top: 8px;
-        }
-
-        /* ── Quiz area ── */
         .quiz-topbar {
             display: flex;
             align-items: center;
@@ -158,6 +178,13 @@
             flex: 1;
         }
 
+        #backBtn {
+            padding: 8px 18px;
+            background: #f0f0f5;
+            color: #555;
+            font-size: 13px;
+        }
+
         #question {
             font-size: 22px;
             font-weight: 700;
@@ -174,7 +201,7 @@
             justify-content: center;
         }
 
-        input[type="text"] {
+        #quizArea input[type="text"] {
             width: 100%;
             padding: 12px 16px;
             font-size: 15px;
@@ -189,16 +216,15 @@
             margin-bottom: 10px;
         }
 
-        input[type="text"]:focus {
+        #quizArea input[type="text"]:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
         }
 
-        input[type="text"]:disabled {
+        #quizArea input[type="text"]:disabled {
             opacity: 0.6;
         }
 
-        /* ── Choices ── */
         #choicesContainer {
             display: flex;
             flex-wrap: wrap;
@@ -210,26 +236,38 @@
         .choice-btn {
             padding: 10px 18px;
             font-size: 14px;
-            font-weight: 600;
-            color: #fff;
             background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
+            color: #fff;
             border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
             width: auto;
-        }
-
-        .choice-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.35);
         }
 
         .choice-btn.selected {
             background: linear-gradient(135deg, #27ae60, #1e8449);
         }
 
-        /* ── Result ── */
+        #validateBtn {
+            width: 100%;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            margin-top: 4px;
+        }
+
+        #nextBtn {
+            width: 100%;
+            padding: 12px 28px;
+            background: #f0f0f5;
+            color: #444;
+            margin-top: 8px;
+        }
+
+        .quiz-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
         #result {
             text-align: center;
             font-size: 15px;
@@ -239,7 +277,6 @@
             color: #555;
         }
 
-        /* ── Timer ── */
         #timer {
             text-align: center;
             font-size: 13px;
@@ -250,7 +287,6 @@
             border-top: 1px solid #f0f0f5;
         }
 
-        /* ── Scoreboard ── */
         #scoreBoard {
             margin-top: 20px;
             background: #f8f9ff;
@@ -275,7 +311,6 @@
             line-height: 1.8;
         }
 
-        /* ── Name prompt ── */
         #namePrompt {
             margin-top: 20px;
             background: linear-gradient(135deg, #667eea15, #764ba215);
@@ -293,34 +328,11 @@
             color: #555;
         }
 
-        #namePrompt input[type="text"] {
-            margin-bottom: 0;
-        }
-
         #saveScoreBtn {
+            width: 100%;
+            padding: 12px 28px;
             background: linear-gradient(135deg, #27ae60, #1e8449);
             color: #fff;
-            width: 100%;
-        }
-
-        /* ── Text mode selector (shown during quiz for text quizzes) ── */
-        #lbTextMode {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #888;
-        }
-
-        #textModeSelect {
-            margin-bottom: 16px;
-        }
-
-        /* ── Utilities ── */
-        .quiz-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
         }
 
         .mode-row {
@@ -330,12 +342,233 @@
             margin-bottom: 16px;
         }
 
-        @media (max-width: 580px) {
+        #lbTextMode {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888;
+        }
+
+        #textModeSelect {
+            width: 100%;
+        }
+
+        /* ════════════════════════════════════
+           EXERCISE TAB
+        ════════════════════════════════════ */
+
+        .ex-controls {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .ex-control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .ex-control-group label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888;
+        }
+
+        .ex-control-group select {
+            min-width: 150px;
+            padding: 8px 36px 8px 14px;
+        }
+
+        .hint-box {
+            background: linear-gradient(135deg, #fff8e1, #fffde7);
+            border-left: 4px solid #ffc107;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin-bottom: 28px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6d4c00;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hint-box::before {
+            content: '💡';
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .sentences-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .sentence {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9ff;
+            border: 2px solid #e8eaf6;
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 15px;
+            color: #333;
+            transition: border-color 0.2s, background-color 0.2s;
+            flex-wrap: wrap;
+        }
+
+        .sentence.answered-correct {
+            border-color: #a5d6a7;
+            background: #f1f8e9;
+        }
+
+        .sentence.answered-incorrect {
+            border-color: #ef9a9a;
+            background: #fff5f5;
+        }
+
+        .sentence-num {
+            font-size: 12px;
+            font-weight: 700;
+            color: #667eea;
+            background: #eef0ff;
+            border-radius: 6px;
+            padding: 2px 8px;
+            flex-shrink: 0;
+        }
+
+        .sentence-text {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        #exerciseForm input[type="text"] {
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #333;
+            background: #ffffff;
+            border: 2px solid #c5cae9;
+            border-radius: 8px;
+            width: 140px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        #exerciseForm input[type="text"]:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+        #exerciseForm input.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+            color: #1b5e20;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+        }
+
+        #exerciseForm input.incorrect {
+            border-color: #f44336;
+            background: #fce4ec;
+            color: #b71c1c;
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.15);
+        }
+
+        .correct-answer {
+            font-size: 12px;
+            color: #e53935;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        #checkBtn {
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        #newBtn {
+            padding: 12px 32px;
+            background: #f0f0f5;
+            color: #444;
+        }
+
+        #newBtn:hover {
+            background: #e4e4ef;
+        }
+
+        #exScore {
+            display: none;
+            text-align: center;
+            margin-top: 28px;
+            padding: 20px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border: 2px solid #c5cae9;
+        }
+
+        #exScore .score-big {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-bar-wrap {
+            background: #e8eaf6;
+            border-radius: 99px;
+            height: 8px;
+            margin: 12px auto 0;
+            max-width: 240px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.6s ease;
+        }
+
+        .score-message {
+            margin-top: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
             .card {
                 padding: 28px 20px;
             }
             header h1 {
                 font-size: 22px;
+            }
+            .ex-controls {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
@@ -343,94 +576,312 @@
 <body>
     <div class="card">
         <header>
-            <h1>Quiz</h1>
+            <h1>Quiz & Exercices</h1>
         </header>
 
-        <!-- Menu -->
-        <div class="menu-section" id="menuSection">
-            <div class="field-group" id="lbCategorySelectWrap">
-                <label id="lbCategorySelect" for="categorySelect">Catégorie</label>
-                <select id="categorySelect"></select>
-            </div>
-            <div class="field-group" id="lbQuizSelectWrap">
-                <label id="lbQuizSelect" for="quizSelect">Quiz</label>
-                <select id="quizSelect"></select>
-            </div>
-            <button id="startBtn" onclick="startQuiz()">Commencer</button>
+        <div class="tabs">
+            <button class="tab tab-active" onclick="showTab('quiz')">Quiz</button>
+            <button class="tab" onclick="showTab('exercise')">Exercice d'anglais</button>
         </div>
 
-        <!-- Quiz area (hidden at start) -->
-        <div id="quizArea" style="display:none;">
-            <div class="quiz-topbar">
-                <div id="quizInfo" style="display:none;"></div>
-                <button id="backBtn" onclick="backToMenu()" style="display:none;">← Retour</button>
+        <!-- ══════════ QUIZ TAB ══════════ -->
+        <div id="tabQuiz">
+            <div class="menu-section" id="menuSection">
+                <div class="field-group">
+                    <label for="categorySelect">Catégorie</label>
+                    <select id="categorySelect"></select>
+                </div>
+                <div class="field-group">
+                    <label for="quizSelect">Quiz</label>
+                    <select id="quizSelect"></select>
+                </div>
+                <button id="startBtn" onclick="startQuiz()">Commencer</button>
             </div>
 
-            <div class="mode-row" id="textModeRow" style="display:none;">
-                <label id="lbTextMode" for="textModeSelect">Mode de réponse</label>
-                <select id="textModeSelect">
-                    <option value="text">Saisie de texte</option>
-                    <option value="selection">Choix multiple</option>
-                </select>
+            <div id="quizArea" style="display:none;">
+                <div class="quiz-topbar">
+                    <div id="quizInfo" style="display:none;"></div>
+                    <button id="backBtn" onclick="backToMenu()" style="display:none;">← Retour</button>
+                </div>
+
+                <div class="mode-row" id="textModeRow" style="display:none;">
+                    <label id="lbTextMode" for="textModeSelect">Mode de réponse</label>
+                    <select id="textModeSelect">
+                        <option value="text">Saisie de texte</option>
+                        <option value="selection">Choix multiple</option>
+                    </select>
+                </div>
+
+                <div id="question" style="display:none;"></div>
+
+                <input type="text" id="answer" autocomplete="off" style="display:none;"
+                       oninput="updateValidateState()" onkeydown="handleEnter(event)" />
+
+                <div id="choicesContainer" style="display:none;"></div>
+
+                <div class="quiz-actions">
+                    <button id="validateBtn" onclick="checkAnswer()" style="display:none;" disabled>Valider</button>
+                    <button id="nextBtn" onclick="nextQuestion()" style="display:none;">Question suivante</button>
+                </div>
+
+                <div id="result" style="display:none;"></div>
+                <div id="timer" style="display:none;"></div>
+                <div id="scoreBoard" style="display:none;"></div>
+
+                <div id="namePrompt" style="display:none;">
+                    <label for="playerName">Bravo ! Entre ton prénom :</label>
+                    <input type="text" id="playerName" />
+                    <button id="saveScoreBtn" onclick="saveScore()">Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════ EXERCISE TAB ══════════ -->
+        <div id="tabExercise" style="display:none;">
+            <div class="ex-controls">
+                <div class="ex-control-group">
+                    <label for="tenseSelect">Tense</label>
+                    <select id="tenseSelect" onchange="initializePage()">
+                        <option value="present">Present</option>
+                        <option value="past">Past</option>
+                        <option value="future">Future</option>
+                    </select>
+                </div>
+                <div class="ex-control-group">
+                    <label for="formSelect">Form</label>
+                    <select id="formSelect" onchange="initializePage()">
+                        <option value="positive">Positive</option>
+                        <option value="negative">Negative</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="question" id="question" style="display:none;"></div>
+            <div class="hint-box" id="instructions"></div>
 
-            <input type="text" id="answer" autocomplete="off" style="display:none;"
-                   oninput="updateValidateState()" onkeydown="handleEnter(event)" />
+            <form id="exerciseForm" class="sentences-list"></form>
 
-            <div id="choicesContainer" style="display:none;"></div>
-
-            <div class="quiz-actions">
-                <button onclick="checkAnswer()" id="validateBtn" style="display:none;" disabled>Valider</button>
-                <button onclick="nextQuestion()" id="nextBtn" style="display:none;">Question suivante</button>
+            <div class="button-row">
+                <button type="button" id="checkBtn" onclick="checkAnswers()">Check Answers</button>
+                <button type="button" id="newBtn" onclick="initializePage()">New Exercise</button>
             </div>
 
-            <div class="result" id="result" style="display:none;"></div>
-
-            <div id="timer" style="display:none;"></div>
-            <div id="scoreBoard" style="display:none;"></div>
-            <div id="namePrompt" style="display:none;">
-                <label for="playerName">Bravo ! Entre ton prénom :</label>
-                <input type="text" id="playerName" />
-                <button onclick="saveScore()" id="saveScoreBtn">Sauvegarder</button>
+            <div id="exScore">
+                <div class="score-big" id="scoreBig"></div>
+                <div class="progress-bar-wrap">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+                <div class="score-message" id="scoreMessage"></div>
             </div>
         </div>
     </div>
 
     <script>
-        function updateValidateState() {
-            const select = document.getElementById('quizSelect');
-            const quizName = select.value;
-            const quizType = quizzes[quizName].type || "text";
-            if (quizType === "multiple") {
-                document.getElementById('validateBtn').disabled = !window.selectedChoice;
-            } else {
-                const val = document.getElementById('answer').value.trim();
-                document.getElementById('validateBtn').disabled = val === "";
+        /* ══════════════════════════════════════
+           TAB SWITCHER
+        ══════════════════════════════════════ */
+        function showTab(name) {
+            document.getElementById('tabQuiz').style.display      = name === 'quiz'     ? '' : 'none';
+            document.getElementById('tabExercise').style.display  = name === 'exercise' ? '' : 'none';
+            document.querySelectorAll('.tab').forEach((btn, i) => {
+                btn.classList.toggle('tab-active',
+                    (name === 'quiz' && i === 0) || (name === 'exercise' && i === 1));
+            });
+            if (name === 'exercise') initializePage();
+        }
+
+        /* ══════════════════════════════════════
+           EXERCISE — data & logic
+        ══════════════════════════════════════ */
+        const allSentences = {
+            present: [
+                { text: "I ___ very happy today.",                   answer: "am",             form: "positive" },
+                { text: "She ___ two brothers.",                      answer: "has",            form: "positive" },
+                { text: "We ___ in the same class.",                  answer: "are",            form: "positive" },
+                { text: "He ___ a new backpack.",                     answer: "has",            form: "positive" },
+                { text: "They ___ late for school.",                  answer: "are",            form: "positive" },
+                { text: "My dog ___ big brown eyes.",                 answer: "has",            form: "positive" },
+                { text: "It ___ very cold outside.",                  answer: "is",             form: "positive" },
+                { text: "You ___ my best friend.",                    answer: "are",            form: "positive" },
+                { text: "Emma ___ a lot of homework tonight.",        answer: "has",            form: "positive" },
+                { text: "I ___ 11 years old.",                        answer: "am",             form: "positive" },
+                { text: "The teachers ___ very kind.",                answer: "are",            form: "positive" },
+                { text: "My parents ___ a small car.",                answer: "have",           form: "positive" },
+                { text: "Tom ___ sick today.",                        answer: "is",             form: "positive" },
+                { text: "We ___ a math test tomorrow.",               answer: "have",           form: "positive" },
+                { text: "She ___ very good at soccer.",               answer: "is",             form: "positive" },
+                { text: "I ___ tired today.",                         answer: "am not",         form: "negative" },
+                { text: "She ___ a sister.",                          answer: "doesn't have",   form: "negative" },
+                { text: "They ___ at school today.",                  answer: "aren't",         form: "negative" },
+                { text: "He ___ a pet.",                              answer: "doesn't have",   form: "negative" },
+                { text: "It ___ sunny today.",                        answer: "isn't",          form: "negative" },
+                { text: "We ___ any homework tonight.",               answer: "don't have",     form: "negative" },
+                { text: "Tom ___ at school today.",                   answer: "isn't",          form: "negative" },
+                { text: "You ___ a bad friend.",                      answer: "aren't",         form: "negative" },
+                { text: "I ___ a bicycle.",                           answer: "don't have",     form: "negative" },
+                { text: "The cat ___ under the bed right now.",       answer: "isn't",          form: "negative" },
+            ],
+            past: [
+                { text: "I ___ very tired yesterday.",                answer: "was",            form: "positive" },
+                { text: "She ___ two cats last year.",                answer: "had",            form: "positive" },
+                { text: "We ___ in the same class last year.",        answer: "were",           form: "positive" },
+                { text: "He ___ a red bike.",                         answer: "had",            form: "positive" },
+                { text: "They ___ late for school yesterday.",        answer: "were",           form: "positive" },
+                { text: "It ___ very cold last night.",               answer: "was",            form: "positive" },
+                { text: "You ___ my best friend.",                    answer: "were",           form: "positive" },
+                { text: "Emma ___ a lot of homework last night.",     answer: "had",            form: "positive" },
+                { text: "I ___ 10 years old last year.",              answer: "was",            form: "positive" },
+                { text: "The teachers ___ very kind.",                answer: "were",           form: "positive" },
+                { text: "My parents ___ a big house.",                answer: "had",            form: "positive" },
+                { text: "Tom ___ sick yesterday.",                    answer: "was",            form: "positive" },
+                { text: "We ___ a math test last week.",              answer: "had",            form: "positive" },
+                { text: "She ___ very good at soccer.",               answer: "was",            form: "positive" },
+                { text: "The cat ___ under the table.",               answer: "was",            form: "positive" },
+                { text: "I ___ at home yesterday.",                   answer: "wasn't",         form: "negative" },
+                { text: "She ___ a sister.",                          answer: "didn't have",    form: "negative" },
+                { text: "They ___ at school last Friday.",            answer: "weren't",        form: "negative" },
+                { text: "He ___ a pet.",                              answer: "didn't have",    form: "negative" },
+                { text: "It ___ sunny yesterday.",                    answer: "wasn't",         form: "negative" },
+                { text: "We ___ any homework last night.",            answer: "didn't have",    form: "negative" },
+                { text: "Tom ___ at school.",                         answer: "wasn't",         form: "negative" },
+                { text: "My friends ___ at the park.",                answer: "weren't",        form: "negative" },
+                { text: "I ___ enough time.",                         answer: "didn't have",    form: "negative" },
+                { text: "You ___ the right answer.",                  answer: "didn't have",    form: "negative" },
+            ],
+            future: [
+                { text: "I ___ very happy tomorrow.",                 answer: "will be",        form: "positive" },
+                { text: "She ___ two brothers soon.",                 answer: "will have",      form: "positive" },
+                { text: "We ___ in the same class next year.",        answer: "will be",        form: "positive" },
+                { text: "He ___ a new backpack next week.",           answer: "will have",      form: "positive" },
+                { text: "They ___ late for school tomorrow.",         answer: "will be",        form: "positive" },
+                { text: "It ___ very cold tomorrow.",                 answer: "will be",        form: "positive" },
+                { text: "You ___ my best friend forever.",            answer: "will be",        form: "positive" },
+                { text: "Emma ___ a lot of homework tonight.",        answer: "will have",      form: "positive" },
+                { text: "I ___ 12 years old next year.",              answer: "will be",        form: "positive" },
+                { text: "The weather ___ nice tomorrow.",             answer: "will be",        form: "positive" },
+                { text: "My parents ___ a new car.",                  answer: "will have",      form: "positive" },
+                { text: "We ___ a math test next Friday.",            answer: "will have",      form: "positive" },
+                { text: "She ___ very good at soccer one day.",       answer: "will be",        form: "positive" },
+                { text: "The cat ___ hungry soon.",                   answer: "will be",        form: "positive" },
+                { text: "Tom ___ a big dog one day.",                 answer: "will have",      form: "positive" },
+                { text: "I ___ at school tomorrow.",                  answer: "won't be",       form: "negative" },
+                { text: "She ___ time for this.",                     answer: "won't have",     form: "negative" },
+                { text: "They ___ late.",                             answer: "won't be",       form: "negative" },
+                { text: "He ___ enough money.",                       answer: "won't have",     form: "negative" },
+                { text: "It ___ sunny tomorrow.",                     answer: "won't be",       form: "negative" },
+                { text: "We ___ any homework tonight.",               answer: "won't have",     form: "negative" },
+                { text: "Tom ___ at school next Monday.",             answer: "won't be",       form: "negative" },
+                { text: "My friends ___ at the park tomorrow.",       answer: "won't be",       form: "negative" },
+                { text: "I ___ enough time.",                         answer: "won't have",     form: "negative" },
+                { text: "You ___ a bad grade.",                       answer: "won't have",     form: "negative" },
+            ],
+        };
+
+        const exHints = {
+            present: { positive: "am / is / are / have / has", negative: "am not / isn't / aren't / don't have / doesn't have" },
+            past:    { positive: "was / were / had",           negative: "wasn't / weren't / didn't have" },
+            future:  { positive: "will be / will have",        negative: "won't be / won't have" },
+        };
+
+        const exMessages = [
+            { min: 90, text: "Excellent work! 🎉" },
+            { min: 70, text: "Well done! Keep it up." },
+            { min: 50, text: "Good effort! Review and try again." },
+            { min: 0,  text: "Keep practising — you'll get there!" },
+        ];
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
             }
+            return shuffled;
         }
 
-        function handleEnter(e) {
-            const select = document.getElementById('quizSelect');
-            const quizName = select.value;
-            const quizType = quizzes[quizName].type || "text";
-            if (quizType === "text" && e.key === "Enter") {
-                const val = document.getElementById('answer').value.trim();
-                if (val !== "") checkAnswer();
-            }
+        function initializePage() {
+            const tense    = document.getElementById('tenseSelect').value;
+            const formType = document.getElementById('formSelect').value;
+
+            document.getElementById('instructions').textContent = 'Use: ' + exHints[tense][formType];
+
+            const pool     = allSentences[tense].filter(s => s.form === formType);
+            const selected = shuffleArray(pool).slice(0, 10);
+
+            const form = document.getElementById('exerciseForm');
+            form.innerHTML = '';
+            selected.forEach((s, i) => {
+                const parts = s.text.split('___');
+                const div   = document.createElement('div');
+                div.className = 'sentence';
+                div.dataset.answer = s.answer;
+
+                const num = document.createElement('span');
+                num.className = 'sentence-num';
+                num.textContent = i + 1;
+
+                const textWrap = document.createElement('span');
+                textWrap.className = 'sentence-text';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = 'ans' + (i + 1);
+                input.autocomplete = 'off';
+                input.placeholder = '…';
+
+                textWrap.appendChild(document.createTextNode(parts[0]));
+                textWrap.appendChild(input);
+                textWrap.appendChild(document.createTextNode(parts[1] || ''));
+
+                div.appendChild(num);
+                div.appendChild(textWrap);
+                form.appendChild(div);
+            });
+
+            document.getElementById('exScore').style.display = 'none';
         }
 
-        function getQuizLabel() {
-            const select = document.getElementById('quizSelect');
-            return quizzes[select.value]?.title || "";
+        function checkAnswers() {
+            const sentences = document.querySelectorAll('#exerciseForm .sentence');
+            let score = 0;
+
+            sentences.forEach(sentence => {
+                const input   = sentence.querySelector('input');
+                const userAns = input.value.trim().toLowerCase();
+                const correct = sentence.dataset.answer;
+
+                const old = sentence.querySelector('.correct-answer');
+                if (old) old.remove();
+
+                sentence.classList.remove('answered-correct', 'answered-incorrect');
+                input.classList.remove('correct', 'incorrect');
+
+                if (userAns === correct) {
+                    input.classList.add('correct');
+                    sentence.classList.add('answered-correct');
+                    score++;
+                } else {
+                    input.classList.add('incorrect');
+                    sentence.classList.add('answered-incorrect');
+                    const hint = document.createElement('span');
+                    hint.className = 'correct-answer';
+                    hint.textContent = '→ ' + correct;
+                    sentence.querySelector('.sentence-text').appendChild(hint);
+                }
+            });
+
+            const total = sentences.length;
+            const pct   = Math.round((score / total) * 100);
+            const msg   = exMessages.find(m => pct >= m.min).text;
+
+            document.getElementById('scoreBig').textContent    = `${score} / ${total}`;
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('scoreMessage').textContent = msg;
+            document.getElementById('exScore').style.display   = 'block';
         }
 
-        function backToMenu() {
-            document.getElementById('quizArea').style.display = 'none';
-            document.getElementById('menuSection').style.display = 'flex';
-        }
-
+        /* ══════════════════════════════════════
+           QUIZ — data & logic
+        ══════════════════════════════════════ */
         const quizzes = {
             lesson51: {
                 title: "Lesson 5 Part 1",
@@ -977,7 +1428,7 @@
         }
 
         function fillQuizSelect() {
-            const select = document.getElementById('quizSelect');
+            const select   = document.getElementById('quizSelect');
             const category = document.getElementById('categorySelect').value;
             select.innerHTML = "";
             Object.entries(quizzes).forEach(([key, quiz]) => {
@@ -1005,42 +1456,62 @@
         let quizFinished = false;
         let lastScore = null;
 
+        function updateValidateState() {
+            const quizName = document.getElementById('quizSelect').value;
+            const quizType = quizzes[quizName].type || "text";
+            if (quizType === "multiple") {
+                document.getElementById('validateBtn').disabled = !window.selectedChoice;
+            } else {
+                document.getElementById('validateBtn').disabled =
+                    document.getElementById('answer').value.trim() === "";
+            }
+        }
+
+        function handleEnter(e) {
+            const quizName = document.getElementById('quizSelect').value;
+            const quizType = quizzes[quizName].type || "text";
+            if (quizType === "text" && e.key === "Enter") {
+                if (document.getElementById('answer').value.trim() !== "") checkAnswer();
+            }
+        }
+
+        function getQuizLabel() {
+            return quizzes[document.getElementById('quizSelect').value]?.title || "";
+        }
+
+        function backToMenu() {
+            document.getElementById('quizArea').style.display   = 'none';
+            document.getElementById('menuSection').style.display = 'flex';
+        }
+
         function startQuiz() {
-            const select = document.getElementById('quizSelect');
-            const quizName = select.value;
+            const quizName = document.getElementById('quizSelect').value;
             const quizType = quizzes[quizName].type || "text";
 
-            quizQueue = shuffle([...quizzes[quizName].questions]);
-            current = 0;
+            quizQueue    = shuffle([...quizzes[quizName].questions]);
+            current      = 0;
             wrongAnswers = [];
 
-            // Switch views
             document.getElementById('menuSection').style.display = 'none';
-            document.getElementById('quizArea').style.display = 'block';
+            document.getElementById('quizArea').style.display    = 'block';
 
-            // Show/hide elements
-            document.getElementById('quizInfo').style.display = '';
-            document.getElementById('backBtn').style.display = '';
-            document.getElementById('question').style.display = 'flex';
-            document.getElementById('answer').style.display = '';
+            document.getElementById('quizInfo').style.display    = '';
+            document.getElementById('backBtn').style.display     = '';
+            document.getElementById('question').style.display    = 'flex';
+            document.getElementById('answer').style.display      = '';
             document.getElementById('validateBtn').style.display = '';
-            document.getElementById('result').style.display = '';
-            document.getElementById('nextBtn').style.display = 'none';
-            document.getElementById('timer').style.display = '';
-            document.getElementById('scoreBoard').style.display = 'none';
-            document.getElementById('namePrompt').style.display = 'none';
+            document.getElementById('result').style.display      = '';
+            document.getElementById('nextBtn').style.display     = 'none';
+            document.getElementById('timer').style.display       = '';
+            document.getElementById('scoreBoard').style.display  = 'none';
+            document.getElementById('namePrompt').style.display  = 'none';
             document.getElementById('choicesContainer').style.display = 'none';
+            document.getElementById('textModeRow').style.display = quizType === "text" ? 'flex' : 'none';
 
-            if (quizType === "text") {
-                document.getElementById('textModeRow').style.display = 'flex';
-            } else {
-                document.getElementById('textModeRow').style.display = 'none';
-            }
-
-            elapsed = 0;
+            elapsed      = 0;
             quizFinished = false;
-            lastScore = null;
-            startTime = Date.now();
+            lastScore    = null;
+            startTime    = Date.now();
             updateTimer();
             timerInterval = setInterval(updateTimer, 1000);
             showQuestion();
@@ -1057,30 +1528,29 @@
         function showQuestion() {
             if (quizQueue.length === 0) {
                 if (wrongAnswers.length > 0) {
-                    quizQueue = [...wrongAnswers];
+                    quizQueue    = [...wrongAnswers];
                     wrongAnswers = [];
-                    current = 0;
+                    current      = 0;
                     document.getElementById('result').textContent = "On recommence les questions mal répondues !";
                     setTimeout(showQuestion, 1500);
                     return;
-                } else {
-                    document.getElementById('question').textContent = "Quiz terminé !";
-                    document.getElementById('quizInfo').style.display = 'none';
-                    document.getElementById('choicesContainer').style.display = 'none';
-                    document.getElementById('answer').style.display = "none";
-                    document.getElementById('validateBtn').style.display = "none";
-                    document.getElementById('nextBtn').style.display = "none";
-                    document.getElementById('result').textContent = "Bravo, tu as fini !";
-                    endQuiz();
-                    return;
                 }
+                document.getElementById('question').textContent         = "Quiz terminé !";
+                document.getElementById('quizInfo').style.display       = 'none';
+                document.getElementById('choicesContainer').style.display = 'none';
+                document.getElementById('answer').style.display         = 'none';
+                document.getElementById('validateBtn').style.display    = 'none';
+                document.getElementById('nextBtn').style.display        = 'none';
+                document.getElementById('result').textContent           = "Bravo, tu as fini !";
+                endQuiz();
+                return;
             }
 
             document.getElementById('quizInfo').innerHTML =
                 getQuizLabel() + " &nbsp;|&nbsp; " + (current + 1) + "/" + quizQueue.length;
             document.getElementById('question').textContent = quizQueue[current].q;
-            document.getElementById('answer').value = "";
-            document.getElementById('result').textContent = "";
+            document.getElementById('answer').value         = "";
+            document.getElementById('result').textContent   = "";
             updateValidateState();
 
             const quizName = document.getElementById('quizSelect').value;
@@ -1088,18 +1558,18 @@
             const textMode = document.getElementById('textModeSelect').value;
 
             if (quizType === "text" && textMode === "selection") {
-                document.getElementById('answer').style.display = 'none';
-                document.getElementById('validateBtn').style.display = 'none';
+                document.getElementById('answer').style.display         = 'none';
+                document.getElementById('validateBtn').style.display    = 'none';
                 document.getElementById('choicesContainer').style.display = 'flex';
                 renderTextChoices(quizQueue[current], quizName);
             } else if (quizType === "text") {
-                document.getElementById('answer').style.display = '';
-                document.getElementById('validateBtn').style.display = '';
+                document.getElementById('answer').style.display         = '';
+                document.getElementById('validateBtn').style.display    = '';
                 document.getElementById('choicesContainer').style.display = 'none';
                 setTimeout(() => document.getElementById('answer').focus(), 50);
             } else {
-                document.getElementById('answer').style.display = 'none';
-                document.getElementById('validateBtn').style.display = 'none';
+                document.getElementById('answer').style.display         = 'none';
+                document.getElementById('validateBtn').style.display    = 'none';
                 document.getElementById('choicesContainer').style.display = 'flex';
                 renderMultipleChoices(quizQueue[current]);
             }
@@ -1111,14 +1581,11 @@
             questionObj.choices.forEach((choice, idx) => {
                 const btn = document.createElement('button');
                 btn.textContent = choice;
-                btn.className = "choice-btn";
-                btn.onclick = function () {
-                    selectMultipleChoice(idx);
-                };
+                btn.className   = "choice-btn";
+                btn.onclick     = () => selectMultipleChoice(idx);
                 container.appendChild(btn);
             });
             window.selectedChoice = null;
-            updateValidateState();
         }
 
         function selectMultipleChoice(idx) {
@@ -1126,41 +1593,35 @@
             document.querySelectorAll('.choice-btn').forEach((btn, i) => {
                 btn.classList.toggle('selected', i === idx);
             });
-            document.getElementById('validateBtn').style.display = '';
             document.getElementById('validateBtn').disabled = false;
             checkAnswer();
         }
 
         function renderTextChoices(questionObj, quizName) {
-            const container = document.getElementById('choicesContainer');
+            const container  = document.getElementById('choicesContainer');
             container.innerHTML = "";
-            const allAnswers = quizzes[quizName].questions.map(q => q.a);
-            const otherAnswers = allAnswers.filter(a => a !== questionObj.a);
-            const shuffledOthers = shuffle([...otherAnswers]);
-            const wrongOnes = shuffledOthers.slice(0, 3);
-            const choices = shuffle([questionObj.a, ...wrongOnes]);
+            const allAnswers    = quizzes[quizName].questions.map(q => q.a);
+            const otherAnswers  = allAnswers.filter(a => a !== questionObj.a);
+            const choices       = shuffle([questionObj.a, ...shuffle([...otherAnswers]).slice(0, 3)]);
 
-            choices.forEach((choice, idx) => {
+            choices.forEach((choice) => {
                 const btn = document.createElement('button');
                 btn.textContent = choice;
-                btn.className = "choice-btn";
-                btn.onclick = function () {
-                    selectTextChoice(idx, choices, questionObj.a);
-                };
+                btn.className   = "choice-btn";
+                btn.onclick     = () => selectTextChoice(choice, questionObj.a);
                 container.appendChild(btn);
             });
             window.selectedChoice = null;
         }
 
-        function selectTextChoice(idx, choices, correctAnswer) {
-            const selectedText = choices[idx];
-            document.querySelectorAll('.choice-btn').forEach((btn, i) => {
-                btn.classList.toggle('selected', i === idx);
+        function selectTextChoice(selectedText, correctAnswer) {
+            document.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.textContent === selectedText);
             });
-            // Immediately check
             const match = selectedText === correctAnswer;
             if (match) {
-                document.getElementById('result').innerHTML = "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
+                document.getElementById('result').innerHTML =
+                    "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
             } else {
                 document.getElementById('result').innerHTML =
                     "Non, la bonne réponse est : <span style='color:#e53935;font-weight:bold;'>" + correctAnswer + "</span>";
@@ -1176,13 +1637,13 @@
         function checkAnswer() {
             const quizName = document.getElementById('quizSelect').value;
             const quizType = quizzes[quizName].type || "text";
-            const correct = quizQueue[current].a;
+            const correct  = quizQueue[current].a;
             let match = false;
 
             if (quizType === "multiple") {
                 match = window.selectedChoice === correct;
             } else {
-                const userAnswer = document.getElementById('answer').value.trim();
+                const userAnswer    = document.getElementById('answer').value.trim();
                 const caseSensitive = quizzes[quizName].caseSensitive;
                 match = caseSensitive
                     ? userAnswer === correct
@@ -1190,9 +1651,10 @@
             }
 
             if (match) {
-                document.getElementById('result').innerHTML = "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
+                document.getElementById('result').innerHTML =
+                    "<span style='color:#27ae60;font-weight:bold;'>Bravo !</span>";
             } else {
-                let correctText = quizType === "multiple"
+                const correctText = quizType === "multiple"
                     ? quizQueue[current].choices[correct]
                     : correct;
                 document.getElementById('result').innerHTML =
@@ -1201,13 +1663,11 @@
             }
 
             document.getElementById('validateBtn').disabled = true;
-            document.getElementById('answer').disabled = true;
-            document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+            document.getElementById('answer').disabled      = true;
 
             setTimeout(() => {
                 document.getElementById('validateBtn').disabled = false;
-                document.getElementById('answer').disabled = false;
-                document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = false);
+                document.getElementById('answer').disabled      = false;
                 nextQuestion();
             }, match ? 1500 : 2500);
         }
@@ -1216,11 +1676,9 @@
             current++;
             if (current >= quizQueue.length) {
                 quizQueue = quizQueue.slice(current);
-                current = 0;
-                showQuestion();
-            } else {
-                showQuestion();
+                current   = 0;
             }
+            showQuestion();
         }
 
         function updateTimer() {
@@ -1232,7 +1690,7 @@
         function endQuiz() {
             quizFinished = true;
             clearInterval(timerInterval);
-            document.getElementById('timer').textContent = "Temps total : " + elapsed + "s";
+            document.getElementById('timer').textContent        = "Temps total : " + elapsed + "s";
             document.getElementById('scoreBoard').style.display = '';
             showScores();
             lastScore = elapsed;
@@ -1243,7 +1701,7 @@
 
         function showScores() {
             const quizName = document.getElementById('quizSelect').value;
-            const scores = getScores(quizName);
+            const scores   = getScores(quizName);
             let html = "<strong>TOP 5 scores</strong>";
             if (scores.length === 0) {
                 html += "<p style='color:#aaa;font-style:italic;margin-top:6px;'>Aucun score enregistré.</p>";
@@ -1271,8 +1729,8 @@
 
         function saveScore() {
             const quizName = document.getElementById('quizSelect').value;
-            const name = document.getElementById('playerName').value.trim() || "Anonyme";
-            let scores = getScores(quizName);
+            const name     = document.getElementById('playerName').value.trim() || "Anonyme";
+            let scores     = getScores(quizName);
             scores.push({ name, time: lastScore });
             scores = scores.sort((a, b) => a.time - b.time).slice(0, 5);
             saveScores(quizName, scores);
@@ -1280,9 +1738,7 @@
             showScores();
         }
 
-        document.getElementById('textModeSelect').addEventListener('change', () => {
-            showQuestion();
-        });
+        document.getElementById('textModeSelect').addEventListener('change', showQuestion);
     </script>
 </body>
 </html>
