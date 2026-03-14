@@ -288,23 +288,18 @@ section {
 .guage-canvas {
 	margin-bottom: 10px;
 }
+.gauge-wrapper {
+	position: relative;
+	text-align: center;
+}
 .gauge-value-text {
 	color: #727272;
 	position: absolute;
 	top: 60px;
 	font-size: 20px;
-}
-.gauge-value-text-left {
-	left: 135px;
-	position: absolute;
-}
-.gauge-value-text-center {
-	left: 130px;
-	position: absolute;
-}
-.gauge-value-text-right {
-	left: 125px;
-	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	white-space: nowrap;
 }
 .back-to-top {
     position: fixed;
