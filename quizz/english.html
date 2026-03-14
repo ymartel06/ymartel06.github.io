@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>English Exercise - To Be / To Have (Present)</title>
+    <title>English Exercise - To Be / To Have</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,15 +12,41 @@
         h1 {
             text-align: center;
         }
+        h2 {
+            text-align: center;
+            font-size: 18px;
+            font-weight: normal;
+            color: #555;
+        }
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .controls label {
+            font-weight: bold;
+            font-size: 16px;
+            margin-right: 8px;
+        }
+        select {
+            padding: 6px 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
         .instructions {
             margin-bottom: 20px;
             font-weight: bold;
+            background-color: #fff8dc;
+            padding: 10px 16px;
+            border-left: 4px solid #f0c040;
+            border-radius: 4px;
         }
         .sentence {
             margin-bottom: 12px;
         }
         input {
-            width: 80px;
+            width: 120px;
             padding: 4px;
             font-size: 14px;
             text-align: center;
@@ -28,18 +54,29 @@
         .button-container {
             text-align: center;
             margin: 30px 0;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
         }
         button {
             padding: 10px 30px;
             font-size: 16px;
-            background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
-        button:hover {
+        #checkBtn {
+            background-color: #4CAF50;
+        }
+        #checkBtn:hover {
             background-color: #45a049;
+        }
+        #newBtn {
+            background-color: #2196F3;
+        }
+        #newBtn:hover {
+            background-color: #1976D2;
         }
         #score {
             text-align: center;
@@ -62,57 +99,124 @@
 <body>
 
     <h1>English Exercise</h1>
-    <h2>Write the correct form of "to be" or "to have" in the present.</h2>
+    <h2>Write the correct form of "to be" or "to have".</h2>
 
-    <div class="instructions">
-        Fill in the blanks with: am / is / are / have / has
+    <div class="controls">
+        <label for="tenseSelect">Tense:</label>
+        <select id="tenseSelect" onchange="initializePage()">
+            <option value="present">Present</option>
+            <option value="past">Past</option>
+            <option value="future">Future</option>
+        </select>
+        &nbsp;&nbsp;
+        <label for="formSelect">Form:</label>
+        <select id="formSelect" onchange="initializePage()">
+            <option value="positive">Positive</option>
+            <option value="negative">Negative</option>
+        </select>
     </div>
 
-    <form id="exerciseForm">
-        <div class="sentence">1. I <input type="text" id="ans1"> very happy today.</div>
-        <div class="sentence">2. She <input type="text" id="ans2"> two brothers.</div>
-        <div class="sentence">3. We <input type="text" id="ans3"> in the same class.</div>
-        <div class="sentence">4. He <input type="text" id="ans4"> a new backpack.</div>
-        <div class="sentence">5. They <input type="text" id="ans5"> late for school.</div>
-        <div class="sentence">6. My dog <input type="text" id="ans6"> big brown eyes.</div>
-        <div class="sentence">7. It <input type="text" id="ans7"> very cold outside.</div>
-        <div class="sentence">8. You <input type="text" id="ans8"> my best friend.</div>
-        <div class="sentence">9. Emma <input type="text" id="ans9"> a lot of homework tonight.</div>
-        <div class="sentence">10. I <input type="text" id="ans10"> 11 years old.</div>
-        <div class="sentence">11. The teachers <input type="text" id="ans11"> very kind.</div>
-        <div class="sentence">12. My parents <input type="text" id="ans12"> a small car.</div>
-        <div class="sentence">13. Tom <input type="text" id="ans13"> sick today.</div>
-        <div class="sentence">14. We <input type="text" id="ans14"> a math test tomorrow.</div>
-        <div class="sentence">15. She <input type="text" id="ans15"> very good at soccer.</div>
-        <div class="sentence">16. The cat <input type="text" id="ans16"> under the table.</div>
-        <div class="sentence">17. You <input type="text" id="ans17"> a great idea!</div>
-        <div class="sentence">18. I <input type="text" id="ans18"> ready to go.</div>
-        <div class="sentence">19. My friends <input type="text" id="ans19"> at the park.</div>
-        <div class="sentence">20. Lucas <input type="text" id="ans20"> a blue bike.</div>
-        <div class="sentence">21. My sister <input type="text" id="ans21"> 8 years old.</div>
-        <div class="sentence">22. We <input type="text" id="ans22"> a lot of pencils in our classroom.</div>
-        <div class="sentence">23. The weather <input type="text" id="ans23"> sunny today.</div>
-        <div class="sentence">24. I <input type="text" id="ans24"> a new mobile phone.</div>
-        <div class="sentence">25. My grandparents <input type="text" id="ans25"> very nice.</div>
-        <div class="sentence">26. My best friend <input type="text" id="ans26"> glasses.</div>
-        <div class="sentence">27. You <input type="text" id="ans27"> very intelligent.</div>
-        <div class="sentence">28. This book <input type="text" id="ans28"> very interesting.</div>
-        <div class="sentence">29. My cousins <input type="text" id="ans29"> at the beach.</div>
-        <div class="sentence">30. I <input type="text" id="ans30"> 2 cats at home.</div>
-    </form>
+    <div class="instructions" id="instructions"></div>
+
+    <form id="exerciseForm"></form>
 
     <div class="button-container">
-        <button type="button" onclick="checkAnswers()">Check Answers</button>
+        <button type="button" id="checkBtn" onclick="checkAnswers()">Check Answers</button>
+        <button type="button" id="newBtn" onclick="initializePage()">New Exercise</button>
     </div>
 
     <div id="score"></div>
 
     <script>
-        const correctAnswers = [
-            'am', 'has', 'are', 'has', 'are', 'has', 'is', 'are', 'has', 'am',
-            'are', 'have', 'is', 'have', 'is', 'is', 'have', 'am', 'are', 'has',
-            'is', 'have', 'is', 'have', 'are', 'has', 'are', 'is', 'are', 'have'
-        ];
+        const allSentences = {
+            present: [
+                { text: "I ___ very happy today.",                   answer: "am",             form: "positive" },
+                { text: "She ___ two brothers.",                      answer: "has",            form: "positive" },
+                { text: "We ___ in the same class.",                  answer: "are",            form: "positive" },
+                { text: "He ___ a new backpack.",                     answer: "has",            form: "positive" },
+                { text: "They ___ late for school.",                  answer: "are",            form: "positive" },
+                { text: "My dog ___ big brown eyes.",                 answer: "has",            form: "positive" },
+                { text: "It ___ very cold outside.",                  answer: "is",             form: "positive" },
+                { text: "You ___ my best friend.",                    answer: "are",            form: "positive" },
+                { text: "Emma ___ a lot of homework tonight.",        answer: "has",            form: "positive" },
+                { text: "I ___ 11 years old.",                        answer: "am",             form: "positive" },
+                { text: "The teachers ___ very kind.",                answer: "are",            form: "positive" },
+                { text: "My parents ___ a small car.",                answer: "have",           form: "positive" },
+                { text: "Tom ___ sick today.",                        answer: "is",             form: "positive" },
+                { text: "We ___ a math test tomorrow.",               answer: "have",           form: "positive" },
+                { text: "She ___ very good at soccer.",               answer: "is",             form: "positive" },
+                { text: "I ___ tired today.",                         answer: "am not",         form: "negative" },
+                { text: "She ___ a sister.",                          answer: "doesn't have",   form: "negative" },
+                { text: "They ___ at school today.",                  answer: "aren't",         form: "negative" },
+                { text: "He ___ a pet.",                              answer: "doesn't have",   form: "negative" },
+                { text: "It ___ sunny today.",                        answer: "isn't",          form: "negative" },
+                { text: "We ___ any homework tonight.",               answer: "don't have",     form: "negative" },
+                { text: "Tom ___ at school today.",                   answer: "isn't",          form: "negative" },
+                { text: "You ___ a bad friend.",                      answer: "aren't",         form: "negative" },
+                { text: "I ___ a bicycle.",                           answer: "don't have",     form: "negative" },
+                { text: "The cat ___ under the bed right now.",       answer: "isn't",          form: "negative" },
+            ],
+            past: [
+                { text: "I ___ very tired yesterday.",                answer: "was",            form: "positive" },
+                { text: "She ___ two cats last year.",                answer: "had",            form: "positive" },
+                { text: "We ___ in the same class last year.",        answer: "were",           form: "positive" },
+                { text: "He ___ a red bike.",                         answer: "had",            form: "positive" },
+                { text: "They ___ late for school yesterday.",        answer: "were",           form: "positive" },
+                { text: "It ___ very cold last night.",               answer: "was",            form: "positive" },
+                { text: "You ___ my best friend.",                    answer: "were",           form: "positive" },
+                { text: "Emma ___ a lot of homework last night.",     answer: "had",            form: "positive" },
+                { text: "I ___ 10 years old last year.",              answer: "was",            form: "positive" },
+                { text: "The teachers ___ very kind.",                answer: "were",           form: "positive" },
+                { text: "My parents ___ a big house.",                answer: "had",            form: "positive" },
+                { text: "Tom ___ sick yesterday.",                    answer: "was",            form: "positive" },
+                { text: "We ___ a math test last week.",              answer: "had",            form: "positive" },
+                { text: "She ___ very good at soccer.",               answer: "was",            form: "positive" },
+                { text: "The cat ___ under the table.",               answer: "was",            form: "positive" },
+                { text: "I ___ at home yesterday.",                   answer: "wasn't",         form: "negative" },
+                { text: "She ___ a sister.",                          answer: "didn't have",    form: "negative" },
+                { text: "They ___ at school last Friday.",            answer: "weren't",        form: "negative" },
+                { text: "He ___ a pet.",                              answer: "didn't have",    form: "negative" },
+                { text: "It ___ sunny yesterday.",                    answer: "wasn't",         form: "negative" },
+                { text: "We ___ any homework last night.",            answer: "didn't have",    form: "negative" },
+                { text: "Tom ___ at school.",                         answer: "wasn't",         form: "negative" },
+                { text: "My friends ___ at the park.",                answer: "weren't",        form: "negative" },
+                { text: "I ___ enough time.",                         answer: "didn't have",    form: "negative" },
+                { text: "You ___ the right answer.",                  answer: "didn't have",    form: "negative" },
+            ],
+            future: [
+                { text: "I ___ very happy tomorrow.",                 answer: "will be",        form: "positive" },
+                { text: "She ___ two brothers soon.",                 answer: "will have",      form: "positive" },
+                { text: "We ___ in the same class next year.",        answer: "will be",        form: "positive" },
+                { text: "He ___ a new backpack next week.",           answer: "will have",      form: "positive" },
+                { text: "They ___ late for school tomorrow.",         answer: "will be",        form: "positive" },
+                { text: "It ___ very cold tomorrow.",                 answer: "will be",        form: "positive" },
+                { text: "You ___ my best friend forever.",            answer: "will be",        form: "positive" },
+                { text: "Emma ___ a lot of homework tonight.",        answer: "will have",      form: "positive" },
+                { text: "I ___ 12 years old next year.",              answer: "will be",        form: "positive" },
+                { text: "The weather ___ nice tomorrow.",             answer: "will be",        form: "positive" },
+                { text: "My parents ___ a new car.",                  answer: "will have",      form: "positive" },
+                { text: "We ___ a math test next Friday.",            answer: "will have",      form: "positive" },
+                { text: "She ___ very good at soccer one day.",       answer: "will be",        form: "positive" },
+                { text: "The cat ___ hungry soon.",                   answer: "will be",        form: "positive" },
+                { text: "Tom ___ a big dog one day.",                 answer: "will have",      form: "positive" },
+                { text: "I ___ at school tomorrow.",                  answer: "won't be",       form: "negative" },
+                { text: "She ___ time for this.",                     answer: "won't have",     form: "negative" },
+                { text: "They ___ late.",                             answer: "won't be",       form: "negative" },
+                { text: "He ___ enough money.",                       answer: "won't have",     form: "negative" },
+                { text: "It ___ sunny tomorrow.",                     answer: "won't be",       form: "negative" },
+                { text: "We ___ any homework tonight.",               answer: "won't have",     form: "negative" },
+                { text: "Tom ___ at school next Monday.",             answer: "won't be",       form: "negative" },
+                { text: "My friends ___ at the park tomorrow.",       answer: "won't be",       form: "negative" },
+                { text: "I ___ enough time.",                         answer: "won't have",     form: "negative" },
+                { text: "You ___ a bad grade.",                       answer: "won't have",     form: "negative" },
+            ],
+        };
+
+        const hints = {
+            present: { positive: "am / is / are / have / has", negative: "am not / isn't / aren't / don't have / doesn't have" },
+            past:    { positive: "was / were / had",           negative: "wasn't / weren't / didn't have" },
+            future:  { positive: "will be / will have",        negative: "won't be / won't have" },
+        };
 
         function shuffleArray(array) {
             const shuffled = [...array];
@@ -124,38 +228,52 @@
         }
 
         function initializePage() {
+            const tense     = document.getElementById('tenseSelect').value;
+            const formType  = document.getElementById('formSelect').value;
+
+            // Update instructions
+            document.getElementById('instructions').textContent =
+                'Fill in the blanks with: ' + hints[tense][formType];
+
+            // Pick 10 random sentences for this tense + form
+            const pool = allSentences[tense].filter(s => s.form === formType);
+            const selected = shuffleArray(pool).slice(0, 10);
+
+            // Render sentences
             const form = document.getElementById('exerciseForm');
-            const sentences = form.querySelectorAll('.sentence');
-            
-            // Créer un tableau d'indices [0, 1, 2, ..., 29]
-            const indices = Array.from({length: 30}, (_, i) => i);
-            
-            // Mélanger les indices
-            const shuffledIndices = shuffleArray(indices);
-            
-            // Afficher seulement les 10 premières phrases mélangées
-            sentences.forEach((sentence, index) => {
-                if (shuffledIndices.indexOf(index) < 10) {
-                    sentence.style.display = 'block';
-                } else {
-                    sentence.style.display = 'none';
-                }
+            form.innerHTML = '';
+            selected.forEach((s, i) => {
+                const parts = s.text.split('___');
+                const div = document.createElement('div');
+                div.className = 'sentence';
+                div.dataset.answer = s.answer;
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = 'ans' + (i + 1);
+                input.autocomplete = 'off';
+
+                div.appendChild(document.createTextNode((i + 1) + '. ' + parts[0]));
+                div.appendChild(input);
+                div.appendChild(document.createTextNode(parts[1] || ''));
+                form.appendChild(div);
             });
+
+            // Reset score
+            const scoreDisplay = document.getElementById('score');
+            scoreDisplay.style.display = 'none';
+            scoreDisplay.textContent = '';
         }
 
         function checkAnswers() {
-            let score = 0;
-            const scoreDisplay = document.getElementById('score');
             const form = document.getElementById('exerciseForm');
-            const visibleInputs = Array.from(form.querySelectorAll('input[type="text"]')).filter(input => {
-                return input.closest('.sentence').style.display !== 'none';
-            });
+            const sentences = form.querySelectorAll('.sentence');
+            let score = 0;
 
-            visibleInputs.forEach((input) => {
-                // Extraire le numéro de l'ID (ans1, ans2, etc.)
-                const answerNumber = parseInt(input.id.replace('ans', '')) - 1;
+            sentences.forEach((sentence) => {
+                const input = sentence.querySelector('input');
                 const userAnswer = input.value.trim().toLowerCase();
-                const correctAnswer = correctAnswers[answerNumber];
+                const correctAnswer = sentence.dataset.answer;
 
                 if (userAnswer === correctAnswer) {
                     input.classList.remove('incorrect');
@@ -167,12 +285,13 @@
                 }
             });
 
-            const percentage = Math.round((score / visibleInputs.length) * 100);
-            scoreDisplay.textContent = `Score: ${score}/${visibleInputs.length} (${percentage}%)`;
+            const total = sentences.length;
+            const percentage = Math.round((score / total) * 100);
+            const scoreDisplay = document.getElementById('score');
+            scoreDisplay.textContent = `Score: ${score}/${total} (${percentage}%)`;
             scoreDisplay.style.display = 'block';
         }
 
-        // Initialiser la page au chargement
         window.addEventListener('load', initializePage);
     </script>
 
