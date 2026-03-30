@@ -640,6 +640,13 @@
         <div id="tabExercise" style="display:none;">
             <div class="ex-controls">
                 <div class="ex-control-group">
+                    <label for="exTypeSelect">Exercise</label>
+                    <select id="exTypeSelect" onchange="switchExerciseType()">
+                        <option value="tenseForm">Tense / Form (to be &amp; to have)</option>
+                        <option value="possessivePronouns">Possessive Pronouns</option>
+                    </select>
+                </div>
+                <div class="ex-control-group" id="tenseGroup">
                     <label for="tenseSelect">Tense</label>
                     <select id="tenseSelect" onchange="initializePage()">
                         <option value="present">Present</option>
@@ -647,7 +654,7 @@
                         <option value="future">Future</option>
                     </select>
                 </div>
-                <div class="ex-control-group">
+                <div class="ex-control-group" id="formGroup">
                     <label for="formSelect">Form</label>
                     <select id="formSelect" onchange="initializePage()">
                         <option value="positive">Positive</option>
@@ -782,6 +789,59 @@
             future:  { positive: "will be / will have",        negative: "won't be / won't have" },
         };
 
+        const possessiveSentences = [
+            { text: "___ name is John. (I)",                         answer: "my" },
+            { text: "Is this ___ book? (you)",                       answer: "your" },
+            { text: "___ house is very big. (he)",                   answer: "his" },
+            { text: "___ cat is black and white. (she)",             answer: "her" },
+            { text: "The dog is eating ___ food. (it)",              answer: "its" },
+            { text: "___ school starts at 8 o'clock. (we)",          answer: "our" },
+            { text: "Is this ___ classroom? (you, plural)",          answer: "your" },
+            { text: "___ parents are very nice. (they)",             answer: "their" },
+            { text: "I love ___ family. (I)",                        answer: "my" },
+            { text: "She is doing ___ homework. (she)",              answer: "her" },
+            { text: "He forgot ___ lunch box. (he)",                 answer: "his" },
+            { text: "We enjoy ___ holidays. (we)",                   answer: "our" },
+            { text: "They are washing ___ car. (they)",              answer: "their" },
+            { text: "The bird is in ___ nest. (it)",                 answer: "its" },
+            { text: "Can I borrow ___ pencil? (you)",                answer: "your" },
+            { text: "___ sister is 9 years old. (I)",                answer: "my" },
+            { text: "He is riding ___ bicycle. (he)",                answer: "his" },
+            { text: "She lost ___ keys. (she)",                      answer: "her" },
+            { text: "The cat is licking ___ paw. (it)",              answer: "its" },
+            { text: "___ teacher is very funny. (we)",               answer: "our" },
+            { text: "Please open ___ books. (you, plural)",          answer: "your" },
+            { text: "___ dog likes to play in the park. (they)",     answer: "their" },
+            { text: "I can't find ___ shoes. (I)",                   answer: "my" },
+            { text: "He is proud of ___ painting. (he)",             answer: "his" },
+            { text: "She always cleans ___ room. (she)",             answer: "her" },
+            { text: "The tree lost ___ leaves in autumn. (it)",      answer: "its" },
+            { text: "___ garden has many flowers. (we)",              answer: "our" },
+            { text: "Did you finish ___ exam? (you)",                answer: "your" },
+            { text: "___ house is next to the school. (they)",       answer: "their" },
+            { text: "I gave ___ friend a present. (I)",              answer: "my" },
+            { text: "She showed me ___ new dress. (she)",            answer: "her" },
+            { text: "He wants to visit ___ grandparents. (he)",      answer: "his" },
+            { text: "The baby dropped ___ toy. (it)",                answer: "its" },
+            { text: "___ trip to the zoo was amazing. (we)",          answer: "our" },
+            { text: "Is ___ phone ringing? (you)",                   answer: "your" },
+            { text: "___ children go to the same school. (they)",    answer: "their" },
+            { text: "I forgot ___ umbrella at home. (I)",            answer: "my" },
+            { text: "She invited ___ friends to the party. (she)",   answer: "her" },
+            { text: "He broke ___ arm last week. (he)",              answer: "his" },
+            { text: "The snake shed ___ skin. (it)",                 answer: "its" },
+            { text: "___ classroom is on the second floor. (we)",    answer: "our" },
+            { text: "Don't forget ___ jacket! (you)",                answer: "your" },
+            { text: "___ vacation starts next Monday. (they)",       answer: "their" },
+            { text: "___ favourite colour is blue. (I)",             answer: "my" },
+            { text: "She is feeding ___ rabbit. (she)",              answer: "her" },
+            { text: "He finished ___ project on time. (he)",         answer: "his" },
+            { text: "The computer lost ___ connection. (it)",        answer: "its" },
+            { text: "___ bus arrives at 7:30. (we)",                  answer: "our" },
+            { text: "Where is ___ bag? (you)",                       answer: "your" },
+            { text: "___ team won the match! (they)",                answer: "their" },
+        ];
+
         const exMessages = [
             { min: 90, text: "Excellent work! 🎉" },
             { min: 70, text: "Well done! Keep it up." },
@@ -798,14 +858,29 @@
             return shuffled;
         }
 
+        function switchExerciseType() {
+            const exType = document.getElementById('exTypeSelect').value;
+            document.getElementById('tenseGroup').style.display = exType === 'tenseForm' ? '' : 'none';
+            document.getElementById('formGroup').style.display  = exType === 'tenseForm' ? '' : 'none';
+            initializePage();
+        }
+
         function initializePage() {
-            const tense    = document.getElementById('tenseSelect').value;
-            const formType = document.getElementById('formSelect').value;
+            const exType = document.getElementById('exTypeSelect').value;
+            let selected, hintText;
 
-            document.getElementById('instructions').textContent = 'Use: ' + exHints[tense][formType];
+            if (exType === 'possessivePronouns') {
+                selected = shuffleArray(possessiveSentences).slice(0, 10);
+                hintText = 'Use: my / your / his / her / its / our / your / their';
+            } else {
+                const tense    = document.getElementById('tenseSelect').value;
+                const formType = document.getElementById('formSelect').value;
+                hintText = 'Use: ' + exHints[tense][formType];
+                const pool = allSentences[tense].filter(s => s.form === formType);
+                selected = shuffleArray(pool).slice(0, 10);
+            }
 
-            const pool     = allSentences[tense].filter(s => s.form === formType);
-            const selected = shuffleArray(pool).slice(0, 10);
+            document.getElementById('instructions').textContent = hintText;
 
             const form = document.getElementById('exerciseForm');
             form.innerHTML = '';
