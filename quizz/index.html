@@ -644,6 +644,8 @@
                     <select id="exTypeSelect" onchange="switchExerciseType()">
                         <option value="tenseForm">Tense / Form (to be &amp; to have)</option>
                         <option value="possessivePronouns">Possessive Pronouns</option>
+                        <option value="presentContinuous">Present Continuous</option>
+                        <option value="pastContinuous">Past Continuous</option>
                     </select>
                 </div>
                 <div class="ex-control-group" id="tenseGroup">
@@ -842,6 +844,112 @@
             { text: "___ team won the match! (they)",                answer: "their" },
         ];
 
+        const presentContinuousSentences = [
+            { text: "I ___ reading a book right now. (read)",                answer: "am reading" },
+            { text: "She ___ to music at the moment. (listen)",              answer: "is listening" },
+            { text: "They ___ football in the park. (play)",                 answer: "are playing" },
+            { text: "He ___ his homework now. (do)",                         answer: "is doing" },
+            { text: "We ___ dinner together tonight. (cook)",                answer: "are cooking" },
+            { text: "The baby ___ right now. (sleep)",                       answer: "is sleeping" },
+            { text: "You ___ very fast today! (run)",                        answer: "are running" },
+            { text: "My mum ___ on the phone. (talk)",                       answer: "is talking" },
+            { text: "The children ___ in the garden. (play)",                answer: "are playing" },
+            { text: "I ___ for my English test. (study)",                    answer: "am studying" },
+            { text: "Look! It ___. (rain)",                                  answer: "is raining" },
+            { text: "The dog ___ in the lake. (swim)",                       answer: "is swimming" },
+            { text: "My friends ___ a movie. (watch)",                       answer: "are watching" },
+            { text: "She ___ a letter to her grandma. (write)",              answer: "is writing" },
+            { text: "We ___ a new song in class. (learn)",                   answer: "are learning" },
+            { text: "He ___ his breakfast. (eat)",                           answer: "is eating" },
+            { text: "The teacher ___ the lesson. (explain)",                 answer: "is explaining" },
+            { text: "I ___ my teeth. (brush)",                               answer: "am brushing" },
+            { text: "They ___ the house. (clean)",                           answer: "are cleaning" },
+            { text: "She ___ a beautiful picture. (draw)",                   answer: "is drawing" },
+            { text: "We ___ to school right now. (walk)",                    answer: "are walking" },
+            { text: "He ___ a glass of water. (drink)",                      answer: "is drinking" },
+            { text: "The cat ___ on the sofa. (sit)",                        answer: "is sitting" },
+            { text: "I ___ my favourite song. (sing)",                       answer: "am singing" },
+            { text: "You ___ too much noise! (make)",                        answer: "are making" },
+            { text: "She ___ her new dress today. (wear)",                   answer: "is wearing" },
+            { text: "They ___ for the bus. (wait)",                          answer: "are waiting" },
+            { text: "My dad ___ the car. (wash)",                            answer: "is washing" },
+            { text: "The birds ___ in the sky. (fly)",                       answer: "are flying" },
+            { text: "I ___ a sandwich for lunch. (make)",                    answer: "am making" },
+            { text: "He ___ to his friend. (talk)",                          answer: "is talking" },
+            { text: "We ___ a great time at the beach. (have)",              answer: "are having" },
+            { text: "She ___ the piano right now. (play)",                   answer: "is playing" },
+            { text: "The sun ___ brightly today. (shine)",                   answer: "is shining" },
+            { text: "They ___ their bags for the trip. (pack)",              answer: "are packing" },
+            { text: "I ___ about my holidays. (think)",                      answer: "am thinking" },
+            { text: "He ___ a cake for his sister. (bake)",                  answer: "is baking" },
+            { text: "You ___ a lot today! (smile)",                          answer: "are smiling" },
+            { text: "We ___ our favourite TV show. (watch)",                 answer: "are watching" },
+            { text: "The phone ___. Can you answer it? (ring)",              answer: "is ringing" },
+            { text: "She ___ in the school play. (act)",                     answer: "is acting" },
+            { text: "They ___ a sandcastle. (build)",                        answer: "are building" },
+            { text: "My brother ___ video games. (play)",                    answer: "is playing" },
+            { text: "I ___ this exercise now. (finish)",                     answer: "am finishing" },
+            { text: "He ___ his room. (tidy)",                               answer: "is tidying" },
+            { text: "The students ___ the answer. (discuss)",                answer: "are discussing" },
+            { text: "She ___ orange juice. (drink)",                         answer: "is drinking" },
+            { text: "We ___ a project for science class. (prepare)",         answer: "are preparing" },
+            { text: "You ___ so well in the race! (do)",                     answer: "are doing" },
+            { text: "It ___ colder and colder outside. (get)",               answer: "is getting" },
+        ];
+
+        const pastContinuousSentences = [
+            { text: "I ___ a book when you called. (read)",                  answer: "was reading" },
+            { text: "She ___ to music all evening. (listen)",                answer: "was listening" },
+            { text: "They ___ football when it started to rain. (play)",     answer: "were playing" },
+            { text: "He ___ his homework at 8 p.m. (do)",                    answer: "was doing" },
+            { text: "We ___ dinner when the lights went out. (cook)",        answer: "were cooking" },
+            { text: "The baby ___ when I arrived. (sleep)",                  answer: "was sleeping" },
+            { text: "You ___ very fast during the race. (run)",              answer: "were running" },
+            { text: "My mum ___ on the phone when I left. (talk)",           answer: "was talking" },
+            { text: "The children ___ in the garden all afternoon. (play)",  answer: "were playing" },
+            { text: "I ___ for my test when she came. (study)",              answer: "was studying" },
+            { text: "It ___ when we left the house. (rain)",                 answer: "was raining" },
+            { text: "The dog ___ in the lake when we saw it. (swim)",        answer: "was swimming" },
+            { text: "My friends ___ a movie last night. (watch)",            answer: "were watching" },
+            { text: "She ___ a letter when the bell rang. (write)",          answer: "was writing" },
+            { text: "We ___ a new song during class. (learn)",               answer: "were learning" },
+            { text: "He ___ his breakfast at 7 a.m. (eat)",                  answer: "was eating" },
+            { text: "The teacher ___ when I entered the room. (explain)",    answer: "was explaining" },
+            { text: "I ___ my teeth when the phone rang. (brush)",           answer: "was brushing" },
+            { text: "They ___ the house all morning. (clean)",               answer: "were cleaning" },
+            { text: "She ___ a picture when I saw her. (draw)",              answer: "was drawing" },
+            { text: "We ___ to school when it started snowing. (walk)",      answer: "were walking" },
+            { text: "He ___ water when he heard the news. (drink)",          answer: "was drinking" },
+            { text: "The cat ___ on the sofa all day. (sit)",                answer: "was sitting" },
+            { text: "I ___ in the shower when you knocked. (sing)",          answer: "was singing" },
+            { text: "You ___ too much noise during the lesson! (make)",      answer: "were making" },
+            { text: "She ___ her red dress at the party. (wear)",            answer: "was wearing" },
+            { text: "They ___ for the bus when it started to rain. (wait)",  answer: "were waiting" },
+            { text: "My dad ___ the car yesterday afternoon. (wash)",        answer: "was washing" },
+            { text: "The birds ___ south when we saw them. (fly)",           answer: "were flying" },
+            { text: "I ___ a sandwich when he arrived. (make)",              answer: "was making" },
+            { text: "He ___ to his friend during the break. (talk)",         answer: "was talking" },
+            { text: "We ___ a great time when it ended. (have)",             answer: "were having" },
+            { text: "She ___ the piano when the guests came. (play)",        answer: "was playing" },
+            { text: "The sun ___ when we woke up. (shine)",                  answer: "was shining" },
+            { text: "They ___ their bags when I called them. (pack)",        answer: "were packing" },
+            { text: "I ___ about you when you texted me. (think)",           answer: "was thinking" },
+            { text: "He ___ a cake when the oven broke. (bake)",             answer: "was baking" },
+            { text: "You ___ a lot at the party. (smile)",                   answer: "were smiling" },
+            { text: "We ___ TV when the power went off. (watch)",            answer: "were watching" },
+            { text: "The phone ___ while I was in the shower. (ring)",       answer: "was ringing" },
+            { text: "She ___ in the school play last week. (act)",           answer: "was acting" },
+            { text: "They ___ a sandcastle when the wave came. (build)",     answer: "were building" },
+            { text: "My brother ___ video games all evening. (play)",        answer: "was playing" },
+            { text: "I ___ my essay when the computer crashed. (finish)",    answer: "was finishing" },
+            { text: "He ___ his room when his friend called. (tidy)",        answer: "was tidying" },
+            { text: "The students ___ the answer when the bell rang. (discuss)", answer: "were discussing" },
+            { text: "She ___ juice when she spilled it. (drink)",            answer: "was drinking" },
+            { text: "We ___ a project when the teacher stopped us. (prepare)", answer: "were preparing" },
+            { text: "You ___ so well before you fell. (do)",                 answer: "were doing" },
+            { text: "It ___ dark when we finally left. (get)",               answer: "was getting" },
+        ];
+
         const exMessages = [
             { min: 90, text: "Excellent work! 🎉" },
             { min: 70, text: "Well done! Keep it up." },
@@ -872,6 +980,12 @@
             if (exType === 'possessivePronouns') {
                 selected = shuffleArray(possessiveSentences).slice(0, 10);
                 hintText = 'Use: my / your / his / her / its / our / your / their';
+            } else if (exType === 'presentContinuous') {
+                selected = shuffleArray(presentContinuousSentences).slice(0, 10);
+                hintText = 'Use: am/is/are + verb-ing (e.g. am reading, is playing, are watching)';
+            } else if (exType === 'pastContinuous') {
+                selected = shuffleArray(pastContinuousSentences).slice(0, 10);
+                hintText = 'Use: was/were + verb-ing (e.g. was reading, were playing)';
             } else {
                 const tense    = document.getElementById('tenseSelect').value;
                 const formType = document.getElementById('formSelect').value;
