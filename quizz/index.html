@@ -2088,6 +2088,90 @@
                         "To run quickly across the room"
                     ]}
                 ]
+            },
+            math_conversion_mass: {
+                title: "Conversions - Masses (kg / g)",
+                category: "Mathématiques - Conversions",
+                caseSensitive: false,
+                normalizeDecimal: true,
+                type: "text",
+                generator: () => {
+                    const formatFR = n => String(n).replace('.', ',');
+                    const questions = [];
+                    for (let i = 0; i < 10; i++) {
+                        if (Math.random() < 0.5) {
+                            const kg = Math.round((Math.random() * 9 + 0.1) * 1000) / 1000;
+                            const g  = Math.round(kg * 1000);
+                            questions.push({ q: formatFR(kg) + " kg = ? g", a: String(g) });
+                        } else {
+                            const g  = Math.floor(Math.random() * 9900) + 100;
+                            const kg = g / 1000;
+                            questions.push({ q: g + " g = ? kg", a: formatFR(kg) });
+                        }
+                    }
+                    return questions;
+                }
+            },
+            math_conversion_volume: {
+                title: "Conversions - Volumes (L / ml / cl / dl)",
+                category: "Mathématiques - Conversions",
+                caseSensitive: false,
+                normalizeDecimal: true,
+                type: "text",
+                generator: () => {
+                    const formatFR = n => String(n).replace('.', ',');
+                    const units = [
+                        { name: "ml", factor: 1000 },
+                        { name: "cl", factor: 100 },
+                        { name: "dl", factor: 10 }
+                    ];
+                    const questions = [];
+                    for (let i = 0; i < 10; i++) {
+                        const u = units[Math.floor(Math.random() * units.length)];
+                        if (Math.random() < 0.5) {
+                            const L = Math.round((Math.random() * 9 + 0.1) * 100) / 100;
+                            const sub = Math.round(L * u.factor);
+                            questions.push({ q: formatFR(L) + " L = ? " + u.name, a: String(sub) });
+                        } else {
+                            let sub;
+                            if (u.name === "ml") sub = (Math.floor(Math.random() * 99) + 1) * 100;
+                            else if (u.name === "cl") sub = (Math.floor(Math.random() * 99) + 1) * 10;
+                            else sub = Math.floor(Math.random() * 99) + 1;
+                            const L = sub / u.factor;
+                            questions.push({ q: sub + " " + u.name + " = ? L", a: formatFR(L) });
+                        }
+                    }
+                    return questions;
+                }
+            },
+            math_conversion_time: {
+                title: "Conversions - Heures et minutes",
+                category: "Mathématiques - Conversions",
+                caseSensitive: false,
+                normalizeDecimal: true,
+                type: "text",
+                generator: () => {
+                    const questions = [];
+                    for (let i = 0; i < 10; i++) {
+                        if (Math.random() < 0.5) {
+                            const h = Math.floor(Math.random() * 5) + 1;
+                            const m = Math.floor(Math.random() * 60);
+                            const total = h * 60 + m;
+                            const label = m === 0 ? h + "h" : h + "h" + (m < 10 ? "0" + m : m);
+                            questions.push({ q: label + " = ? minutes", a: String(total) });
+                        } else {
+                            const total = Math.floor(Math.random() * 295) + 5;
+                            const h = Math.floor(total / 60);
+                            const m = total % 60;
+                            let answer;
+                            if (h === 0) answer = m + "min";
+                            else if (m === 0) answer = h + "h";
+                            else answer = h + "h" + (m < 10 ? "0" + m : m);
+                            questions.push({ q: total + " minutes = ? (format 1h30 ou 90min)", a: answer });
+                        }
+                    }
+                    return questions;
+                }
             }
         };
 
@@ -2163,6 +2247,10 @@
         function startQuiz() {
             const quizName = document.getElementById('quizSelect').value;
             const quizType = quizzes[quizName].type || "text";
+
+            if (typeof quizzes[quizName].generator === "function") {
+                quizzes[quizName].questions = quizzes[quizName].generator();
+            }
 
             quizQueue    = shuffle([...quizzes[quizName].questions]);
             current      = 0;
@@ -2321,9 +2409,14 @@
             } else {
                 const userAnswer    = document.getElementById('answer').value.trim();
                 const caseSensitive = quizzes[quizName].caseSensitive;
+                const normalize = quizzes[quizName].normalizeDecimal
+                    ? s => s.replace(/\s+/g, '').replace(',', '.')
+                    : s => s;
+                const u = normalize(userAnswer);
+                const c = normalize(correct);
                 match = caseSensitive
-                    ? userAnswer === correct
-                    : userAnswer.toLowerCase() === correct.toLowerCase();
+                    ? u === c
+                    : u.toLowerCase() === c.toLowerCase();
             }
 
             if (match) {
