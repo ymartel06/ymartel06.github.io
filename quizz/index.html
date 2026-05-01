@@ -462,7 +462,7 @@
             background: #ffffff;
             border: 2px solid #c5cae9;
             border-radius: 8px;
-            width: 140px;
+            width: 170px;
             text-align: center;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -646,6 +646,7 @@
                         <option value="possessivePronouns">Possessive Pronouns</option>
                         <option value="presentContinuous">Present Continuous</option>
                         <option value="pastContinuous">Past Continuous</option>
+                        <option value="willBeGoingTo">Will / Be going to</option>
                     </select>
                 </div>
                 <div class="ex-control-group" id="tenseGroup">
@@ -950,6 +951,60 @@
             { text: "It ___ dark when we finally left. (get)",               answer: "was getting" },
         ];
 
+        const willBeGoingToSentences = [
+            { text: "My brother ___ 45 in October. (be)",                                                                           answer: "is going to be" },
+            { text: "- The phone is ringing and I'm in the shower! - Don't worry Mark, I ___ for you. (answer)",                    answer: "will answer" },
+            { text: "James Jones ___ the next President. (probably / become)",                                                      answer: "will probably become" },
+            { text: "Mum is unemployed but she ___ for that job because it isn't well-paid. (not / apply)",                         answer: "isn't going to apply" },
+            { text: "I'm so excited! We ___ to a bigger house next month. (move)",                                                  answer: "are going to move" },
+            { text: "My parents ___ very proud, I have passed all the exams. (be)",                                                 answer: "will be" },
+            { text: "I think my sister ___ the exam, she has studied very hard so far. (pass)",                                     answer: "will pass" },
+            { text: "I ___ the kids to the mountains this winter. (take)",                                                          answer: "am going to take" },
+            { text: "There isn't any milk left in the fridge. - I know, I ___ the shopping this afternoon. (do)",                   answer: "am going to do" },
+            { text: "There isn't any milk left in the fridge. - Oh sorry!, I ___ you some juice instead. (give)",                   answer: "will give" },
+            { text: "Look at the clouds, it ___; you should take an umbrella! (rain)",                                              answer: "is going to rain" },
+            { text: "There's a knock at the door; that ___ the postman. (be)",                                                      answer: "will be" },
+            { text: "Boys ___ boys! (be)",                                                                                          answer: "will be" },
+            { text: "When the cat is away, the mice ___. (play)",                                                                   answer: "will play" },
+            { text: "I'm not feeling well, I ___. (faint)",                                                                         answer: "am going to faint" },
+            { text: "It's 11:00pm; I think I ___ to bed now. (go)",                                                                 answer: "will go" },
+            { text: "She ___ them at 6:00pm. (meet)",                                                                               answer: "is going to meet" },
+            { text: "That ___ the book you are looking for. (be)",                                                                  answer: "will be" },
+            { text: "There ___ a gale. (be)",                                                                                       answer: "is going to be" },
+            { text: "Sally is a big girl now, we ___ her a scooter. (buy)",                                                         answer: "are going to buy" },
+            { text: "Look at that car! It ___ the wall! (crash)",                                                                   answer: "is going to crash" },
+            { text: "I promise I ___ you with your homework tonight. (help)",                                                       answer: "will help" },
+            { text: "We ___ on holiday to Spain next summer; the tickets are booked. (go)",                                         answer: "are going to go" },
+            { text: "- Someone is at the door. - I ___ it. (get)",                                                                  answer: "will get" },
+            { text: "I think it ___ a sunny day tomorrow. (be)",                                                                    answer: "will be" },
+            { text: "She ___ a baby in May. (have)",                                                                                answer: "is going to have" },
+            { text: "Be careful with that knife! You ___ yourself. (cut)",                                                          answer: "are going to cut" },
+            { text: "I hope you ___ soon. (feel better)",                                                                           answer: "will feel better" },
+            { text: "My grandparents ___ us next weekend; they've already bought the train tickets. (visit)",                       answer: "are going to visit" },
+            { text: "- I'm thirsty. - I ___ you a glass of water. (bring)",                                                         answer: "will bring" },
+            { text: "Watch out! That tree ___! (fall)",                                                                             answer: "is going to fall" },
+            { text: "I guess Tom ___ late again. (be)",                                                                             answer: "will be" },
+            { text: "We ___ a barbecue on Saturday; we've invited all our friends. (have)",                                         answer: "are going to have" },
+            { text: "- This bag is so heavy! - I ___ you carry it. (help)",                                                         answer: "will help" },
+            { text: "I'm sure you ___ the test. (pass)",                                                                            answer: "will pass" },
+            { text: "Look at the sky! It ___ snow tonight. (probably)",                                                             answer: "will probably" },
+            { text: "She ___ ballet classes next year; she has already signed up. (start)",                                         answer: "is going to start" },
+            { text: "- The bag is too heavy. - Don't worry, I ___ it for you. (carry)",                                             answer: "will carry" },
+            { text: "Hurry up! The bus ___! (leave)",                                                                               answer: "is going to leave" },
+            { text: "I think the weather ___ better tomorrow. (be)",                                                                answer: "will be" },
+            { text: "We ___ a new car; we've saved enough money. (buy)",                                                            answer: "are going to buy" },
+            { text: "I hope she ___ to the party. (come)",                                                                          answer: "will come" },
+            { text: "Don't worry, I ___ on time. (be)",                                                                             answer: "will be" },
+            { text: "Look at him! He ___! (sneeze)",                                                                                answer: "is going to sneeze" },
+            { text: "They ___ married next June; everything is planned. (get)",                                                     answer: "are going to get" },
+            { text: "- I haven't got any money. - I ___ you some. (lend)",                                                          answer: "will lend" },
+            { text: "I think you ___ this movie; it's really funny. (like)",                                                        answer: "will like" },
+            { text: "Be careful! The glass ___! (fall)",                                                                            answer: "is going to fall" },
+            { text: "I promise I ___ to you tomorrow. (call)",                                                                      answer: "will call" },
+            { text: "We ___ a new dog next week; we found one at the shelter. (adopt)",                                             answer: "are going to adopt" },
+            { text: "I guess he ___ home soon. (come)",                                                                             answer: "will come" },
+        ];
+
         const exMessages = [
             { min: 90, text: "Excellent work! 🎉" },
             { min: 70, text: "Well done! Keep it up." },
@@ -986,6 +1041,9 @@
             } else if (exType === 'pastContinuous') {
                 selected = shuffleArray(pastContinuousSentences).slice(0, 10);
                 hintText = 'Use: was/were + verb-ing (e.g. was reading, were playing)';
+            } else if (exType === 'willBeGoingTo') {
+                selected = shuffleArray(willBeGoingToSentences).slice(0, 10);
+                hintText = 'WILL: decision now, prediction (I think / probably), promise, fact. BE GOING TO: planned action, prediction with evidence.';
             } else {
                 const tense    = document.getElementById('tenseSelect').value;
                 const formType = document.getElementById('formSelect').value;
