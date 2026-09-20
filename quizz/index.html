@@ -2038,6 +2038,50 @@
                     }
                     return questions;
                 }
+            },
+            canada_capitales: {
+                title: "Capitales des provinces et territoires",
+                category: "Géographie - Canada",
+                caseSensitive: false,
+                accentInsensitive: true,
+                type: "text",
+                questions: [
+                    { q: "Alberta", a: "Edmonton" },
+                    { q: "Colombie-Britannique", a: "Victoria" },
+                    { q: "Île-du-Prince-Édouard", a: "Charlottetown" },
+                    { q: "Manitoba", a: "Winnipeg" },
+                    { q: "Nouveau-Brunswick", a: "Fredericton" },
+                    { q: "Nouvelle-Écosse", a: "Halifax" },
+                    { q: "Nunavut", a: "Iqaluit" },
+                    { q: "Ontario", a: "Toronto" },
+                    { q: "Québec (la province)", a: "Québec" },
+                    { q: "Saskatchewan", a: "Regina" },
+                    { q: "Terre-Neuve-et-Labrador", a: "St. John's" },
+                    { q: "Territoires du Nord-Ouest", a: "Yellowknife" },
+                    { q: "Yukon", a: "Whitehorse" }
+                ]
+            },
+            canada_provinces: {
+                title: "Provinces et territoires à partir des capitales",
+                category: "Géographie - Canada",
+                caseSensitive: false,
+                accentInsensitive: true,
+                type: "text",
+                questions: [
+                    { q: "Charlottetown", a: "Île-du-Prince-Édouard" },
+                    { q: "Edmonton", a: "Alberta" },
+                    { q: "Fredericton", a: "Nouveau-Brunswick" },
+                    { q: "Halifax", a: "Nouvelle-Écosse" },
+                    { q: "Iqaluit", a: "Nunavut" },
+                    { q: "Québec (la ville)", a: "Québec" },
+                    { q: "Regina", a: "Saskatchewan" },
+                    { q: "St. John's", a: "Terre-Neuve-et-Labrador" },
+                    { q: "Toronto", a: "Ontario" },
+                    { q: "Victoria", a: "Colombie-Britannique" },
+                    { q: "Whitehorse", a: "Yukon" },
+                    { q: "Winnipeg", a: "Manitoba" },
+                    { q: "Yellowknife", a: "Territoires du Nord-Ouest" }
+                ]
             }
         };
 
@@ -2277,7 +2321,11 @@
                 const caseSensitive = quizzes[quizName].caseSensitive;
                 const normalize = quizzes[quizName].normalizeDecimal
                     ? s => s.replace(/\s+/g, '').replace(',', '.')
-                    : s => s;
+                    : quizzes[quizName].accentInsensitive
+                        ? s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                                .replace(/['’.\-]/g, ' ')
+                                .replace(/\s+/g, ' ').trim()
+                        : s => s;
                 const u = normalize(userAnswer);
                 const c = normalize(correct);
                 match = caseSensitive
