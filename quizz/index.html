@@ -185,6 +185,25 @@
             font-size: 13px;
         }
 
+        #passage {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            background: #fffdf5;
+            border: 2px solid #f3ead0;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        #passage h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #764ba2;
+        }
+
         #wordBank {
             display: flex;
             flex-wrap: wrap;
@@ -629,6 +648,8 @@
                         <option value="selection">Choix multiple</option>
                     </select>
                 </div>
+
+                <div id="passage" style="display:none;"></div>
 
                 <div id="wordBank" style="display:none;"></div>
 
@@ -1149,6 +1170,18 @@
         /* ══════════════════════════════════════
            QUIZ — data & logic
         ══════════════════════════════════════ */
+        const passageCreativeWeekend = {
+            title: "A Creative Weekend",
+            text: "My name is Oliver, and I am ten years old. I live in a small town with my family. " +
+                  "I have two favourite pastimes: drawing and riding my bike. Every Saturday morning, " +
+                  "I ride my bike with my sister in the park. We usually spend one hour outdoors. " +
+                  "In the afternoon, I draw animals and imaginary places in my notebook. I like drawing " +
+                  "because I can invent new things. My friends say I am creative and patient. Today it " +
+                  "is raining, so I am staying indoors. Right now, I am drawing a giant roller coaster. " +
+                  "My sister is reading a book beside me. Next weekend, we want to visit an amusement " +
+                  "park with our parents."
+        };
+
         const quizzes = {
             unit1_0: {
                 title: "Unit One - 0 - Introduction",
@@ -1436,6 +1469,66 @@
                     { q: "I is listening to music.", a: "I am listening to music." },
                     { q: "Sarah go to the park on Sundays.", a: "Sarah goes to the park on Sundays." },
                     { q: "The children are play basketball now.", a: "The children are playing basketball now." }
+                ]
+            },
+            unit2_review_f_mc: {
+                title: "Unit Two - Révision F - Reading Comprehension (choix multiple)",
+                category: "Anglais - Unit Two",
+                caseSensitive: false,
+                passage: passageCreativeWeekend,
+                type: "multiple",
+                questions: [
+                    { q: "How old is Oliver?", a: 1,
+                      choices: ["eight years old", "ten years old", "twelve years old"] },
+                    { q: "Name Oliver's two favourite pastimes.", a: 0,
+                      choices: ["drawing and riding his bike", "reading and swimming", "singing and playing chess"] },
+                    { q: "When does he ride his bike?", a: 2,
+                      choices: ["every Sunday afternoon", "every day after school", "every Saturday morning"] },
+                    { q: "Who rides with Oliver?", a: 0,
+                      choices: ["his sister", "his father", "his best friend"] },
+                    { q: "How long do they usually spend outdoors?", a: 1,
+                      choices: ["thirty minutes", "one hour", "three hours"] },
+                    { q: "Why does Oliver like drawing?", a: 2,
+                      choices: ["because it is easy", "because his sister draws too", "because he can invent new things"] },
+                    { q: "Which two personality adjectives describe Oliver?", a: 0,
+                      choices: ["creative and patient", "athletic and sociable", "musical and adventurous"] },
+                    { q: "Why is Oliver staying indoors today?", a: 1,
+                      choices: ["because he is sick", "because it is raining", "because it is snowing"] },
+                    { q: "What is Oliver drawing right now?", a: 0,
+                      choices: ["a giant roller coaster", "a big castle", "animals in the park"] },
+                    { q: "What does the family want to do next weekend?", a: 1,
+                      choices: ["go to the beach", "visit an amusement park", "go camping in the mountains"] }
+                ]
+            },
+            unit2_review_f_text: {
+                title: "Unit Two - Révision F - Reading Comprehension (réponses écrites)",
+                category: "Anglais - Unit Two",
+                caseSensitive: false,
+                passage: passageCreativeWeekend,
+                type: "text",
+                // keywords: every group must appear in the answer; within a group, any
+                // alternative is enough. Matching is on word starts ("rain" accepts "raining").
+                questions: [
+                    { q: "How old is Oliver?", a: "He is ten years old.",
+                      keywords: [["ten", "10"]] },
+                    { q: "Name Oliver's two favourite pastimes.", a: "Drawing and riding his bike.",
+                      keywords: [["draw"], ["bike", "biking", "riding", "ride"]] },
+                    { q: "When does he ride his bike?", a: "Every Saturday morning.",
+                      keywords: [["saturday"], ["morning"]] },
+                    { q: "Who rides with Oliver?", a: "His sister.",
+                      keywords: [["sister"]] },
+                    { q: "How long do they usually spend outdoors?", a: "One hour.",
+                      keywords: [["one hour", "1 hour", "an hour", "1h"]] },
+                    { q: "Why does Oliver like drawing?", a: "Because he can invent new things.",
+                      keywords: [["invent"], ["new"]] },
+                    { q: "Which two personality adjectives describe Oliver?", a: "Creative and patient.",
+                      keywords: [["creative"], ["patient"]] },
+                    { q: "Why is Oliver staying indoors today?", a: "Because it is raining.",
+                      keywords: [["rain"]] },
+                    { q: "What is Oliver drawing right now?", a: "A giant roller coaster.",
+                      keywords: [["roller coaster", "rollercoaster"]] },
+                    { q: "What does the family want to do next weekend?", a: "Visit an amusement park with their parents.",
+                      keywords: [["amusement park"]] }
                 ]
             },
             unit2_review_g: {
@@ -2366,6 +2459,20 @@
             document.getElementById('choicesContainer').style.display = 'none';
             document.getElementById('textModeRow').style.display = quizType === "text" ? 'flex' : 'none';
 
+            const passageEl = document.getElementById('passage');
+            passageEl.innerHTML = "";
+            const passage = quizzes[quizName].passage;
+            if (passage) {
+                const h = document.createElement('h3');
+                h.textContent = passage.title;
+                const p = document.createElement('p');
+                p.textContent = passage.text;
+                passageEl.append(h, p);
+                passageEl.style.display = '';
+            } else {
+                passageEl.style.display = 'none';
+            }
+
             const wordBank = document.getElementById('wordBank');
             wordBank.innerHTML = "";
             if (quizzes[quizName].showWordBank) {
@@ -2411,6 +2518,7 @@
                 }
                 document.getElementById('question').textContent         = "Quiz terminé !";
                 document.getElementById('wordBank').style.display       = 'none';
+                document.getElementById('passage').style.display        = 'none';
                 document.getElementById('quizInfo').style.display       = 'none';
                 document.getElementById('choicesContainer').style.display = 'none';
                 document.getElementById('answer').style.display         = 'none';
@@ -2517,6 +2625,13 @@
 
             if (quizType === "multiple") {
                 match = window.selectedChoice === correct;
+            } else if (quizQueue[current].keywords) {
+                const norm = s => " " + s.toLowerCase()
+                    .replace(/[.,!?;:'’"\-]/g, ' ')
+                    .replace(/\s+/g, ' ').trim();
+                const userAnswer = norm(document.getElementById('answer').value);
+                match = quizQueue[current].keywords.every(group =>
+                    group.some(kw => userAnswer.includes(norm(kw))));
             } else {
                 const userAnswer    = document.getElementById('answer').value.trim();
                 const caseSensitive = quizzes[quizName].caseSensitive;
