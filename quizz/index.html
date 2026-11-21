@@ -185,6 +185,24 @@
             font-size: 13px;
         }
 
+        #wordBank {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        #wordBank span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+            background: #f0f1ff;
+            border: 1px solid #d9dcfb;
+            border-radius: 8px;
+            padding: 4px 10px;
+        }
+
         #question {
             font-size: 22px;
             font-weight: 700;
@@ -611,6 +629,8 @@
                         <option value="selection">Choix multiple</option>
                     </select>
                 </div>
+
+                <div id="wordBank" style="display:none;"></div>
 
                 <div id="question" style="display:none;"></div>
 
@@ -1313,6 +1333,145 @@
                     { a: "with others", q: "avec les autres" },
                     { a: "all the time", q: "tout le temps" },
                     { a: "most of the time", q: "la plupart du temps" }
+                ]
+            },
+            unit2_review_a: {
+                title: "Unit Two - Révision A - Multiple Choice: Pastimes",
+                category: "Anglais - Unit Two",
+                caseSensitive: false,
+                type: "multiple",
+                questions: [
+                    { q: "I use a pencil to make pictures. My pastime is:", a: 1,
+                      choices: ["fishing", "drawing", "climbing"] },
+                    { q: "Mia uses a bicycle. She enjoys:", a: 0,
+                      choices: ["riding", "reading", "singing"] },
+                    { q: "You need a racket for:", a: 0,
+                      choices: ["tennis", "writing", "listening"] },
+                    { q: "I go to the library to borrow books. I enjoy:", a: 1,
+                      choices: ["snowboarding", "reading", "fishing"] },
+                    { q: "Which activity usually happens outdoors?", a: 0,
+                      choices: ["climbing a mountain", "reading in bed", "playing video games"] },
+                    { q: "Which activity can you do alone OR with others?", a: 0,
+                      choices: ["playing the guitar", "sleeping", "neither"] },
+                    { q: "A person who likes adventures is:", a: 0,
+                      choices: ["adventurous", "patient", "musical"] },
+                    { q: "A person who enjoys creating new things is:", a: 1,
+                      choices: ["athletic", "creative", "sleepy"] },
+                    { q: "Which word describes someone who enjoys meeting people?", a: 0,
+                      choices: ["sociable", "scary", "indoors"] },
+                    { q: "What do you do with music?", a: 0,
+                      choices: ["listen to it", "ride it", "climb it"] }
+                ]
+            },
+            unit2_review_b: {
+                title: "Unit Two - Révision B - Complete the Sentences: Pastime Verbs",
+                category: "Anglais - Unit Two",
+                caseSensitive: false,
+                showWordBank: true,
+                type: "text",
+                questions: [
+                    { q: "Liam is ___ a bike.", a: "riding" },
+                    { q: "Ella enjoys ___ a magazine.", a: "reading" },
+                    { q: "We are ___ soccer in the park.", a: "playing" },
+                    { q: "I am ___ to music.", a: "listening" },
+                    { q: "My sister is ___ a song.", a: "singing" },
+                    { q: "The athletes are ___ a wall.", a: "climbing" },
+                    { q: "Nora is ___ a picture.", a: "drawing" },
+                    { q: "My uncle enjoys ___ at the lake.", a: "fishing" },
+                    { q: "I am ___ a story.", a: "writing" },
+                    { q: "In winter, Ben enjoys ___.", a: "snowboarding" }
+                ]
+            },
+            unit2_review_c: {
+                title: "Unit Two - Révision C - Simple Present: Choose the Correct Verb",
+                category: "Anglais - Unit Two",
+                caseSensitive: false,
+                type: "multiple",
+                questions: [
+                    { q: "She ___ the guitar every day.", a: 1, choices: ["play", "plays"] },
+                    { q: "They ___ movies on Fridays.", a: 0, choices: ["watch", "watches"] },
+                    { q: "I ___ to the park on weekends.", a: 0, choices: ["go", "goes"] },
+                    { q: "He ___ a skateboard.", a: 1, choices: ["have", "has"] },
+                    { q: "We ___ athletic.", a: 1, choices: ["is", "are"] },
+                    { q: "My brother ___ chess.", a: 1, choices: ["like", "likes"] },
+                    { q: "You ___ creative.", a: 1, choices: ["am", "are"] },
+                    { q: "Sarah ___ music after school.", a: 1, choices: ["study", "studies"] },
+                    { q: "My friends ___ cards.", a: 0, choices: ["collect", "collects"] },
+                    { q: "Leo ___ gymnastics.", a: 1, choices: ["do", "does"] }
+                ]
+            },
+            unit2_review_d: {
+                title: "Unit Two - Révision D - Present Continuous: Complete the Sentences",
+                category: "Anglais - Unit Two",
+                caseSensitive: false,
+                ignorePunctuation: true,
+                type: "text",
+                questions: [
+                    { q: "Right now, she ___ (draw) a picture.", a: "is drawing" },
+                    { q: "Look! They ___ (play) basketball.", a: "are playing" },
+                    { q: "I ___ (make) a paper bird.", a: "am making" },
+                    { q: "We ___ (watch) a movie.", a: "are watching" },
+                    { q: "He ___ (ride) his bike.", a: "is riding" },
+                    { q: "You ___ (listen) to music.", a: "are listening" },
+                    { q: "The children ___ (run) in the park.", a: "are running" },
+                    { q: "My mother ___ (write) an email.", a: "is writing" },
+                    { q: "It ___ (snow) outside.", a: "is snowing" },
+                    { q: "The boys ___ (swim) in the pool.", a: "are swimming" }
+                ]
+            },
+            unit2_review_e: {
+                title: "Unit Two - Révision E - Correct the Mistakes",
+                category: "Anglais - Unit Two",
+                caseSensitive: false,
+                ignorePunctuation: true,
+                type: "text",
+                questions: [
+                    { q: "She play soccer every day.", a: "She plays soccer every day." },
+                    { q: "They is watching a movie.", a: "They are watching a movie." },
+                    { q: "He are drawing a picture.", a: "He is drawing a picture." },
+                    { q: "I am makeing a model.", a: "I am making a model." },
+                    { q: "My sister have a bike.", a: "My sister has a bike." },
+                    { q: "We plays chess after school.", a: "We play chess after school." },
+                    { q: "Look! The dog is runing.", a: "Look! The dog is running." },
+                    { q: "I is listening to music.", a: "I am listening to music." },
+                    { q: "Sarah go to the park on Sundays.", a: "Sarah goes to the park on Sundays." },
+                    { q: "The children are play basketball now.", a: "The children are playing basketball now." }
+                ]
+            },
+            unit2_review_g: {
+                title: "Unit Two - Révision G - Make Sentences",
+                category: "Anglais - Unit Two",
+                caseSensitive: false,
+                ignorePunctuation: true,
+                type: "text",
+                questions: [
+                    { q: "every / reads / Mia / night", a: "Mia reads every night.",
+                      alt: ["Every night, Mia reads."] },
+                    { q: "are / now / They / skating", a: "They are skating now.",
+                      alt: ["Now they are skating."] },
+                    { q: "guitar / plays / the / Ben", a: "Ben plays the guitar." },
+                    { q: "drawing / I / am / a / picture", a: "I am drawing a picture." },
+                    { q: "on / we / soccer / play / weekends", a: "We play soccer on weekends.",
+                      alt: ["On weekends, we play soccer."] },
+                    { q: "is / making / paper / a / bird / She", a: "She is making a paper bird." }
+                ]
+            },
+            unit2_review_h: {
+                title: "Unit Two - Révision H - Choose a Personality Adjective",
+                category: "Anglais - Unit Two",
+                caseSensitive: false,
+                showWordBank: ["active", "athletic", "adventurous", "creative",
+                               "determined", "musical", "patient", "sociable"],
+                type: "text",
+                questions: [
+                    { q: "Maya likes talking and playing with many friends. She is ___.", a: "sociable" },
+                    { q: "Ben practises basketball and runs very fast. He is ___.", a: "athletic" },
+                    { q: "Eva invents stories and draws new characters. She is ___.", a: "creative" },
+                    { q: "Leo does not give up when a model is difficult. He is ___.", a: "determined" },
+                    { q: "Anna waits calmly for her turn. She is ___.", a: "patient" },
+                    { q: "Noah loves exploring new places. He is ___.", a: "adventurous" },
+                    { q: "Sofia sings and plays the piano. She is ___.", a: "musical" },
+                    { q: "Jack is always moving and enjoys many activities. He is ___.", a: "active" }
                 ]
             },
             feelings: {
@@ -2207,6 +2366,22 @@
             document.getElementById('choicesContainer').style.display = 'none';
             document.getElementById('textModeRow').style.display = quizType === "text" ? 'flex' : 'none';
 
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = "";
+            if (quizzes[quizName].showWordBank) {
+                const words = Array.isArray(quizzes[quizName].showWordBank)
+                    ? quizzes[quizName].showWordBank
+                    : quizzes[quizName].questions.map(q => q.a);
+                words.forEach(word => {
+                    const span = document.createElement('span');
+                    span.textContent = word;
+                    wordBank.appendChild(span);
+                });
+                wordBank.style.display = 'flex';
+            } else {
+                wordBank.style.display = 'none';
+            }
+
             elapsed      = 0;
             quizFinished = false;
             lastScore    = null;
@@ -2235,6 +2410,7 @@
                     return;
                 }
                 document.getElementById('question').textContent         = "Quiz terminé !";
+                document.getElementById('wordBank').style.display       = 'none';
                 document.getElementById('quizInfo').style.display       = 'none';
                 document.getElementById('choicesContainer').style.display = 'none';
                 document.getElementById('answer').style.display         = 'none';
@@ -2350,12 +2526,17 @@
                         ? s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                                 .replace(/['’.\-]/g, ' ')
                                 .replace(/\s+/g, ' ').trim()
-                        : s => s;
+                        : quizzes[quizName].ignorePunctuation
+                            ? s => s.replace(/[.,!?;:]/g, ' ').replace(/\s+/g, ' ').trim()
+                            : s => s;
                 const u = normalize(userAnswer);
-                const c = normalize(correct);
-                match = caseSensitive
-                    ? u === c
-                    : u.toLowerCase() === c.toLowerCase();
+                const accepted = [correct, ...(quizQueue[current].alt || [])];
+                match = accepted.some(ans => {
+                    const c = normalize(ans);
+                    return caseSensitive
+                        ? u === c
+                        : u.toLowerCase() === c.toLowerCase();
+                });
             }
 
             if (match) {
